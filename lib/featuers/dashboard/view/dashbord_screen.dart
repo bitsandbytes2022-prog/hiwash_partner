@@ -1,19 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:hiwash_partner/featuers/notification/view/notification_screen.dart';
-import 'package:hiwash_partner/featuers/profile/view/drawer_screen.dart';
-import 'package:hiwash_partner/featuers/qr_scanner/view/qr_scanner.dart';
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:hiwash_partner/featuers/reward/view/reward_screen.dart';
-import 'package:hiwash_partner/featuers/rewarded_customers/view/rewarded_customers_screen.dart';
-import 'package:hiwash_partner/generated/assets.dart';
-import 'package:hiwash_partner/styling/app_color.dart';
-import 'package:hiwash_partner/widgets/components/app_home_bg.dart';
-import 'package:hiwash_partner/widgets/components/image_view.dart';
-import 'package:hiwash_partner/widgets/components/profile_image_view.dart';
-import 'package:hiwash_partner/widgets/sized_box_extension.dart';
-import 'package:flutter/material.dart';
 import 'package:hiwash_partner/featuers/notification/view/notification_screen.dart';
 import 'package:hiwash_partner/featuers/profile/view/drawer_screen.dart';
 import 'package:hiwash_partner/featuers/qr_scanner/view/qr_scanner.dart';
@@ -24,6 +9,7 @@ import 'package:hiwash_partner/generated/assets.dart';
 import 'package:hiwash_partner/styling/app_color.dart';
 import 'package:hiwash_partner/widgets/components/image_view.dart';
 import 'package:hiwash_partner/widgets/components/profile_image_view.dart';
+
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({super.key});
@@ -87,7 +73,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               isActive ? filledImages[index] : outlineImages[index],
-
+              /*SizedBox(height: 4), // Space between icon and label
+              Text(
+                index == 0
+                    ? 'Home'
+                    : index == 1
+                    ? 'Customers'
+                    : 'Notifications',
+                style: TextStyle(
+                  color: isActive ? Colors.white : Colors.grey,
+                  fontSize: 12,
+                ),
+              ),*/
             ],
           );
         },
@@ -132,6 +129,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
+     /* floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColor.red,
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+        ),
+        onPressed: () {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return QrScreen();
+            },
+          );
+        },
+        child:Container(
+          decoration: BoxDecoration(
+            color: AppColor.red,
+            borderRadius: BorderRadius.circular(100),
+            boxShadow: [
+              BoxShadow(
+                color: AppColor.red.withOpacity(0.60),
+                spreadRadius: 0,
+                blurRadius: 30,
+          offset: Offset(0, 15)
+          ),],),
+          child:
+          ImageView(
+            path: Assets.iconsIcQrScanner,
+            height: 28,
+            width: 28,
+          ),
+        ) ,
+      ),
+      */
+
+
     );
   }
 

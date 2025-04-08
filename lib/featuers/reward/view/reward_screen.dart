@@ -124,6 +124,7 @@ class RewardScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: HiWashTextField(
+                  readOnly: true,
                   hintText: "All Offers",
                   suffixIcon: Padding(
                     padding: EdgeInsets.all(20.0),
@@ -138,6 +139,7 @@ class RewardScreen extends StatelessWidget {
               13.widthSizeBox,
               Expanded(
                 child: HiWashTextField(
+                  readOnly: true,
                   hintText: "Sort by Expiry",
                   suffixIcon: Padding(
                     padding: EdgeInsets.all(20),
