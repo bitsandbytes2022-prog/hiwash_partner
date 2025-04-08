@@ -11,6 +11,7 @@ class RouteStrings {
   static const String paymentSuccessScreen = '/paymentSuccessScreen';
   static const String rewardScreen = '/rewardScreen';
   static const String dashboardScreen = '/dashboardScreen';
+  static const String termsAndConditionScreen = '/termsAndConditionScreen';
 
 
 

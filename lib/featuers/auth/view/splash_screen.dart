@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:hiwash_partner/widgets/components/doted_line.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
@@ -70,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
 
                       30.heightSizeBox,
-                      DottedLine(),
+                      DashedLineWidget(),
 
                       Container(
                         width: Get.width,
@@ -115,33 +116,4 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-class DottedLine extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 1.0,
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: AppColor.c142293.withOpacity(0.2),
-            width: 1.0,
-            style: BorderStyle.solid,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(40, (index) {
-          return Container(
-            width: 5.0,
-            height: 1.0,
-            color:
-                index % 4 == 0
-                    ? AppColor.c142293.withOpacity(0.2)
-                    : Colors.transparent,
-          );
-        }),
-      ),
-    );
-  }
-}
+

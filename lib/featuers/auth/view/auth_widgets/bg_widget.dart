@@ -28,7 +28,7 @@ class BgWidget extends StatelessWidget {
                 right: 16,
                 child: GestureDetector(
                   onTap: () {
-                    Get.offAllNamed(RouteStrings.signUpScreen);
+                    Get.offAllNamed(RouteStrings.loginScreen);
                   },
                   child: Text("skip", style: w400_16a(color: AppColor.white)),
                 ),

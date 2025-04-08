@@ -126,12 +126,13 @@ class DrawerScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ImageView(path: Assets.iconsIcLogout, height: 20, width: 20),
+                5.widthSizeBox,
                 Text("Logout", style: w500_14a(color: AppColor.c142293)),
               ],
             ),
           ),
         ),
-        30.heightSizeBox,
+        50.heightSizeBox,
       ],
     );
   }

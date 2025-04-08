@@ -91,9 +91,14 @@ class WelcomeScreen extends StatelessWidget {
                         },
                       ),
                       15.heightSizeBox,
-                      Text(
-                        "kTermsAndConditions".tr,
-                        style: w500_14a(color: AppColor.red),
+                      GestureDetector(
+                        onTap: (){
+                          Get.toNamed(RouteStrings.termsAndConditionScreen);
+                        },
+                        child: Text(
+                          "kTermsAndConditions".tr,
+                          style: w500_14a(color: AppColor.red),
+                        ),
                       ),
                       60.heightSizeBox,
                     ],

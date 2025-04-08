@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:hiwash_partner/featuers/profile/view/terms%20_and_condition_screen.dart';
 import '../featuers/auth/view/forgot_password_screen.dart';
 import '../featuers/auth/view/login_screen.dart';
 import '../featuers/auth/view/otp_screen.dart';
@@ -53,6 +54,11 @@ class Routes {
     GetPage(
   name: RouteStrings.dashboardScreen,
   page: () => DashboardScreen(),
+ ),
+
+   GetPage(
+  name: RouteStrings.termsAndConditionScreen,
+  page: () => TermsAndConditionScreen(),
  ),
 
 

@@ -6,7 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:hiwash_partner/route/route_strings.dart';
 import 'package:hiwash_partner/styling/app_color.dart';
 import 'package:hiwash_partner/styling/app_font_anybody.dart';
-import 'package:hiwash_partner/widgets/components/app_bg.dart';
+import 'package:hiwash_partner/widgets/components/auth_bg.dart';
 import 'package:hiwash_partner/widgets/components/hi_wash_button.dart';
 import 'package:hiwash_partner/widgets/components/hi_wash_text_field.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
@@ -23,7 +23,9 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     return Scaffold(
-      body: AppBg(
+      body: AuthBg(
+
+
         headingText: "kWelcomeBack".tr,
         subText: "kLogin".tr,
       showBackButton: false,

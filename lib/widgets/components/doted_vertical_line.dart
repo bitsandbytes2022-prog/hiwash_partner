@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../styling/app_color.dart';
 
-class DottedLine extends StatelessWidget {
+class DotedVerticalLine extends StatelessWidget {
   final double? width;
   final double? height;
 
-  const DottedLine({Key? key, this.width, this.height}) : super(key: key);
+  const DotedVerticalLine({Key? key, this.width, this.height}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

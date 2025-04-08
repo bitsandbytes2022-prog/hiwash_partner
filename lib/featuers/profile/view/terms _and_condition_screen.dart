@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:hiwash_partner/widgets/components/app_home_bg.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
@@ -14,7 +15,14 @@ class TermsAndConditionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body:AppHomeBg(
+        headingText:  "Terms and Condition",
+        iconRight: SizedBox(),
+        child: Column(children: [Text("kDemoText".tr)]),
+      )
+
+
+      /* Column(
         children: [
           Stack(
             alignment: Alignment.bottomCenter,
@@ -64,7 +72,7 @@ class TermsAndConditionScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
+      ),*/
     );
   }
 }

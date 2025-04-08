@@ -12,7 +12,8 @@ class AppDialog extends StatelessWidget {
   Widget? child;
   String? remainingText;
   EdgeInsets?padding;
-   AppDialog({super.key, this.child,this.padding});
+ VoidCallback?onTap;
+   AppDialog({super.key, this.child,this.padding,this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class AppDialog extends StatelessWidget {
                 child: child
             ),
             GestureDetector(
-              onTap: (){
+              onTap: onTap??(){
                 Get.back();
               },
               child: Container(

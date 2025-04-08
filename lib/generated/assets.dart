@@ -27,12 +27,17 @@ class Assets {
   static const String iconsIcForward = 'assets/icons/ic_forward.png';
   static const String iconsIcGoogle = 'assets/icons/ic_google.png';
   static const String iconsIcGuideBook = 'assets/icons/ic_guide_book.png';
+  static const String iconsIcHome = 'assets/icons/ic_home.png';
+  static const String iconsIcHomeFill = 'assets/icons/ic_home_fill.png';
   static const String iconsIcLanguage = 'assets/icons/ic_language.png';
   static const String iconsIcLogout = 'assets/icons/ic_logout.png';
   static const String iconsIcMessage = 'assets/icons/ic_message.png';
   static const String iconsIcMeta = 'assets/icons/ic_meta.png';
+  static const String iconsIcNotification = 'assets/icons/ic_notification.png';
+  static const String iconsIcNotificationFill = 'assets/icons/ic_notification_fill.png';
   static const String iconsIcPlaceMarker = 'assets/icons/ic_place_marker.png';
   static const String iconsIcPrivacy = 'assets/icons/ic_privacy.png';
+  static const String iconsIcQrScanner = 'assets/icons/ic_qr_scanner.png';
   static const String iconsIcSent = 'assets/icons/ic_sent.png';
   static const String iconsIcStar = 'assets/icons/ic_star.png';
   static const String iconsIcSubscriptionPlan = 'assets/icons/ic_subscription_plan.png';
@@ -40,6 +45,8 @@ class Assets {
   static const String iconsIcTermscondition = 'assets/icons/ic_termscondition.png';
   static const String iconsIcTheme = 'assets/icons/ic_theme.png';
   static const String iconsIcTicket = 'assets/icons/ic_ticket.png';
+  static const String iconsIcUsers = 'assets/icons/ic_users.png';
+  static const String iconsIcUsersFill = 'assets/icons/ic_users_fill.png';
   static const String iconsIcVerify = 'assets/icons/ic_verify.png';
   static const String iconsMyLocation = 'assets/icons/my_location.png';
   static const String iconsPhone = 'assets/icons/Phone.png';
@@ -59,6 +66,7 @@ class Assets {
   static const String imagesImMap = 'assets/images/im_map.png';
   static const String imagesImOffer = 'assets/images/im_offer.png';
   static const String imagesImQr = 'assets/images/im_qr.png';
+  static const String imagesImSussess = 'assets/images/im_sussess.png';
   static const String imagesJackpot = 'assets/images/jackpot.png';
   static const String imagesMapImage = 'assets/images/map_image.png';
   static const String imagesPaymet1 = 'assets/images/paymet_1.png';

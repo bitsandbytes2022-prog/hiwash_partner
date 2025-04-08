@@ -7,7 +7,7 @@ import '../../../route/route_strings.dart';
 import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
-import '../../../widgets/components/app_bg.dart';
+import '../../../widgets/components/auth_bg.dart';
 import '../../../widgets/components/hi_wash_button.dart';
 import '../../../widgets/components/hi_wash_text_field.dart';
 import 'auth_controller/auth_controller.dart';
@@ -24,7 +24,7 @@ class ResetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
-      body: AppBg(
+      body: AuthBg(
         headingText: "kReset".tr,
         subText: 'kPassword'.tr,
 

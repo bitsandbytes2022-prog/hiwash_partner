@@ -13,7 +13,7 @@ class ProfileImageView extends StatelessWidget {
   final double? heightStack;
   final double? widthStack;
   final double? radiusStack;
-  final bool? isVisible;
+  final bool? isVisibleStack;
   final bool? isTopRight;
 
   const ProfileImageView({super.key,
@@ -24,7 +24,9 @@ class ProfileImageView extends StatelessWidget {
     this.image,
     this.heightStack=15,
     this.widthStack=15,
-    this.radiusStack=10, this.isVisible=true, this.isTopRight
+    this.radiusStack=10,
+    this.isVisibleStack=true,
+    this.isTopRight
   });
 
   @override
@@ -44,7 +46,7 @@ class ProfileImageView extends StatelessWidget {
             backgroundImage: AssetImage(imagePath??Assets.imagesDemoProfile),
           ),
         ),
-    if(isVisible==true)    Container(
+    if(isVisibleStack==true)    Container(
           padding: EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: AppColor.white,

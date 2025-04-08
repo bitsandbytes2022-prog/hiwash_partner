@@ -1,56 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:hiwash_partner/widgets/components/app_home_bg.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:hiwash_partner/featuers/profile/view/chat_screen.dart';
+import 'package:hiwash_partner/generated/assets.dart';
+import 'package:hiwash_partner/styling/app_color.dart';
+import 'package:hiwash_partner/styling/app_font_anybody.dart';
+import 'package:hiwash_partner/widgets/components/image_view.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
+import 'doted_line.dart';
+import 'doted_vertical_line.dart';
 
-import '../../../generated/assets.dart';
-import '../../../styling/app_color.dart';
-import '../../../styling/app_font_anybody.dart';
-import '../../../styling/app_font_poppins.dart';
-import '../../../widgets/components/doted_line.dart';
-import '../../../widgets/components/doted_vertical_line.dart';
-import '../../../widgets/components/image_view.dart';
-import '../../profile/view/chat_screen.dart';
-import '../controller/notification_controller.dart';
+class AppHomeBg extends StatelessWidget {
+  final String?headingText;
+  final Widget?child;
+  final Widget?iconRight;
+  final Widget?iconLeft;
+  final EdgeInsets?padding;
 
-class NotificationScreen extends StatelessWidget {
-  NotificationScreen({super.key});
 
-  NotificationController controller = Get.put(NotificationController());
+   AppHomeBg({super.key,  this.headingText, this.child, this.iconRight, this.iconLeft, this.padding, });
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppHomeBg(
-        padding: EdgeInsets.zero,
-        iconLeft: SizedBox(),
-        headingText: "Rewarded Customers",
-        child:  Column(
-          children: [
-
-
-            ListView.separated(
-
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: 20,
-              separatorBuilder: (context, index) {
-                return DashedLineWidget();
-              },
-              itemBuilder: (context, index) {
-                return Obx(() {
-                  return notificationContainer(index);
-                });
-              },
-            ),
-          ],
-        ),
-      ),
-    );   /* Scaffold(
-   *//*   key: _scaffoldKey,
+      key: _scaffoldKey,
       drawer: Drawer(
         backgroundColor: AppColor.white,
         child: Column(
@@ -81,7 +55,7 @@ class NotificationScreen extends StatelessWidget {
 
             /// **Drawer Options**
             drawerRowWidget(onTap: () => {
-              
+
               Get.to(ChatScreen())
             }, title: 'Chat with Support', image: Assets.iconsIcChat),
             drawerRowWidget(onTap: () => {}, title: 'Help Desk Ticket', image: Assets.iconsIcTicket),
@@ -95,7 +69,7 @@ class NotificationScreen extends StatelessWidget {
             Spacer(),
             DashedLineWidget(),
             Container(
-             // padding: EdgeInsets.only(bottom: 20),
+              // padding: EdgeInsets.only(bottom: 20),
               color: AppColor.cF6F7FF,
               alignment: Alignment.center,
               height: 86,
@@ -113,7 +87,7 @@ class NotificationScreen extends StatelessWidget {
                     ),
                   ),
                   DotedVerticalLine(),
-                 // Container(height: Get.height, width: 1, color: AppColor.c142293.withOpacity(0.10)),
+                  // Container(height: Get.height, width: 1, color: AppColor.c142293.withOpacity(0.10)),
 
                   Expanded(
                     child: Column(
@@ -130,7 +104,7 @@ class NotificationScreen extends StatelessWidget {
 
           ],
         ),
-      ),*//*
+      ),
       body: Column(
         children: [
           Stack(
@@ -150,12 +124,22 @@ class NotificationScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(""),
+                    iconLeft??  GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: ImageView(
+                        path: Assets.iconsIcArrow,
+
+                        height: 15,
+                        width: 15,
+                      ),
+                    ),
                     Text(
-                      "Notification’s",
+                      headingText??'',
                       style: w700_16a(color: AppColor.white),
                     ),
-                    GestureDetector(
+                    iconRight?? GestureDetector(
                       onTap: () {
                         _scaffoldKey.currentState?.openDrawer();
                       },
@@ -170,36 +154,19 @@ class NotificationScreen extends StatelessWidget {
               ),
             ],
           ),
+          15.heightSizeBox,
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-
-
-                  ListView.separated(
-
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: 20,
-                    separatorBuilder: (context, index) {
-                      return DashedLineWidget();
-                    },
-                    itemBuilder: (context, index) {
-                      return Obx(() {
-                        return notificationContainer(index);
-                      });
-                    },
-                  ),
-                ],
+              child: Padding(
+                padding: padding??EdgeInsets.symmetric(horizontal: 16),
+                child: child
               ),
             ),
           ),
         ],
       ),
-    );*/
+    );
   }
-
   Widget drawerRowWidget({
     required VoidCallback onTap,
     required String title,
@@ -233,69 +200,4 @@ class NotificationScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget notificationContainer(int index) {
-    return GestureDetector(
-      onTap: () {
-        controller.toggleSelection(index);
-      },
-      child: Container(
-        width: Get.width,
-        color:
-            controller.selectedIndices[index] ? Colors.white : AppColor.cF6F7FF,
-        padding: EdgeInsets.only(top: 15, bottom: 15, left: 15, right: 26),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-
-              padding: EdgeInsets.all(3),
-              decoration: BoxDecoration(
-
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColor.blue.withOpacity(0.2)),
-              ),
-              child: Container(
-                height: 38,
-                width: 38,
-                  padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color:AppColor.cCACEE9,
-
-                  shape: BoxShape.circle,
-                  //borderRadius: BorderRadius.circular(100),
-                ),
-                child: ImageView(
-                  path: Assets.iconsIcCheck,
-                  color: AppColor.c455A64,
-                  height: 9,
-                  width: 14,
-
-                )
-              ),
-            ),
-
-            9.widthSizeBox,
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "kDemoText".tr,
-                    style: w500_12p(color: AppColor.c2C2A2A),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  4.heightSizeBox,
-                  Text("12 am", style: w400_10p(color: AppColor.c455A64)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
-
