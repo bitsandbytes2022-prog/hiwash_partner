@@ -13,6 +13,7 @@ class CustomBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       //padding: EdgeInsets.all(16),
       height: Get.height / 1.2,
       width: Get.width,
