@@ -47,7 +47,7 @@ class Languages extends Translations {
       "kForgot": "Forgot",
       "kEnterRegisteredPhone": "Enter Registered Phone",
       "kEnterThePhoneNumber":
-          "Enter the phone number\nassociated with your account",
+          "Enter the phone number associated\nwith your account",
       "kEnterYourPhoneNumber": "Enter your phone number",
       "kRecoverPassword": "Recover password",
 

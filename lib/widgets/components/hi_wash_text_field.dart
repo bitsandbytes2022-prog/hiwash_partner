@@ -95,7 +95,7 @@ class HiWashTextField extends StatelessWidget {
         labelStyle: w400_14p(color: AppColor.c455A64),
         hintMaxLines: 2,
         fillColor: fillColor??AppColor.cF6F7FF,
-        hintStyle:hintStyle?? w400_14p(color: AppColor.c455A64),
+        hintStyle:hintStyle?? w400_14p(color: AppColor.c2C2A2A.withOpacity(0.40)),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         floatingLabelBehavior: FloatingLabelBehavior.always,

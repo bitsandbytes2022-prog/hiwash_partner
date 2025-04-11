@@ -122,6 +122,8 @@ class RewardScreen extends StatelessWidget {
             Expanded(
               child: HiWashTextField(
                 readOnly: true,
+                hintStyle: w400_12p(color: AppColor.c2C2A2A),
+
                 hintText: "All Offers",
                 suffixIcon: Padding(
                   padding: EdgeInsets.all(20.0),
@@ -133,20 +135,21 @@ class RewardScreen extends StatelessWidget {
                 ),
               ),
             ),
-            13.widthSizeBox,
+            8.widthSizeBox,
             Expanded(
               child: HiWashTextField(
+                hintStyle: w400_12p(color: AppColor.c2C2A2A),
+               // padding: EdgeInsets.only(left: 10,right: 10),
                 readOnly: true,
                 hintText: "Sort by Expiry",
                 suffixIcon: Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20.0),
                   child: ImageView(
                     path: Assets.iconsIcDropDown,
                     height: 5,
                     width: 9,
                   ),
                 ),
-                hintStyle: w400_12p(color: AppColor.c2C2A2A),
               ),
             ),
           ],
@@ -166,7 +169,7 @@ class RewardScreen extends StatelessWidget {
               mainAxisSpacing: 15,
               //  mainAxisExtent: Get.height * 0.22,
             ),
-            itemCount: 10,
+            itemCount: 8,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
@@ -595,7 +598,7 @@ class RewardScreen extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 13),
+              20.heightSizeBox,
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 16),
                   child: Stack(
@@ -781,21 +784,22 @@ class RewardScreen extends StatelessWidget {
                       if (rewardController.isSelected.value == 1) ...[
                         Text(
                           "Don't miss out on amazing deals! We’re offering exclusive products, special discounts, and FREE coupons just for you. This limited-time offer is your chance to grab exciting rewards before they’re gone.",
-                        ),
-                        5.heightSizeBox,
+                        style: w400_12p(),),
+                        10.heightSizeBox,
                         Text(
                           "Why You Shouldn’t Miss This",
-                          style: w600_12p(color: AppColor.white),
+                          style: w600_12p(),
                         ),
+                        6.heightSizeBox,
                         for (var i = 0; i < 5; i++)
                           Text(
                             "✔ Exclusive products available for a limited time",
-                            style: w600_12p(color: AppColor.c455A64),
+                            style: w400_10p(color: AppColor.c455A64),
                           ),
                         10.heightSizeBox,
                         Text(
                           "Claim your rewards today and make the most of these incredible deals! 🎉",
-                          style: w600_12p(color: AppColor.c455A64),
+                          style: w400_12p(color: AppColor.c455A64),
                         ),
                       ],
                       if (rewardController.isSelected.value == 2) ...[

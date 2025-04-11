@@ -54,7 +54,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   return authController.validatePhoneNumber(value);
                 },
               ),
-              184.heightSizeBox,
+             120.heightSizeBox,
               HiWashButton(
                 text: "kRecoverPassword".tr,
                 onTap: () {
@@ -63,7 +63,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                 },
               ),
 
-              60.heightSizeBox,
+              30.heightSizeBox,
             ],
           ),
         ),

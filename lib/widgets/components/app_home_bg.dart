@@ -23,67 +23,71 @@ class AppHomeBg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: Scaffold(
 
-      body: Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  color: AppColor.c142293,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25),
+        body: Column(
+          children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: AppColor.c142293,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25),
+                    ),
+                  ),
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      iconLeft??  GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: ImageView(
+                          path: Assets.iconsIcArrow,
+
+                          height: 15,
+                          width: 15,
+                        ),
+                      ),
+                      Text(
+                        headingText??'',
+                        style: w700_16a(color: AppColor.white),
+                      ),
+                      iconRight?? GestureDetector(
+                        onTap: () {
+                        //  _scaffoldKey.currentState?.openDrawer();
+                        },
+                        child: ImageView(
+                          height: 23,
+                          width: 23,
+                          path: Assets.iconsIcMessage,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    iconLeft??  GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: ImageView(
-                        path: Assets.iconsIcArrow,
-
-                        height: 15,
-                        width: 15,
-                      ),
-                    ),
-                    Text(
-                      headingText??'',
-                      style: w700_16a(color: AppColor.white),
-                    ),
-                    iconRight?? GestureDetector(
-                      onTap: () {
-                      //  _scaffoldKey.currentState?.openDrawer();
-                      },
-                      child: ImageView(
-                        height: 23,
-                        width: 23,
-                        path: Assets.iconsIcMessage,
-                      ),
-                    ),
-                  ],
+              ],
+            ),
+            15.heightSizeBox,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: padding??EdgeInsets.symmetric(horizontal: 16),
+                  child: child
                 ),
               ),
-            ],
-          ),
-          15.heightSizeBox,
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: padding??EdgeInsets.symmetric(horizontal: 16),
-                child: child
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

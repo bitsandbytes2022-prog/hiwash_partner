@@ -69,14 +69,15 @@ class ResetPasswordScreen extends StatelessWidget {
               HiWashButton(
                 text: 'kSave'.tr,
                 onTap: () {
-                  if (_formKey.currentState?.validate() ?? false){
+                  Get.offNamedUntil(RouteStrings.loginScreen, (route) => false);
+                /*  if (_formKey.currentState?.validate() ?? false){
                     Get.offNamedUntil(RouteStrings.loginScreen, (route) => false);
           
-                  }
+                  }*/
                 },
               ),
           
-              60.heightSizeBox,
+              30.heightSizeBox,
             ],
           ),
         ),

@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
 
         headingText: "kWelcomeBack".tr,
         subText: "kLogin".tr,
-      showBackButton: false,
+      //showBackButton: false,
         child: Form(
           key: formKey,
           child: Column(
@@ -65,15 +65,15 @@ class LoginScreen extends StatelessWidget {
               HiWashButton(
                 text: "kLogIn".tr,
                 onTap: () {
-                  //Get.offNamed(RouteStrings.dashboardScreen);
-                    if (formKey.currentState?.validate() ?? false) {
+                  Get.offNamed(RouteStrings.dashboardScreen);
+                  /*  if (formKey.currentState?.validate() ?? false) {
 
 
                   Get.offNamed(RouteStrings.dashboardScreen);
-                  }
+                  }*/
                 },
               ),
-              130.heightSizeBox,
+            56.heightSizeBox,
               GestureDetector(
                 onTap: () {
                   Get.toNamed(RouteStrings.forgotPasswordScreen);
@@ -83,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                   style: w500_14a(color: AppColor.red),
                 ),
               ),
-              54.heightSizeBox,
+              20.heightSizeBox,
 
 
             ],

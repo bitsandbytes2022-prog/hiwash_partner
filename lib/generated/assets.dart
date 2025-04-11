@@ -79,5 +79,14 @@ class Assets {
   static const String imagesTimeImage = 'assets/images/time_image.png';
   static const String imagesTimeView = 'assets/images/time_view.png';
   static const String imagesWelcomeBg = 'assets/images/welcome_bg.png';
+  static const String poppinsW100 = 'assets/fonts/poppins/w100.ttf';
+  static const String poppinsW200 = 'assets/fonts/poppins/w200.ttf';
+  static const String poppinsW300 = 'assets/fonts/poppins/w300.ttf';
+  static const String poppinsW400 = 'assets/fonts/poppins/w400.ttf';
+  static const String poppinsW500 = 'assets/fonts/poppins/w500.ttf';
+  static const String poppinsW600 = 'assets/fonts/poppins/w600.ttf';
+  static const String poppinsW700 = 'assets/fonts/poppins/w700.ttf';
+  static const String poppinsW800 = 'assets/fonts/poppins/w800.ttf';
+  static const String poppinsW900 = 'assets/fonts/poppins/w900.ttf';
 
 }

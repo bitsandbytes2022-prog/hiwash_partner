@@ -23,23 +23,27 @@ class DrawerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Obx(() {
-        return Drawer(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColor.white,
-              borderRadius: BorderRadius.horizontal(right: Radius.circular(15)),
+    return SafeArea(
+      bottom: true,
+      top: false,
+      child: Scaffold(
+        body: Obx(() {
+          return Drawer(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColor.white,
+                borderRadius: BorderRadius.horizontal(right: Radius.circular(15)),
+              ),
+              child:
+                  drawerController.currentDrawerSection.value == ''
+                      ? mainDrawerUI()
+                      : sectionDrawerUI(
+                        drawerController.currentDrawerSection.value,
+                      ),
             ),
-            child:
-                drawerController.currentDrawerSection.value == ''
-                    ? mainDrawerUI()
-                    : sectionDrawerUI(
-                      drawerController.currentDrawerSection.value,
-                    ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 
@@ -113,7 +117,7 @@ class DrawerScreen extends StatelessWidget {
         //  60.heightSizeBox,
         GestureDetector(
           onTap: () {
-            Get.offAllNamed(RouteStrings.loginScreen);
+            Get.offAllNamed(RouteStrings.welcomeScreen);
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 31, vertical: 10),
@@ -132,7 +136,7 @@ class DrawerScreen extends StatelessWidget {
             ),
           ),
         ),
-        50.heightSizeBox,
+        20.heightSizeBox,
       ],
     );
   }

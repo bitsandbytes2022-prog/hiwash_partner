@@ -147,13 +147,14 @@ class MyAccountScreen extends StatelessWidget {
             ),
 
             20.heightSizeBox
-            ,
-            20.heightSizeBox,
+          ,
             HiWashTextField(hintText: "Car Number", labelText: "Car Number"),
 
-            20.heightSizeBox,
-            HiWashButton(text: 'Save',),
-            60.heightSizeBox,
+            40.heightSizeBox,
+            HiWashButton(text: 'Save',onTap: (){
+              Get.back();
+            },),
+            30.heightSizeBox,
           ],
         ),
       )
