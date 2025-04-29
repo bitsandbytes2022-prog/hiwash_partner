@@ -12,6 +12,11 @@ class RouteStrings {
   static const String rewardScreen = '/rewardScreen';
   static const String dashboardScreen = '/dashboardScreen';
   static const String termsAndConditionScreen = '/termsAndConditionScreen';
+  static const String faqScreen = '/faqScreen';
+  static const String helpDeskTicketScreen = '/helpDeskTicketScreen';
+  static const String stepByStepGuideScreen = '/stepByStepGuideScreen';
+  static const String stepByStepGuideDetailScreen = '/stepByStepGuideDetailScreen';
+
 
 
 

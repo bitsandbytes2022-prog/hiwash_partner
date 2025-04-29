@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,12 +15,22 @@ import '../../../widgets/components/doted_line.dart';
 import '../../../widgets/components/hi_wash_text_field.dart';
 import '../../../widgets/components/image_view.dart';
 
-import '../controller/drawer.dart';
+import '../../auth/auth_controller/auth_controller.dart';
+import '../../dashboard/controller/dashboard_controller.dart';
+import '../controller/drawer_profile_controller.dart';
 import 'my_account_screen.dart';
 import 'terms _and_condition_screen.dart';
 
 class DrawerScreen extends StatelessWidget {
-  final DrawerControllerX drawerController = Get.put(DrawerControllerX());
+  final DrawerProfileController drawerController = Get.put(
+    DrawerProfileController(),
+  );
+  AuthController authController =
+      Get.isRegistered<AuthController>()
+          ? Get.find<AuthController>()
+          : Get.put(AuthController());
+  DashboardController dashboardController = Get.isRegistered<DashboardController>()?Get.find():Get.put(DashboardController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +43,9 @@ class DrawerScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: AppColor.white,
-                borderRadius: BorderRadius.horizontal(right: Radius.circular(15)),
+                borderRadius: BorderRadius.horizontal(
+                  right: Radius.circular(15),
+                ),
               ),
               child:
                   drawerController.currentDrawerSection.value == ''
@@ -76,13 +89,44 @@ class DrawerScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
             border: Border.all(color: AppColor.blue.withOpacity(0.2)),
           ),
-          child: CircleAvatar(
-            radius: 50,
-            backgroundImage: AssetImage(Assets.imagesDemoProfile),
-          ),
+         child:  Obx(() {
+            final profilePicUrl = dashboardController
+                .getPartnerModel
+                .value
+                ?.data?.first
+                .profilePicUrl;
+
+            final hasValidUrl = profilePicUrl?.isNotEmpty ?? false;
+
+            return CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.grey[200],
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: hasValidUrl ? profilePicUrl! : '',
+                  fit: BoxFit.cover,
+                  height: 100,
+                  width: 100,
+                  placeholder: (context, url) => Center(
+                    child: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    Assets.imagesDemoProfile,
+                    fit: BoxFit.cover,
+                    height: 100,
+                    width: 100,
+                  ),
+                ),
+              ),
+            );
+          }),
         ),
         11.heightSizeBox,
-        Text("Caltex Engine Oil", style: w700_16a(color: AppColor.c2C2A2A)),
+        Text(dashboardController.getPartnerModel.value?.data?.first.businessName ?? '', style: w700_16a(color: AppColor.c2C2A2A)),
 
         39.heightSizeBox,
 
@@ -117,7 +161,7 @@ class DrawerScreen extends StatelessWidget {
         //  60.heightSizeBox,
         GestureDetector(
           onTap: () {
-            Get.offAllNamed(RouteStrings.welcomeScreen);
+            authController.logout();
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 31, vertical: 10),

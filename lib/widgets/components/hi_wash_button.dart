@@ -60,18 +60,17 @@ class HiWashButton extends StatelessWidget {
         child: isLoading
             ? Center(
           child: SizedBox(
-            width: width,
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: FittedBox(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
+            width: 20,
+            height: 20,
+            child: FittedBox(
+              child: CircularProgressIndicator(
+                color: Colors.white,
               ),
             ),
           ),
         )
             : Center(
+
           child: Text(
             text,
             style: textStyle ?? w600_16a(color: AppColor.white),

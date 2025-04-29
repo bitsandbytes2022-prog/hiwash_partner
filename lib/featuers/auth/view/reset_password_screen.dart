@@ -10,7 +10,7 @@ import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/auth_bg.dart';
 import '../../../widgets/components/hi_wash_button.dart';
 import '../../../widgets/components/hi_wash_text_field.dart';
-import 'auth_controller/auth_controller.dart';
+import '../auth_controller/auth_controller.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   ResetPasswordScreen({super.key});
@@ -22,6 +22,8 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String phoneNumber = Get.arguments as String;
+    authController.phoneRestController.text = phoneNumber;
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       body: AuthBg(
@@ -45,38 +47,68 @@ class ResetPasswordScreen extends StatelessWidget {
               ),
               23.heightSizeBox,
               HiWashTextField(
-                controller: authController.passwordRestController,
-                hintText: "kPassword".tr,
-                labelText: "kPassword".tr,
-                obscure: true,
-                obscuringCharacter: '*',
-                validator: (value){
-                  return authController.validatePassword(value);
+                readOnly: true,
+                keyboardType: TextInputType.number,
+                controller: authController.phoneRestController,
+                hintText: "Phone".tr,
+                labelText: "Phone".tr,
+
+                validator: (value) {
+                  return authController.validatePhoneNumberLogin(value);
                 },
               ),
               20.heightSizeBox,
-              HiWashTextField(
-                controller: authController.cPasswordRestController,
-                hintText: "kConfirmPassword".tr,
-                labelText: "kConfirmPassword".tr,
-                obscure: true,
-                obscuringCharacter: '*',
-                validator: (value){
-                  return authController.validate(value);
-                },
+              Obx(
+                 () {
+                  return HiWashTextField(
+                    controller: authController.passwordRestController,
+                    hintText: "kPassword".tr,
+                    labelText: "kPassword".tr,
+
+                    obscuringCharacter: '*',
+                    obscure: !authController.isPasswordVisible.value,
+                    validator: (value) {
+                      return authController.validatePassword(value);
+                    },
+                    onTap: (){
+                      authController.togglePasswordVisibility();
+                    },
+                    suffixIcon: Icon(
+                      authController.isPasswordVisible.value
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColor.c455A64.withOpacity(0.5),
+                    ),
+                  );
+                }
               ),
               105.heightSizeBox,
-              HiWashButton(
-                text: 'kSave'.tr,
-                onTap: () {
-                  Get.offNamedUntil(RouteStrings.loginScreen, (route) => false);
-                /*  if (_formKey.currentState?.validate() ?? false){
-                    Get.offNamedUntil(RouteStrings.loginScreen, (route) => false);
-          
-                  }*/
-                },
+              Obx(
+                () {
+                  return HiWashButton(
+                    isLoading: authController.isLoading.value,
+                    text: 'kSave'.tr,
+                    onTap: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        authController
+                            .resetPassword(
+                              authController.phoneRestController.text,
+                              authController.passwordRestController.text,
+                            )
+                            .then((value) {
+                              if (value != null) {
+                                Get.offNamedUntil(
+                                  RouteStrings.loginScreen,
+                                  (route) => false,
+                                );
+                              }
+                            });
+                      }
+                    },
+                  );
+                }
               ),
-          
+
               30.heightSizeBox,
             ],
           ),

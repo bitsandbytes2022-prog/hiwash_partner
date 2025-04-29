@@ -10,7 +10,7 @@ import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/bottom_sheet_bg.dart';
 import '../../../widgets/components/get_start_button.dart';
-import 'auth_controller/auth_controller.dart';
+import '../auth_controller/auth_controller.dart';
 import 'auth_widgets/bg_widget.dart';
 
 class WelcomeScreen extends StatelessWidget {

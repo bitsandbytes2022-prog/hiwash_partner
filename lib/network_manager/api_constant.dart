@@ -1,0 +1,34 @@
+class ApiConstant{
+
+static const baseUrl="https://loyaltyapistaging.pipelinedns.com/api";
+
+static const String baseImageUrl = "https://loyaltyapistaging.pipelinedns.com";
+
+static const login="$baseUrl/authentication/partner/login";
+static const sendOtp="$baseUrl/authentication/send-otp";
+static const resetPassword="$baseUrl/authentication/partner/reset-password";
+static const getToken="$baseUrl/authentication/token";
+static const signUp="$baseUrl/customer";
+static  getPartnerId(int id)=>"$baseUrl/partner/$id";
+static const getSubscription="$baseUrl/subscription";
+static const getSubscriptionMembership="/subscription/membership";
+static  getFaq(int entityType)=>"/content/faqs?entityType=$entityType";
+static  getGuides(int entityType)=>"/content/guides?entityType=$entityType";
+static  getTermsAndConditions(int entityType)=>"/content/termsandconditions?entityType=$entityType";
+static const getOffers="$baseUrl/offer";
+static  getOffersById(int id)=>"$baseUrl/offer/$id";
+static  const offerCategories="$baseUrl/offer/categories";
+static const validateWashQr="$baseUrl/worker/validate-wash-qr";
+
+
+static const uploadProfileImage="$baseUrl/partner/upload-profile-picture";
+static const uploadProfile="$baseUrl/partner/update-profile";
+static  rewardedCustomer(int offerId)=>"$baseUrl/offer/rewarded-customers?offerId=$offerId";
+
+
+
+
+
+
+
+}

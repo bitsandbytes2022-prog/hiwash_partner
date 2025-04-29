@@ -1,127 +1,153 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
+// qr_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:hiwash_partner/generated/assets.dart';
-import 'package:hiwash_partner/styling/app_color.dart';
-import 'package:hiwash_partner/styling/app_font_anybody.dart';
-import 'package:hiwash_partner/widgets/components/image_view.dart';
+
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
-class QrScreen extends StatefulWidget {
-  const QrScreen({super.key});
 
-  @override
-  State<QrScreen> createState() => _QrScreenState();
-}
+import '../../../generated/assets.dart';
+import '../../../styling/app_color.dart';
+import '../../../styling/app_font_anybody.dart';
+import '../../../styling/app_font_poppins.dart';
+import '../../../widgets/components/app_dialog.dart';
+import '../../../widgets/components/doted_horizontal_line.dart';
+import '../../../widgets/components/doted_vertical_line.dart';
+import '../../../widgets/components/image_view.dart';
+import '../../../widgets/components/is_select_button.dart';
+import '../controller/qr_controller.dart';
 
-class _QrScreenState extends State<QrScreen> {
 
+class QrScreen extends StatelessWidget {
+  QrScreen({super.key});
 
-  String? scanUrl;
-  String internetStatus="";
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
-  Future<void> checkInternetConnection() async {
-    Connectivity().onConnectivityChanged
-        .listen((List<ConnectivityResult> connectivityResult) {
-      setState(() {
-        if (connectivityResult.contains(ConnectivityResult.mobile) ||
-            connectivityResult.contains(ConnectivityResult.wifi)) {
-          internetStatus = "";
-        } else {
-          internetStatus = "Internet is not available";
-        }
-      });
-    });
-
-  }
-  void onQRViewCreated(QRViewController controller) {
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        scanUrl = scanData.code;
-      });
-    });
-  }
-  @override
-  void initState() {
-    super.initState();
-    checkInternetConnection();
-  }
+  final QrController controller = Get.put(QrController());
 
   @override
   Widget build(BuildContext context) {
+    final int? washId = Get.arguments;
+
     return Scaffold(
-backgroundColor: Colors.transparent,
-      body: Stack(
+      backgroundColor: AppColor.cF6F7FF.withOpacity(0.2),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ImageView(
-            path: Assets.imagesQrBg,
-            width: Get.width,
-            fit: BoxFit.cover,
+          GestureDetector(
+            onTap: controller.clearScan,
+            child: Text(
+              "Clear",
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            /*  Stack(
+          const SizedBox(height: 20),
+
+          Center(
+            child: Container(
+              alignment: Alignment.center,
+              width: Get.width / 1.2,
+              height: 300,
+              child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 180,
-                    height: 180,
-
-                    child: QRView(
-                      key: qrKey,
-                      onQRViewCreated: onQRViewCreated,
+                  QRView(
+                    key: controller.qrKey,
+                    onQRViewCreated: washId != null
+                        ? controller.onQRViewCreated1
+                        : controller.onQRViewCreated,
+                    overlay: QrScannerOverlayShape(
+                      borderColor: Colors.white,
+                      overlayColor: AppColor.c101D8D.withOpacity(0.5),
+                      borderRadius: 10,
+                      borderLength: 50,
+                      borderWidth: 20,
+                      cutOutSize: 300,
                     ),
                   ),
-                  ImageView(
-                    height: 210,
-                    width: 210,
-                    path:Assets.imagesMainQrBg,
-                  )
-                ],
-              ),*/
-              Container(
-                alignment: Alignment.center,
-                width: 200,
-                height: 200,
+                  Obx(() {
+                    // Add safety check for animationController being initialized
+                    if (controller.scanUrl.value.isEmpty &&
+                        controller.animationController != null &&
+                        controller.animationController.isAnimating) {
+                      return AnimatedBuilder(
+                        animation: controller.animationController,
+                        builder: (context, child) {
+                          return Positioned(
+                            top: controller.animation.value,
+                            child: Container(
+                              width: 280,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColor.cFFC727,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }),
 
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: onQRViewCreated,
-                ),
+                  /*   Obx(() {
+                    if (controller.scanUrl.value.isEmpty &&
+                        controller.animationController.isAnimating) {
+                      return AnimatedBuilder(
+                        animation: controller.animationController,
+                        builder: (context, child) {
+                          return Positioned(
+                            top: controller.animation.value,
+                            child: Container(
+                              width: 280,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: AppColor.cFFC727,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }),*/
+
+
+                ],
               ),
-              Container(
-                padding: EdgeInsets.only(top: 20),
-                color: Colors.transparent,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        scanUrl != null ? 'Scanned URL: $scanUrl' : 'Scan a QR code',
-                        textAlign: TextAlign.center,style: w700_16a(color: AppColor.white),
-                      ),
-                      const SizedBox(height: 20),
-                      if(internetStatus.isNotEmpty)
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          color: Colors.transparent,
-                          child: Text(
-                            "Internet is not available",
-                            style: TextStyle(color:Colors.white ),
-                          ),
-                        ),
-                    ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          Obx(
+            () => Column(
+              children: [
+                Text(
+                  controller.customerId.value.isNotEmpty
+                      ? 'Customer ID: ${controller.customerId.value}'
+                      : 'Scan a QR code',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                if (controller.internetStatus.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      controller.internetStatus.value,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+              ],
+            ),
           ),
-
         ],
       ),
     );
   }
+
+
 }

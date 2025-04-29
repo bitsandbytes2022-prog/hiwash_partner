@@ -1,3 +1,19 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:hiwash_partner/widgets/components/auth_bg.dart';
+import 'package:hiwash_partner/widgets/sized_box_extension.dart';
+
+import '../../../generated/assets.dart';
+import '../../../route/route_strings.dart';
+import '../../../styling/app_color.dart';
+import '../../../styling/app_font_anybody.dart';
+import '../../../widgets/components/bottom_sheet_bg.dart';
+import '../../../widgets/components/hi_wash_button.dart';
+import '../../../widgets/components/hi_wash_text_field.dart';
+import '../auth_controller/auth_controller.dart';
+import 'auth_widgets/bg_widget.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +27,6 @@ import 'package:hiwash_partner/widgets/components/hi_wash_button.dart';
 import 'package:hiwash_partner/widgets/components/hi_wash_text_field.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
-import 'auth_controller/auth_controller.dart';
-
-
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
@@ -24,11 +37,9 @@ class LoginScreen extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       body: AuthBg(
-
-
         headingText: "kWelcomeBack".tr,
         subText: "kLogin".tr,
-      //showBackButton: false,
+        //showBackButton: false,
         child: Form(
           key: formKey,
           child: Column(
@@ -62,18 +73,26 @@ class LoginScreen extends StatelessWidget {
               12.heightSizeBox,
 
               56.heightSizeBox,
-              HiWashButton(
-                text: "kLogIn".tr,
-                onTap: () {
-                  Get.offNamed(RouteStrings.dashboardScreen);
-                  /*  if (formKey.currentState?.validate() ?? false) {
-
-
-                  Get.offNamed(RouteStrings.dashboardScreen);
-                  }*/
-                },
-              ),
-            56.heightSizeBox,
+              Obx(() {
+                return HiWashButton(
+                  isLoading: authController.isLoading.value,
+                  text: "kLogIn".tr,
+                  onTap: () {
+                    // Get.offNamed(RouteStrings.dashboardScreen);
+                    if (formKey.currentState?.validate() ?? false) {
+                      authController
+                          .login(
+                            authController.emailController.text,
+                            authController.passwordController.text,
+                          )
+                          .then((value) {
+                            Get.offNamed(RouteStrings.dashboardScreen);
+                          });
+                    }
+                  },
+                );
+              }),
+              56.heightSizeBox,
               GestureDetector(
                 onTap: () {
                   Get.toNamed(RouteStrings.forgotPasswordScreen);
@@ -84,14 +103,10 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               20.heightSizeBox,
-
-
             ],
           ),
         ),
       ),
-
-
     );
   }
 }

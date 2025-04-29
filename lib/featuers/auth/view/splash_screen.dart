@@ -6,6 +6,7 @@ import 'package:hiwash_partner/widgets/components/doted_line.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
+import '../../../network_manager/local_storage.dart';
 import '../../../route/route_strings.dart';
 import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
@@ -20,12 +21,27 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 2), () {
-     return Get.offNamed(RouteStrings.welcomeScreen);
-   });
     super.initState();
+    _checkLoginStatus();
+  }
+
+
+
+  void _checkLoginStatus() async {
+    final LocalStorage localStorage = LocalStorage();
+    await Future.delayed(Duration(seconds: 2));
+
+    final token = localStorage.getToken();
+    print("Token retrieved: $token");
+
+    if (token != null && token.isNotEmpty) {
+      Get.offNamed(RouteStrings.dashboardScreen);
+    } else {
+      Get.offNamed(RouteStrings.welcomeScreen);
+    }
   }
 
   @override
@@ -33,7 +49,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          ImageView(path: Assets.imagesSplashBg),
+          ImageView(path: Assets.imagesSplashBg,
+
+
+            width: Get.width,
+            fit: BoxFit.cover,),
           Stack(
            alignment: Alignment.bottomCenter,
             children: [

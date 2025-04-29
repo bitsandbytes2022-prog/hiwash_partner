@@ -11,29 +11,34 @@ import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/auth_bg.dart';
 import '../../../widgets/components/hi_wash_button.dart';
 import '../../../widgets/components/hi_wash_text_field.dart';
-import 'auth_controller/auth_controller.dart';
+import '../auth_controller/auth_controller.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   ForgotPasswordScreen({super.key});
 
-  AuthController authController =
-      Get.isRegistered<AuthController>()
-          ? Get.find<AuthController>()
-          : Get.put(AuthController());
+
+  AuthController controller =   Get.isRegistered<AuthController>()
+      ? Get.find<AuthController>()
+      : Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return Scaffold(
       body: AuthBg(
-        headingText: "kForgot".tr,
-        subText: 'kPassword'.tr,
+        headingText: "kWelcomeBack".tr,
+        subText: "kLogin".tr,
 
+        showBackButton: true,
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              110.heightSizeBox,
+              114.heightSizeBox,
+
               Text(
                 "kEnterRegisteredPhone".tr,
                 style: w700_22a(color: AppColor.c2C2A2A),
@@ -44,26 +49,68 @@ class ForgotPasswordScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: w400_12p(color: AppColor.c455A64),
               ),
-              21.heightSizeBox,
+              40.heightSizeBox,
               HiWashTextField(
-                controller: authController.phoneForgotController,
+                controller: controller.loginPhoneController,
                 keyboardType: TextInputType.phone,
-                hintText: "kEnterYourPhoneNumber".tr,
-                labelText: "kPhone".tr,
-                validator: (value){
-                  return authController.validatePhoneNumber(value);
-                },
-              ),
-             120.heightSizeBox,
-              HiWashButton(
-                text: "kRecoverPassword".tr,
-                onTap: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                  Get.toNamed(RouteStrings.otpScreen);}
+
+                hintText: "Phone".tr,
+                labelText: "Phone".tr,
+
+                validator: (value) {
+                  return controller.validatePhoneNumberLogin(value);
                 },
               ),
 
-              30.heightSizeBox,
+              100.heightSizeBox,
+              Obx(() {
+                return HiWashButton(
+                  isLoading: controller.isLoading.value,
+                  text: "kRecoverPassword".tr,
+                  onTap: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      String phoneNumber = controller.loginPhoneController.text.trim();
+                      controller.sendOtp(phoneNumber).then((value) {
+                        if (value != null) {
+                          Get.toNamed(
+                            RouteStrings.otpScreen,
+                            arguments: phoneNumber,
+                          );
+                          controller.loginPhoneController.clear();
+                        }
+                      }).catchError((error) {
+                        print("Error during OTP sending: $error");
+                      });
+                    }
+                  },
+                );
+              }),
+              /*    Obx(() {
+               return HiWashButton(
+                  isLoading: controller.isLoading.value,
+                  text: "kLogIn".tr,
+                  onTap: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      String phoneNumber = controller.loginPhoneController.text.trim();
+                      controller.sendOtp(phoneNumber).then((value) {
+                        if (value != null) {
+                          Get.toNamed(
+                            RouteStrings.loginOtpScreen,
+                            arguments: phoneNumber,
+                          );
+                          controller.loginPhoneController.clear();
+                        }
+                      });
+                    }
+                  },
+                );
+              }),*/
+
+              20.heightSizeBox,
+
+
+
+
             ],
           ),
         ),

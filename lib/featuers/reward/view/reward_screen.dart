@@ -155,438 +155,47 @@ class RewardScreen extends StatelessWidget {
           ],
         ),
         19.heightSizeBox,
-        SizedBox(
-          height: Get.height,
-          child: GridView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            // padding: EdgeInsets.symmetric(horizontal: 10),
-            clipBehavior: Clip.hardEdge,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              //  mainAxisExtent: Get.height * 0.22,
-            ),
-            itemCount: 8,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-
-                  showModalBottomSheet(
-                    context: Get.context!,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                      ),
-                    ),
-                    builder: (BuildContext context) {
-                      return CustomBottomSheet(
-                        child: viewOfferDetailBottomSheet(),
-                      );
-                    },
-                  );
-                },
-                child: OffersGridContainer(),
-              );
-            },
+        GridView.builder(
+          shrinkWrap: true,
+          padding: EdgeInsets.only(bottom: 30),
+          // padding: EdgeInsets.symmetric(horizontal: 10),
+          clipBehavior: Clip.hardEdge,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15,
+            mainAxisSpacing: 15,
+            //  mainAxisExtent: Get.height * 0.22,
           ),
+          itemCount: 20,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+
+                showModalBottomSheet(
+                  context: Get.context!,
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                  ),
+                  builder: (BuildContext context) {
+                    return CustomBottomSheet(
+                      child: viewOfferDetailBottomSheet(),
+                    );
+                  },
+                );
+              },
+              child: OffersGridContainer(),
+            );
+          },
         ),
 
       ],
     );
 
-
-    /*AppHomeBg(
-      headingText: "Your Exclusive Reward",
-      iconLeft: SizedBox(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AppDialog(
-                    child: approveRewardDialog(),
-                    padding: EdgeInsets.zero,
-                  );
-                },
-              );
-            },
-            child: Container(
-              height: 95,
-              decoration: BoxDecoration(
-                color: AppColor.cC31848,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.cC31848.withOpacity(0.30),
-                    spreadRadius: 0,
-                    blurRadius: 15,
-                    offset: Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 14, top: 12),
-                        child: Text(
-                          "53",
-                          style: w700_27a(color: AppColor.white),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, bottom: 9),
-                        child: Text(
-                          "kTotalWashes".tr,
-                          style: w500_12p(
-                            color: AppColor.white.withOpacity(0.7),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ImageView(
-                    path: Assets.imagesRewardImage,
-                    height: 59,
-                    width: 107,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 14, top: 12),
-                        child: Text(
-                          "89",
-                          style: w700_27a(color: AppColor.white),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15, bottom: 9),
-                        child: Text(
-                          "Rewarded\nCustomers",
-                          style: w500_12p(
-                            color: AppColor.white.withOpacity(0.7),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          21.heightSizeBox,
-          Row(
-            children: [
-              Expanded(
-                child: HiWashTextField(
-                  readOnly: true,
-                  hintText: "All Offers",
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: ImageView(
-                      path: Assets.iconsIcDropDown,
-                      height: 5,
-                      width: 9,
-                    ),
-                  ),
-                ),
-              ),
-              13.widthSizeBox,
-              Expanded(
-                child: HiWashTextField(
-                  readOnly: true,
-                  hintText: "Sort by Expiry",
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: ImageView(
-                      path: Assets.iconsIcDropDown,
-                      height: 5,
-                      width: 9,
-                    ),
-                  ),
-                  hintStyle: w400_12p(color: AppColor.c2C2A2A),
-                ),
-              ),
-            ],
-          ),
-          19.heightSizeBox,
-          SizedBox(
-            height: Get.height,
-            child: GridView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              // padding: EdgeInsets.symmetric(horizontal: 10),
-              clipBehavior: Clip.hardEdge,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
-                //  mainAxisExtent: Get.height * 0.22,
-              ),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-
-                    showModalBottomSheet(
-                      context: Get.context!,
-                      isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                      ),
-                      builder: (BuildContext context) {
-                        return CustomBottomSheet(
-                          child: viewOfferDetailBottomSheet(),
-                        );
-                      },
-                    );
-                  },
-                  child: OffersGridContainer(),
-                );
-              },
-            ),
-          ),
-          
-        ],
-      ),
-    );*/
-
-    /*Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  color: AppColor.c142293,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25),
-                  ),
-                ),
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(""),
-                    Text(
-                      "Your Exclusive Reward",
-                      style: w700_16a(color: AppColor.white),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        */ /*        _scaffoldKey.currentState?.openDrawer();*/ /*
-                      },
-                      child: ImageView(
-                        height: 23,
-                        width: 23,
-                        path: Assets.iconsIcMessage,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    14.heightSizeBox,
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AppDialog(
-                              child: approveRewardDialog(),
-                              padding: EdgeInsets.zero,
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        height: 95,
-                        decoration: BoxDecoration(
-                          color: AppColor.cC31848,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColor.cC31848.withOpacity(0.30),
-                              spreadRadius: 0,
-                              blurRadius: 15,
-                              offset: Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 14, top: 12),
-                                  child: Text(
-                                    "53",
-                                    style: w700_27a(color: AppColor.white),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                    bottom: 9,
-                                  ),
-                                  child: Text(
-                                    "kTotalWashes".tr,
-                                    style: w500_12p(
-                                      color: AppColor.white.withOpacity(0.7),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ImageView(
-                              path: Assets.imagesRewardImage,
-                              height: 59,
-                              width: 107,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 14, top: 12),
-                                  child: Text(
-                                    "89",
-                                    style: w700_27a(color: AppColor.white),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    right: 15,
-                                    bottom: 9,
-                                  ),
-                                  child: Text(
-                                    "Rewarded\nCustomers",
-                                    style: w500_12p(
-                                      color: AppColor.white.withOpacity(0.7),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    21.heightSizeBox,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: HiWashTextField(
-                            hintText: "All Offers",
-                            suffixIcon: Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: ImageView(
-                                path: Assets.iconsIcDropDown,
-                                height: 5,
-                                width: 9,
-                              ),
-                            ),
-                          ),
-                        ),
-                        13.widthSizeBox,
-                        Expanded(
-                          child: HiWashTextField(
-                            hintText: "Sort by Expiry",
-                            suffixIcon: Padding(
-                              padding: EdgeInsets.all(20),
-                              child: ImageView(
-                                path: Assets.iconsIcDropDown,
-                                height: 5,
-                                width: 9,
-                              ),
-                            ),
-                            hintStyle: w400_12p(color: AppColor.c2C2A2A),
-                          ),
-                        ),
-                      ],
-                    ),
-                    19.heightSizeBox,
-                    SizedBox(
-                      height: Get.height,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        // padding: EdgeInsets.symmetric(horizontal: 10),
-                        clipBehavior: Clip.hardEdge,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 15,
-                          mainAxisSpacing: 15,
-                          //  mainAxisExtent: Get.height * 0.22,
-                        ),
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: Get.context!,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                  ),
-                                ),
-                                builder: (BuildContext context) {
-                                  return CustomBottomSheet(
-                                    child: viewOfferDetailBottomSheet(),
-                                  );
-                                },
-                              );
-                            },
-                            child: OffersGridContainer(),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );*/
   }
 
   Widget viewOfferDetailBottomSheet() {

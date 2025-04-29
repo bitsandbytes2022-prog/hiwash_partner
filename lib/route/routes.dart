@@ -8,6 +8,10 @@ import '../featuers/auth/view/reset_password_screen.dart';
 import '../featuers/auth/view/splash_screen.dart';
 import '../featuers/auth/view/welcome_screen.dart';
 import '../featuers/dashboard/view/dashbord_screen.dart';
+import '../featuers/dashboard/view/widget/second_drawer/faq_screen.dart';
+import '../featuers/dashboard/view/widget/second_drawer/help_desk_ticket_screen.dart';
+import '../featuers/dashboard/view/widget/second_drawer/step_by_step_guide_detail_screen.dart';
+import '../featuers/dashboard/view/widget/second_drawer/step_by_step_guide_screen.dart';
 import '../featuers/reward/view/reward_screen.dart';
 
 import 'route_strings.dart';
@@ -60,6 +64,24 @@ class Routes {
   name: RouteStrings.termsAndConditionScreen,
   page: () => TermsAndConditionScreen(),
  ),
+    GetPage(
+      name: RouteStrings.faqScreen,
+      page: () => FaqScreen(),
+    ),
+
+    GetPage(
+      name: RouteStrings.helpDeskTicketScreen,
+      page: () => HelpDeskTicketScreen(),
+    ),
+    GetPage(
+      name: RouteStrings.stepByStepGuideScreen,
+      page: () => StepByStepGuideScreen(),
+    ),
+
+    GetPage(
+      name: RouteStrings.stepByStepGuideDetailScreen,
+      page: () => StepByStepGuideDetailScreen(),
+    ),
 
 
 
