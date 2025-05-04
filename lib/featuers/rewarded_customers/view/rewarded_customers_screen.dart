@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:hiwash_partner/featuers/reward/controller/reward_controller.dart';
 import 'package:hiwash_partner/widgets/components/app_home_bg.dart';
+import 'package:hiwash_partner/widgets/components/data_formet.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
@@ -18,6 +19,7 @@ class RewardedCustomersScreen extends StatelessWidget {
 RewardController rewardController = Get.put(RewardController());
   @override
   Widget build(BuildContext context) {
+    rewardController.getRewardedCustomersAll();
     return Padding(
       padding: EdgeInsets.only( bottom: 40,top: 15),
       child: Container(
@@ -50,26 +52,33 @@ RewardController rewardController = Get.put(RewardController());
             },
             itemCount: rewardController.getRewardedCustomersModel.value!.data!.length,
             itemBuilder: (context, index) {
+           var customerAllData=  rewardController.getRewardedCustomersModel.value!.data![index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    ProfileImageView(radiusStack: 4, radius: 17),
+                    ProfileImageView(radiusStack: 4, radius: 17,
+                        imagePath:customerAllData.profilePicUrl??'',
+                    ),
                     9.widthSizeBox,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Ibrahim Bafqia",
+                            customerAllData.customerName??'',
                             style: w600_12a(color: AppColor.c2C2A2A),
                           ),
-                          Text("Flat 30% off", style: w400_10a()),
+                          Text(customerAllData.offerTitle??'', style: w400_10a()),
                         ],
                       ),
                     ),
                     20.widthSizeBox,
-                    Text("15-Oct-2025 / 09:15 AM", style: w400_10a()),
+                    Text(formatServerDate(
+
+                      customerAllData.redeemedAt.toString()
+
+                    ), style: w400_10a()),
                   ],
                 ),
               );

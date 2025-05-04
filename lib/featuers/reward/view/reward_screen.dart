@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +16,7 @@ import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/app_dialog.dart';
 import '../../../widgets/components/custom_bottomsheet.dart';
+import '../../../widgets/components/data_formet.dart';
 import '../../../widgets/components/date_time_widget.dart';
 import '../../../widgets/components/doted_line.dart';
 import '../../../widgets/components/doted_vertical_line.dart';
@@ -22,6 +24,7 @@ import '../../../widgets/components/is_select_button.dart';
 import '../../../widgets/components/offers_grid_container.dart';
 import '../../../widgets/components/profile_image_view.dart';
 import '../controller/reward_controller.dart';
+import '../model/offer_response_model.dart';
 
 class RewardScreen extends StatelessWidget {
   RewardScreen({super.key});
@@ -30,172 +33,325 @@ class RewardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    rewardController.getAllOffers();
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        GestureDetector(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AppDialog(
-                  child: approveRewardDialog(),
-                  padding: EdgeInsets.zero,
-                );
-              },
-            );
-          },
-          child: Container(
-            height: 95,
-            decoration: BoxDecoration(
-              color: AppColor.cC31848,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor.cC31848.withOpacity(0.30),
-                  spreadRadius: 0,
-                  blurRadius: 15,
-                  offset: Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 14, top: 12),
-                      child: Text(
-                        "53",
-                        style: w700_27a(color: AppColor.white),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, bottom: 9),
-                      child: Text(
-                        "kTotalWashes".tr,
-                        style: w500_12p(
-                          color: AppColor.white.withOpacity(0.7),
+        Obx(()
+          => GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AppDialog(
+                    child: approveRewardDialog(),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+              );
+            },
+            child: Container(
+              height: 95,
+              decoration: BoxDecoration(
+                color: AppColor.cC31848,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.cC31848.withOpacity(0.30),
+                    spreadRadius: 0,
+                    blurRadius: 15,
+                    offset: Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 14, top: 12),
+                        child: Text(
+                          rewardController
+                                  .offerResponseModel
+                                  .value
+                                  ?.data
+                                  ?.summary
+                                  ?.totalReward
+                                  .toString() ??
+                              '',
+                          style: w700_27a(color: AppColor.white),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                ImageView(
-                  path: Assets.imagesRewardImage,
-                  height: 59,
-                  width: 107,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 14, top: 12),
-                      child: Text(
-                        "89",
-                        style: w700_27a(color: AppColor.white),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15, bottom: 9),
-                      child: Text(
-                        "Rewarded\nCustomers",
-                        style: w500_12p(
-                          color: AppColor.white.withOpacity(0.7),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, bottom: 9),
+                        child: Text(
+                          "kTotalWashes".tr,
+                          style: w500_12p(color: AppColor.white.withOpacity(0.7)),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  ImageView(
+                    path: Assets.imagesRewardImage,
+                    height: 59,
+                    width: 107,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 14, top: 12),
+                        child: Text(
+                          rewardController
+                                  .offerResponseModel
+                                  .value
+                                  ?.data
+                                  ?.summary
+                                  ?.rewardedCustomers
+                                  .toString() ??
+                              '',
+                          style: w700_27a(color: AppColor.white),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15, bottom: 9),
+                        child: Text(
+                          "Rewarded\nCustomers",
+                          style: w500_12p(color: AppColor.white.withOpacity(0.7)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         21.heightSizeBox,
-        Row(
+        Stack(
           children: [
-            Expanded(
-              child: HiWashTextField(
-                readOnly: true,
-                hintStyle: w400_12p(color: AppColor.c2C2A2A),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          rewardController.getAllOffers();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            //color: AppColor.c5C6B72.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: AppColor.c5C6B72.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                "All offers",
+                                style: w400_12p(color: AppColor.c2C2A2A),
+                              ),
 
-                hintText: "All Offers",
-                suffixIcon: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: ImageView(
-                    path: Assets.iconsIcDropDown,
-                    height: 5,
-                    width: 9,
-                  ),
+                              Spacer(),
+                              ImageView(
+                                path: Assets.iconsIcDropDown,
+                                height: 5,
+                                width: 9,
+                                color: AppColor.c2C2A2A,
+                              ),
+                              //Icon(Icons.arrow_drop_down, size: 20),
+                            ],
+                          ),
+                        ),
+                      ) /*HiWashTextField(
+                        readOnly: true,
+                        hintStyle: w400_12p(color: AppColor.c2C2A2A),
+
+                        hintText: "All Offers",
+                        suffixIcon: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: ImageView(
+                            path: Assets.iconsIcDropDown,
+                            height: 5,
+                            width: 9,
+                          ),
+                        ),
+                      ),*/,
+                    ),
+                    8.widthSizeBox,
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          rewardController.isVisible.value =
+                              !rewardController.isVisible.value;
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            //color: AppColor.c5C6B72.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: AppColor.c5C6B72.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Obx(
+                                () => Text(
+                                  rewardController.sortByText.value,
+                                  style: w400_12p(color: AppColor.c2C2A2A),
+                                ),
+                              ),
+
+                              Spacer(),
+                              ImageView(
+                                path: Assets.iconsIcDropDown,
+                                height: 5,
+                                width: 9,
+                                color: AppColor.c2C2A2A,
+                              ),
+                              //Icon(Icons.arrow_drop_down, size: 20),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+                19.heightSizeBox,
+                Obx(() {
+                  final List<Offers> data =
+                      rewardController.offerResponseModel.value?.data?.offers ??
+                      [];
+                  return data.isNotEmpty
+                      ? GridView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(bottom: 30),
+                        // padding: EdgeInsets.symmetric(horizontal: 10),
+                        clipBehavior: Clip.hardEdge,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15,
+                          //  mainAxisExtent: Get.height * 0.22,
+                        ),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+
+                              await rewardController.getOffersById(
+                                data[index].id!,
+                              );
+                              showModalBottomSheet(
+                                context: Get.context!,
+                                isScrollControlled: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  ),
+                                ),
+                                builder: (BuildContext context) {
+                                  return CustomBottomSheet(
+                                    child: viewOfferDetailBottomSheet(),
+                                  );
+                                },
+                              );
+                            },
+                            child: OffersGridContainer(offer: data[index]),
+                          );
+                        },
+                      )
+                      : Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Text(
+                          'Data is not found',
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                      );
+                  ;
+                }),
+              ],
             ),
-            8.widthSizeBox,
-            Expanded(
-              child: HiWashTextField(
-                hintStyle: w400_12p(color: AppColor.c2C2A2A),
-               // padding: EdgeInsets.only(left: 10,right: 10),
-                readOnly: true,
-                hintText: "Sort by Expiry",
-                suffixIcon: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: ImageView(
-                    path: Assets.iconsIcDropDown,
-                    height: 5,
-                    width: 9,
-                  ),
-                ),
-              ),
+            Obx(
+              () =>
+                  rewardController.isVisible.value
+                      ? Positioned(
+                        top: 50,
+                        right: 0,
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          width: 180,
+                          height: 110,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.deepPurple.withOpacity(0.3),
+                                blurRadius: 10,
+                                offset: Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 15,
+                          ),
+                          //   color: Colors.white,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  rewardController.toggleSortOrder();
+                                  rewardController.isVisible.value =
+                                      false; // Hide popup
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Text("Ascending order"),
+                                ),
+                              ),
+
+                              GestureDetector(
+                                onTap: () {
+                                  rewardController.toggleSortOrder();
+                                  rewardController.isVisible.value =
+                                      false; // Hide popup
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Text("Descending order"),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                      : Container(),
             ),
           ],
         ),
-        19.heightSizeBox,
-        GridView.builder(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(bottom: 30),
-          // padding: EdgeInsets.symmetric(horizontal: 10),
-          clipBehavior: Clip.hardEdge,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 15,
-            mainAxisSpacing: 15,
-            //  mainAxisExtent: Get.height * 0.22,
-          ),
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-
-                showModalBottomSheet(
-                  context: Get.context!,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    ),
-                  ),
-                  builder: (BuildContext context) {
-                    return CustomBottomSheet(
-                      child: viewOfferDetailBottomSheet(),
-                    );
-                  },
-                );
-              },
-              child: OffersGridContainer(),
-            );
-          },
-        ),
-
       ],
     );
-
   }
 
   Widget viewOfferDetailBottomSheet() {
@@ -204,32 +360,118 @@ class RewardScreen extends StatelessWidget {
         child: GetBuilder<RewardController>(
           init: RewardController(),
           builder: (controller) {
+            var  rewardDetail=   rewardController
+                .getOffersByIdModel
+                .value
+                ?.data
+                ?.first;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              20.heightSizeBox,
+                20.heightSizeBox,
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  margin: EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    // color: AppColor.c2C2A2A.withOpacity(0.2)
+                    border: Border.all(
+                      color: AppColor.c2C2A2A.withOpacity(0.2),
+                    ),
+                  ),
                   child: Stack(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: ImageView(path: Assets.imagesImOffer),
+                        child: CachedNetworkImage(
+                          height: 187,
+                          width: Get.width,
+                          fit: BoxFit.fitWidth,
+                          imageUrl:
+                          (rewardController
+                              .getOffersByIdModel
+                              .value
+                              ?.data
+                              ?.first
+                              .image
+                              ?.isNotEmpty ??
+                              false)
+                              ? rewardController
+                              .getOffersByIdModel
+                              .value!
+                              .data!
+                              .first
+                              .image!
+                              : Assets.imagesImOffer,
+                          placeholder:
+                              (context, url) => Center(
+                            child: SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          ),
+                          errorWidget:
+                              (context, url, error) => Image.asset(
+                            Assets.imagesImOffer,
+                            height: 187,
+                            width: Get.width,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
                       ),
+
+                      /*  ClipRRect(
+                       borderRadius: BorderRadius.circular(15),
+                       child: ImageView(
+                         height: 187,
+                         path:
+                         rewardController
+                             .getOffersByIdModel
+                             .value
+                             ?.data
+                             ?.first
+                             .image
+                             ?.isNotEmpty ==
+                             true
+                             ? rewardController
+                             .getOffersByIdModel
+                             .value
+                             ?.data!
+                             .first
+                             .image
+                             : Assets.imagesImOffer,
+                         width: Get.width,
+                         fit: BoxFit.fitWidth,
+                       ),
+                     ),*/
                       Positioned(
                         top: 35,
                         left: 14,
+
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             DateTimeWidget(
-                              title: "0:3 HRS - 34 MINS",
-                              textColor: AppColor.c000000,
-                              color: AppColor.white.withOpacity(0.5),
+                              title: rewardController.timeUntilExpiry(
+                                rewardController
+                                    .getOffersByIdModel
+                                    .value
+                                    ?.data
+                                    ?.first
+                                    .expiryDate ??
+                                    "No Expiry",
+                              ),
                             ),
-                            SizedBox(height: 13),
+                            /* DateTimeWidget(
+                            title: "0:3 HRS - 34 MINS",
+                            textColor: AppColor.c000000,
+                            color: AppColor.white.withOpacity(0.5),
+                          ),*/
+                            13.heightSizeBox,
                             Text(
-                              "Special Offers\nFREE Accessories",
+                              "${rewardController.getOffersByIdModel.value?.data?.first.title ?? ""}",
                               textAlign: TextAlign.center,
                               style: GoogleFonts.rumRaisin(
                                 fontWeight: FontWeight.w400,
@@ -237,24 +479,72 @@ class RewardScreen extends StatelessWidget {
                                 color: AppColor.white,
                               ),
                             ),
+                            /* Text("FREE Accessories",
+                             textAlign: TextAlign.center,
+                             style: GoogleFonts.rumRaisin(
+                               fontWeight: FontWeight.w400,
+                               fontSize: 24,
+                               color: AppColor.white,
+                             ),
+                           ),*/
                           ],
                         ),
                       ),
                       Positioned(
                         right: 16,
                         top: 17,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(2),
-                          child: ImageView(
-                            path: Assets.imagesDemo,
-                            height: 40,
-                            width: 40,
+
+                        child: Container(
+                          padding: EdgeInsets.only(top: 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(2),
+                            child: CachedNetworkImage(
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.fitWidth,
+                              imageUrl:
+                              (rewardController
+                                  .getOffersByIdModel
+                                  .value
+                                  ?.data
+                                  ?.first
+                                  .qRCodeUrl
+                                  ?.isNotEmpty ??
+                                  false)
+                                  ? rewardController
+                                  .getOffersByIdModel
+                                  .value!
+                                  .data!
+                                  .first
+                                  .qRCodeUrl!
+                                  : Assets.imagesDemo,
+                              placeholder:
+                                  (context, url) => Center(
+                                child: SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                              errorWidget:
+                                  (context, url, error) => Image.asset(
+                                Assets.imagesDemo,
+                                height: 40,
+                                width: 40,
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
                           ),
+
+
                         ),
                       ),
                     ],
                   ),
                 ),
+
                 DashedLineWidget(),
                 SizedBox(height: 15),
                 Padding(
@@ -263,11 +553,11 @@ class RewardScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Exclusive Products.",
+                        rewardDetail?.title??'',
                         style: w700_16a(color: AppColor.c2C2A2A),
                       ),
                       Text(
-                        "Special Offers & FREE Coupons – Grab Yours Today!",
+                       rewardDetail?.offerDetails??'',
                         style: w400_12p(),
                       ),
                       13.heightSizeBox,
@@ -340,8 +630,10 @@ class RewardScreen extends StatelessWidget {
                                 ),
                                 SizedBox(width: 25),
                                 GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     rewardController.isSelected.value = 2;
+                                   await rewardController.getRewardedCustomersById(rewardDetail?.id??0);
+
                                     rewardController.update();
                                   },
                                   child: Container(
@@ -391,61 +683,14 @@ class RewardScreen extends StatelessWidget {
                       15.heightSizeBox,
 
                       if (rewardController.isSelected.value == 1) ...[
-                        Text(
-                          "Don't miss out on amazing deals! We’re offering exclusive products, special discounts, and FREE coupons just for you. This limited-time offer is your chance to grab exciting rewards before they’re gone.",
-                        style: w400_12p(),),
-                        10.heightSizeBox,
-                        Text(
-                          "Why You Shouldn’t Miss This",
-                          style: w600_12p(),
-                        ),
-                        6.heightSizeBox,
-                        for (var i = 0; i < 5; i++)
-                          Text(
-                            "✔ Exclusive products available for a limited time",
-                            style: w400_10p(color: AppColor.c455A64),
-                          ),
-                        10.heightSizeBox,
-                        Text(
-                          "Claim your rewards today and make the most of these incredible deals! 🎉",
-                          style: w400_12p(color: AppColor.c455A64),
-                        ),
+                      Text(rewardDetail?.description??'',),
                       ],
                       if (rewardController.isSelected.value == 2) ...[
                         ListView.separated(
                           physics: NeverScrollableScrollPhysics(),
 
                           shrinkWrap: true,
-
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    ProfileImageView(
-                                      radiusStack: 4,
-
-                                      radius: 17,
-                                    ),
-                                    9.widthSizeBox,
-                                    Expanded(
-                                      child: Text(
-                                        "Ibrahim Bafqia",
-                                        style: w600_12a(
-                                          color: AppColor.c2C2A2A,
-                                        ),
-                                      ),
-                                    ),
-                                    20.widthSizeBox,
-                                    Text(
-                                      "15-Oct-2025 / 09:15 AM",
-                                      style: w400_10a(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
+                          itemCount: rewardController.getRewardedCustomersModel.value?.data?.length??0,
                           separatorBuilder: (BuildContext context, int index) {
                             return Column(
                               children: [
@@ -455,7 +700,40 @@ class RewardScreen extends StatelessWidget {
                               ],
                             );
                           },
-                          itemCount: 20,
+                          itemBuilder: (context, index) {
+                            var rewardedCustomerDetail=rewardController.getRewardedCustomersModel.value?.data![index];
+                            return Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    ProfileImageView(
+                                      radiusStack: 4,
+
+                                      radius: 17,
+                                      isVisibleStack: false,
+                                      imagePath: rewardedCustomerDetail?.profilePicUrl??'',
+                                    ),
+                                    9.widthSizeBox,
+                                    Expanded(
+                                      child: Text(
+                                        rewardedCustomerDetail?.customerName??''.tr,
+                                        style: w600_12a(
+                                          color: AppColor.c2C2A2A,
+                                        ),
+                                      ),
+                                    ),
+                                    20.widthSizeBox,
+                                    Text(
+                                      formatServerDate(rewardedCustomerDetail?.redeemedAt??''),
+                                      style: w400_10a(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+
+
                         ),
                       ],
                     ],

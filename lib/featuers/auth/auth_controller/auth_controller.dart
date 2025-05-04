@@ -61,7 +61,7 @@ class AuthController extends GetxController {
     text: "partner2@gmail.com",
   );
   TextEditingController passwordController = TextEditingController(
-    text: "Hiwash@54321",
+    text: "Hiwash@5432",
   );
   TextEditingController phoneRestController = TextEditingController();
   TextEditingController passwordRestController = TextEditingController();

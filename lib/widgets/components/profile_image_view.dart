@@ -4,7 +4,7 @@ import '../../generated/assets.dart';
 import '../../styling/app_color.dart';
 import 'image_view.dart';
 
-class ProfileImageView extends StatelessWidget {
+  class ProfileImageView extends StatelessWidget {
   final double? height;
   final double? width;
   final double? radius;
@@ -36,15 +36,19 @@ class ProfileImageView extends StatelessWidget {
       children: [
         Container(
 
-          padding: EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            border: Border.all(color: AppColor.blue.withOpacity(0.2)),
-          ),
-          child: CircleAvatar(
-            radius: radius,
-            backgroundImage: AssetImage(imagePath??Assets.imagesDemoProfile),
-          ),
+            padding: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(color: AppColor.blue.withOpacity(0.2)),
+            ),
+            child:CircleAvatar(
+              radius: radius,
+              backgroundImage: imagePath != null && imagePath!.isNotEmpty
+                  ? NetworkImage(imagePath!)
+                  : AssetImage(Assets.imagesDemoProfile) as ImageProvider,
+            )
+
+
         ),
     if(isVisibleStack==true)    Container(
           padding: EdgeInsets.all(3),

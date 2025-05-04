@@ -10,7 +10,10 @@ import '../featuers/dashboard/model/get_partner_model.dart';
 import '../featuers/dashboard/view/widget/second_drawer/model/faq_response_model.dart';
 import '../featuers/dashboard/view/widget/second_drawer/model/guides_response_model.dart';
 import '../featuers/profile/model/terms_and_conditions_response_model.dart';
+import '../featuers/qr_scanner/model/get_customer_data_model.dart';
+import '../featuers/reward/model/get_offers_by_id_model.dart';
 import '../featuers/reward/model/get_rewarded_customers_model.dart';
+import '../featuers/reward/model/offer_response_model.dart';
 import 'api_constant.dart';
 import 'dio_helper.dart';
 import 'local_storage.dart';
@@ -125,9 +128,28 @@ class Repository {
   }
 
   Future<GetRewardedCustomersModel> GetRewardedCustomersRepo(
+      ) async {
+    Map<String, dynamic> response = await dioHelper.get(
+      url: ApiConstant.rewardedCustomer,
+      isAuthRequired: true,
+    );
+    print("---->termcondition${response.toString()}");
+    return GetRewardedCustomersModel.fromJson(response);
+  }
+
+  Future<GetRewardedCustomersModel> GetRewardedCustomersByIdRepo(
       int offerId,) async {
     Map<String, dynamic> response = await dioHelper.get(
-      url: ApiConstant.baseUrl + ApiConstant.getTermsAndConditions(offerId),
+      url: ApiConstant.rewardedCustomerById(offerId),
+      isAuthRequired: true,
+    );
+    print("---->termcondition${response.toString()}");
+    return GetRewardedCustomersModel.fromJson(response);
+  }
+ Future<GetRewardedCustomersModel> GetRewardedCustomersAlldRepo(
+      ) async {
+    Map<String, dynamic> response = await dioHelper.get(
+      url: ApiConstant.rewardedCustomer,
       isAuthRequired: true,
     );
     print("---->termcondition${response.toString()}");
@@ -175,5 +197,37 @@ class Repository {
     } catch (e) {
       print("validateWashQr failed: $e");
     }
+  }
+
+  Future<GetOfferResponseModel> getAllOffer() async {
+    // print("url--->:${ApiConstant.getOffers}");
+    Map<String, dynamic> response = await dioHelper.get(
+      url: ApiConstant.getOffers,
+      isAuthRequired: true,
+    );
+    // print("Response--->: $response");
+    return GetOfferResponseModel.fromJson(response);
+  }
+  Future<GetOffersByIdModel> getOfferById(int id) async {
+    // print("url--->:${ApiConstant.getOffersById}");
+    Map<String, dynamic> response = await dioHelper.get(
+      url: ApiConstant.getOffersById(id),
+      isAuthRequired: true,
+    );
+    print("Response--->: $response");
+    return GetOffersByIdModel.fromJson(response);
+  }
+
+
+
+  Future<GetCustomerData> getCustomerData(int id) async {
+    print("url dss--->:${ApiConstant.getCustomerId(id)}");
+    var response = await dioHelper.get(
+      url: ApiConstant.getCustomerId(id),
+      isAuthRequired: true,
+    );
+    print("getCustomerData response--->${response.toString()}");
+
+    return GetCustomerData.fromJson(response);
   }
 }

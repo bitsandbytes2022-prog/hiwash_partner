@@ -86,7 +86,10 @@ class LoginScreen extends StatelessWidget {
                             authController.passwordController.text,
                           )
                           .then((value) {
-                            Get.offNamed(RouteStrings.dashboardScreen);
+                            if (value !=null){
+                              Get.offNamed(RouteStrings.dashboardScreen);
+                            }
+
                           });
                     }
                   },

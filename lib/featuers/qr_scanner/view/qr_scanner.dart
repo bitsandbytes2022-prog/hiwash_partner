@@ -4,17 +4,8 @@ import 'package:get/get.dart';
 
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
-import '../../../generated/assets.dart';
 import '../../../styling/app_color.dart';
-import '../../../styling/app_font_anybody.dart';
-import '../../../styling/app_font_poppins.dart';
-import '../../../widgets/components/app_dialog.dart';
-import '../../../widgets/components/doted_horizontal_line.dart';
-import '../../../widgets/components/doted_vertical_line.dart';
-import '../../../widgets/components/image_view.dart';
-import '../../../widgets/components/is_select_button.dart';
 import '../controller/qr_controller.dart';
-
 
 class QrScreen extends StatelessWidget {
   QrScreen({super.key});
@@ -23,7 +14,7 @@ class QrScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int? washId = Get.arguments;
+
 
     return Scaffold(
       backgroundColor: AppColor.cF6F7FF.withOpacity(0.2),
@@ -49,9 +40,7 @@ class QrScreen extends StatelessWidget {
                 children: [
                   QRView(
                     key: controller.qrKey,
-                    onQRViewCreated: washId != null
-                        ? controller.onQRViewCreated1
-                        : controller.onQRViewCreated,
+                    onQRViewCreated: controller.onQRViewCreated,
                     overlay: QrScannerOverlayShape(
                       borderColor: Colors.white,
                       overlayColor: AppColor.c101D8D.withOpacity(0.5),
@@ -62,7 +51,6 @@ class QrScreen extends StatelessWidget {
                     ),
                   ),
                   Obx(() {
-                    // Add safety check for animationController being initialized
                     if (controller.scanUrl.value.isEmpty &&
                         controller.animationController != null &&
                         controller.animationController.isAnimating) {
@@ -144,6 +132,20 @@ class QrScreen extends StatelessWidget {
               ],
             ),
           ),
+          Obx(() {
+            print("ScanUrl----->${controller.scanUrl.value}");
+            return Text(
+              controller.scanUrl.value.isNotEmpty
+                  ? 'Scanned URL: ${controller.scanUrl.value}'
+                  : 'No URL scanned yet',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            );
+          }),
         ],
       ),
     );

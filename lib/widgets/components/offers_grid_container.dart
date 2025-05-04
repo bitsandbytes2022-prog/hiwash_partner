@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../featuers/reward/controller/reward_controller.dart';
+import '../../featuers/reward/model/offer_response_model.dart';
 import '../../generated/assets.dart';
 import '../../styling/app_color.dart';
 import '../../styling/app_font_anybody.dart';
+import '../../widgets/sized_box_extension.dart';
 import 'date_time_widget.dart';
-
 class OffersGridContainer extends StatelessWidget {
-  const OffersGridContainer({super.key});
+  final Offers offer;
+
+  OffersGridContainer({super.key, required this.offer});
+
+  final RewardController rewardController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    final String imageUrl = (offer.image != null && offer.image!.isNotEmpty)
+        ? offer.image!
+        : '';
+
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor.c5C6B72.withOpacity(0.5),
+        border: Border.all(color: AppColor.c5C6B72.withOpacity(0.4)),
+        image: DecorationImage(
+          image: imageUrl.isNotEmpty
+              ? NetworkImage(imageUrl)
+              : AssetImage(Assets.imagesImOffer) as ImageProvider,
+          fit: BoxFit.cover,
         ),
       ),
       child: Column(
@@ -24,16 +39,15 @@ class OffersGridContainer extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: DateTimeWidget(title: "0:3 HRS - 34 MINS",)
+            child: DateTimeWidget(
+              title: rewardController.timeUntilExpiry(
+                offer.expiryDate ?? "No Expiry",
+              ),
+            ),
           ),
-
-          Image.asset(
-            Assets.imagesDemo2,
-            height: 87,
-            fit: BoxFit.cover,
-          ),
+          Spacer(),
           Text(
-            "Flat 30% off",
+            "${offer.discountValue ?? 0}% Off",
             style: w900_14a(color: AppColor.c2C2A2A),
           ),
         ],

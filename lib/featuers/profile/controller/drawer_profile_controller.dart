@@ -53,8 +53,6 @@ class DrawerProfileController extends GetxController {
   Future<dio.FormData> getFormDataForUpload() async {
     if (imageFile == null) {}
 
-
-
     final fileName = imageFile.value?.path.split('/').last;
     var file = await dio.MultipartFile.fromFile(
       imageFile.value!.path,
