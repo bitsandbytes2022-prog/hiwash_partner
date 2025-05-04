@@ -635,6 +635,7 @@ class RewardScreen extends StatelessWidget {
                                    await rewardController.getRewardedCustomersById(rewardDetail?.id??0);
 
                                     rewardController.update();
+
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
