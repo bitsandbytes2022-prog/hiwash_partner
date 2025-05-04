@@ -12,21 +12,21 @@ class RewardController extends GetxController{
   final RxBool isVisible = false.obs;
   RxInt isSelected=1.obs;
   Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
-
+  Rxn<GetRewardedCustomersModel> getRewardedCustomersModel=Rxn();
   @override
   void onInit() {
- getRewardedCustomersAll();
+
  getAllOffers();
+ getRewardedCustomersAll();
     super.onInit();
   }
 
-Rxn<GetRewardedCustomersModel> getRewardedCustomersModel=Rxn();
+
 
 
   Rxn<GetOfferResponseModel> offerResponseModel = Rxn();
   Future<GetOfferResponseModel?> getAllOffers() async {
     try {
-
 
       offerResponseModel.value = await Repository().getAllOffer();
 
@@ -55,9 +55,9 @@ Rxn<GetRewardedCustomersModel> getRewardedCustomersModel=Rxn();
   Future<GetRewardedCustomersModel?> getRewardedCustomersAll()async{
 
     try{
-showLoader();
+//showLoader();
       getRewardedCustomersModel.value=await Repository().GetRewardedCustomersRepo();
-     hideLoader();
+//hideLoader();
       return getRewardedCustomersModel.value;
     }catch (e){
       print("Error fetching Terms And Condition: $e");

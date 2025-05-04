@@ -133,7 +133,7 @@ class Repository {
       url: ApiConstant.rewardedCustomer,
       isAuthRequired: true,
     );
-    print("---->termcondition${response.toString()}");
+    print("---->GetRewardedCustomersRepo${response.toString()}");
     return GetRewardedCustomersModel.fromJson(response);
   }
 
