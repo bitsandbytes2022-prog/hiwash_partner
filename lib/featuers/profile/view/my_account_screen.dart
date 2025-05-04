@@ -126,10 +126,14 @@ class MyAccountScreen extends StatelessWidget {
                 ],
               ),
               11.heightSizeBox,
-              Text(
-                userData?.businessName ?? '',
-                style: w700_16a(color: AppColor.c2C2A2A),
-              ),
+              Obx(() {
+                // Use Obx to make the Text widget reactive
+                final updatedUserData = dashboardController.getPartnerModel.value?.data?.first;
+                return Text(
+                  updatedUserData?.businessName ?? '',
+                  style: w700_16a(color: AppColor.c2C2A2A),
+                );
+              }),
 
 
               31.heightSizeBox,
@@ -247,7 +251,7 @@ class MyAccountScreen extends StatelessWidget {
                 return HiWashButton(
                   isLoading: drawerProfileController.isLoading.value,
                   text: 'Save',
-                  onTap: () {
+                  onTap: () async {
                     if (_formKey.currentState!.validate()) {
                       drawerProfileController.uploadProfile(
                         drawerProfileController.businessNameController.text,
@@ -255,7 +259,7 @@ class MyAccountScreen extends StatelessWidget {
                         drawerProfileController.addressController.text,
                       );
 
-                      dashboardController.getPartnerDataById(
+                    await  dashboardController.getPartnerDataById(
                         dashboardController
                             .getPartnerModel
                             .value

@@ -53,9 +53,9 @@ class Data {
     mobileNumber = json['mobileNumber'];
     address = json['address'];
     profilePicUrl =
-        json['profilePicUrl'] != null
-            ? "${ApiConstant.baseImageUrl}${json['profilePicUrl']}"
-            : null;
+    json['profilePicUrl'] != null
+        ? "${ApiConstant.baseImageUrl}${json['profilePicUrl']}?timestamp=${DateTime.now().millisecondsSinceEpoch}"
+        : null;
   }
 
   Map<String, dynamic> toJson() {

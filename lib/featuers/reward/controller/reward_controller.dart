@@ -15,7 +15,7 @@ class RewardController extends GetxController{
 
   @override
   void onInit() {
-    getRewardedCustomersAll();
+ getRewardedCustomersAll();
  getAllOffers();
     super.onInit();
   }
@@ -32,7 +32,6 @@ Rxn<GetRewardedCustomersModel> getRewardedCustomersModel=Rxn();
 
       return offerResponseModel.value;
     } catch (error) {
-      update();
       print("Error fetching Offers Get All: $error");
     }
     return null;

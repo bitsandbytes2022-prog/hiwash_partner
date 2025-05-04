@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:hiwash_partner/widgets/components/loader.dart';
 import '../../../network_manager/repository.dart';
 import '../model/terms_and_conditions_response_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -63,8 +64,10 @@ class DrawerProfileController extends GetxController {
 
   Future<dynamic> uploadProfileImage() async {
     try {
+      showLoader();
       final formData = await getFormDataForUpload();
       final response = await Repository().uploadProfilePicture(formData);
+     hideLoader();
       return response;
     } catch (e) {
       print("Upload error: $e");
@@ -90,16 +93,17 @@ class DrawerProfileController extends GetxController {
       String phone,
       String address,
       ) async {
-    isLoading.value = true;
+
     try {
-      Map<String, dynamic> requestBody = {
+      showLoader()
+;      Map<String, dynamic> requestBody = {
         "businessName": businessName,
         "phone": phone,
         "address": address,
       };
 
       final response = await Repository().uploadProfile(requestBody);
-
+hideLoader();
       return response;
     } catch (e) {
       print("Update profile error: $e");
