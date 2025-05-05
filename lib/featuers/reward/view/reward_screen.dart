@@ -373,6 +373,7 @@ class RewardScreen extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
           return Padding(
+
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
