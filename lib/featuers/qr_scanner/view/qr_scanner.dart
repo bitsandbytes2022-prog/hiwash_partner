@@ -135,8 +135,8 @@ class QrScreen extends StatelessWidget {
           Obx(() {
             print("ScanUrl----->${controller.scanUrl.value}");
             return Text(
-              controller.scanUrl.value.isNotEmpty
-                  ? 'Scanned URL: ${controller.scanUrl.value}'
+              controller.getOfferId.value.isNotEmpty
+                  ? 'Offer ID: ${controller.getOfferId.value}'
                   : 'No URL scanned yet',
               textAlign: TextAlign.center,
               style: TextStyle(

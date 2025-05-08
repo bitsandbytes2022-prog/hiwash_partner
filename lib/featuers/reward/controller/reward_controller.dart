@@ -11,6 +11,7 @@ class RewardController extends GetxController{
   RxBool isWashSelected=true.obs;
   final RxBool isVisible = false.obs;
   RxInt isSelected=1.obs;
+  var isLoadingCustomers = false.obs;
   Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
   Rxn<GetRewardedCustomersModel> getRewardedCustomersModel=Rxn();
   @override

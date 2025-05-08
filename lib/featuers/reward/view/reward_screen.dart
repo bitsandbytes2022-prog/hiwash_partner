@@ -364,6 +364,7 @@ class RewardScreen extends StatelessWidget {
   }
 
   Widget viewOfferDetailBottomSheet() {
+    // rewardController.getRewardedCustomersModel.value=null;
     return Expanded(
       child: SingleChildScrollView(
         child: Obx(() {
@@ -375,12 +376,13 @@ class RewardScreen extends StatelessWidget {
           return Padding(
 
 
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(1.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 20.heightSizeBox,
                 Container(
+                  height: 187,
                   margin: EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -393,13 +395,15 @@ class RewardScreen extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: CachedNetworkImage(
+
                           height: 187,
                           width: double.infinity,
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.cover,
                           imageUrl:
                               rewardDetail.image?.isNotEmpty == true
                                   ? rewardDetail.image!
                                   : Assets.imagesImOffer,
+
                           placeholder:
                               (context, url) => Center(
                                 child: SizedBox(
@@ -442,7 +446,8 @@ class RewardScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Positioned(
+                    /// Hide Qr image
+                    /*  Positioned(
                         right: 16,
                         top: 17,
                         child: ClipRRect(
@@ -474,11 +479,11 @@ class RewardScreen extends StatelessWidget {
                                 ),
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
-                DashedLineWidget(),
+               // DashedLineWidget(),
                 SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -561,10 +566,12 @@ class RewardScreen extends StatelessWidget {
                                 GestureDetector(
                                   onTap: () async {
                                     rewardController.isSelected.value = 2;
+                                    showLoader();
                                     await rewardController
                                         .getRewardedCustomersById(
                                           rewardDetail.id ?? 0,
                                         );
+                                 hideLoader();
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(

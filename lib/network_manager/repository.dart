@@ -230,4 +230,20 @@ class Repository {
 
     return GetCustomerData.fromJson(response);
   }
+
+  Future<dynamic> validateOfferQrRepo(Object requestBody) async {
+    try {
+      final response = await dioHelper.post(
+        url: ApiConstant.validateOfferQr,
+        requestBody: requestBody,
+        isAuthRequired: true,
+      );
+      print("validateOfferQr success: $response");
+      return response;
+    } catch (e) {
+      print("validateOfferQr failed: $e");
+      return null;
+    }
+  }
+
 }
