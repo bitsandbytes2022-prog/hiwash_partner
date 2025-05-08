@@ -75,6 +75,7 @@ class RewardedCustomersScreen extends StatelessWidget {
                           radiusStack: 4,
                           radius: 17,
                           imagePath: customerAllData.profilePicUrl ?? '',
+                          isVisibleStack: customerAllData.isPremium==0?false:true,
                         ),
                         9.widthSizeBox,
                         Expanded(

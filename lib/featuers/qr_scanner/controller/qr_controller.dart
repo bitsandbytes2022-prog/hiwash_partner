@@ -98,7 +98,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
             customerId.value = id;
             getOfferId.value = offerId;
 
-            // Call validation API
+
             var validationResponse = await validateOfferQr(id, offerId);
             if (validationResponse != null) {
               scannedCustomerId.value = id;
@@ -114,6 +114,10 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
               final GetOffersByIdModel? offerDetail = results[1] as GetOffersByIdModel?;
 
               if (customerData != null && offerDetail != null) {
+                Get.back();
+
+
+                await Future.delayed(Duration(milliseconds: 300));
                 Get.dialog(
                   approveRewardDialog(customerData, offerDetail),
                   barrierDismissible: false,
@@ -166,11 +170,11 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       getCustomerData.refresh();
       return getCustomerData.value;
     } catch (error) {
-      // loading = false;
+
       print("Error fetching customer data: $error");
       return null;
     }
-    return null;
+
   }
 
   ///  Get offer id by id
