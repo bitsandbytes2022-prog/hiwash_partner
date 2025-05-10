@@ -9,6 +9,7 @@ import '../featuers/dashboard/model/get_partner_model.dart';
 
 import '../featuers/dashboard/view/widget/second_drawer/model/faq_response_model.dart';
 import '../featuers/dashboard/view/widget/second_drawer/model/guides_response_model.dart';
+import '../featuers/notification/model/notification.dart';
 import '../featuers/profile/model/terms_and_conditions_response_model.dart';
 import '../featuers/qr_scanner/model/get_customer_data_model.dart';
 import '../featuers/reward/model/get_offers_by_id_model.dart';
@@ -243,5 +244,14 @@ class Repository {
     } catch (e) {
       print("validateOfferQr failed: $e");
     }
+  }
+  Future<NotificationModel> notificationRepo() async {
+    print("{Notification------>${ApiConstant.notification}}");
+    Map<String, dynamic> response = await dioHelper.get(
+      url: ApiConstant.notification,
+      isAuthRequired: true,
+    );
+    print("{Notification------>${response}}");
+    return NotificationModel.fromJson(response);
   }
 }
