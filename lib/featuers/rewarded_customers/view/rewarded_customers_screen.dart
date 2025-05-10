@@ -10,10 +10,12 @@ import 'package:hiwash_partner/widgets/components/doted_line.dart';
 import 'package:hiwash_partner/widgets/components/profile_image_view.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
+import '../controller/rewarded_customer_controller.dart';
+
 class RewardedCustomersScreen extends StatelessWidget {
   RewardedCustomersScreen({super.key});
 
-  RewardController rewardController = Get.put(RewardController());
+  RewardedCustomerController rewardedCustomerController = Get.put(RewardedCustomerController());
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class RewardedCustomersScreen extends StatelessWidget {
         ),
 
         child: Obx(() {
-          return rewardController
+          return rewardedCustomerController
                       .getRewardedCustomersModel
                       .value
                       ?.data
@@ -56,14 +58,14 @@ class RewardedCustomersScreen extends StatelessWidget {
                   );
                 },
                 itemCount:
-                    rewardController
+                rewardedCustomerController
                         .getRewardedCustomersModel
                         .value!
                         .data!
                         .length,
                 itemBuilder: (context, index) {
                   var customerAllData =
-                      rewardController
+                  rewardedCustomerController
                           .getRewardedCustomersModel
                           .value!
                           .data![index];
