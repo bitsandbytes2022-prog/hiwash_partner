@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hiwash_partner/route/route_strings.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -75,6 +76,10 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       }
     });
   }
+
+
+  /// Todo Not working Get back
+/*
   void onQRViewCreated(QRViewController controller) {
     qrController = controller;
 
@@ -98,12 +103,11 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
             customerId.value = id;
             getOfferId.value = offerId;
 
-
             var validationResponse = await validateOfferQr(id, offerId);
+
             if (validationResponse != null) {
               scannedCustomerId.value = id;
               scannedOfferId.value = offerId;
-
 
               final results = await Future.wait([
                 getCustomerDataById(int.parse(id)),
@@ -114,30 +118,102 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
               final GetOffersByIdModel? offerDetail = results[1] as GetOffersByIdModel?;
 
               if (customerData != null && offerDetail != null) {
-                Get.back();
-
-
+                clearScan();
                 await Future.delayed(Duration(milliseconds: 300));
                 Get.dialog(
                   approveRewardDialog(customerData, offerDetail),
                   barrierDismissible: false,
                 );
               } else {
-                Get.snackbar("Error", "Failed to fetch customer or offer data.");
               }
-            }
+            } else {
+              Get.back();
 
+            }
           } catch (e) {
-            Get.snackbar("Error", "Failed to decode JWT: $e");
-            clearScan();
+
           }
         } else {
-          Get.snackbar("Invalid QR", "Scanned code is not a valid JWT");
-          clearScan();
+         // clearScan();
+
+
+
         }
       }
     });
   }
+
+
+*/
+
+  void onQRViewCreated(QRViewController controller) {
+    qrController = controller;
+
+    controller.scannedDataStream.listen((scanData) async {
+      if (!hasScanned.value) {
+        final scannedCode = scanData.code ?? '';
+        scanUrl.value = scannedCode;
+        hasScanned.value = true;
+
+        animationController.stop();
+        controller.pauseCamera();
+
+
+
+        if (scannedCode.isNotEmpty && scannedCode.split('.').length == 3) {
+          try {
+            Map<String, dynamic> decodedToken = JwtDecoder.decode(scannedCode);
+            print("ScanData----->${scanData.code}");
+
+            String id = decodedToken['CustomerId'];
+            String offerId = decodedToken['OfferId'];
+
+            customerId.value = id;
+            getOfferId.value = offerId;
+
+            var validationResponse = await validateOfferQr(id, offerId);
+
+            if (validationResponse != null) {
+              scannedCustomerId.value = id;
+              scannedOfferId.value = offerId;
+
+              final results = await Future.wait([
+                getCustomerDataById(int.parse(id)),
+                getOffersById(int.parse(offerId)),
+              ]);
+
+              final GetCustomerData? customerData = results[0] as GetCustomerData?;
+              final GetOffersByIdModel? offerDetail = results[1] as GetOffersByIdModel?;
+
+              if (customerData != null && offerDetail != null) {
+                //clearScan();
+                await Future.delayed(Duration(milliseconds: 300));
+                Get.dialog(
+                  approveRewardDialog(customerData, offerDetail),
+                  barrierDismissible: false,
+                );
+              }
+            }else{
+              await Future.delayed(Duration(seconds: 1));
+              Get.back();
+              await Future.delayed(Duration(seconds: 1));
+
+              Get.back()
+;            }
+          } catch (e) {
+            clearScan();
+            Get.snackbar("Error", "Failed to decode QR code.");
+            Get.offAllNamed(RouteStrings.dashboardScreen);
+          }
+        } else {
+          clearScan();
+          Get.snackbar("Invalid QR", "Scanned code is not a valid JWT.");
+          Get.offAllNamed(RouteStrings.dashboardScreen);
+        }
+      }
+    });
+  }
+
 
 
 
@@ -200,14 +276,14 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     super.onClose();
   }
 
-  Future<dynamic> validateOfferQr(String customerId, String offerId) async {
+  Future validateOfferQr(String customerId, String offerIdd) async {
     Map<String, dynamic> requestBody = {
       "customerId": customerId,
-      "offerId": offerId,
+      "offerId": offerIdd,
     };
 
     try {
-      var response = await Repository().validateOfferQrRepo(requestBody);
+     var response = await Repository().validateOfferQrRepo(requestBody);
       print("Value received in controller validateOfferQr: $response");
       return response;
     } catch (e) {

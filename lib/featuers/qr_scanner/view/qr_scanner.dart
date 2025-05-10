@@ -7,10 +7,23 @@ import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import '../../../styling/app_color.dart';
 import '../controller/qr_controller.dart';
 
-class QrScreen extends StatelessWidget {
+class QrScreen extends StatefulWidget {
   QrScreen({super.key});
 
+  @override
+  State<QrScreen> createState() => _QrScreenState();
+}
+
+class _QrScreenState extends State<QrScreen> {
   final QrController controller = Get.put(QrController());
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    controller.clearScan();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +163,4 @@ class QrScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }

@@ -242,8 +242,6 @@ class Repository {
       return response;
     } catch (e) {
       print("validateOfferQr failed: $e");
-      return null;
     }
   }
-
 }
