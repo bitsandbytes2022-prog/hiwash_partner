@@ -35,7 +35,9 @@ class AuthController extends GetxController {
     _timer?.cancel();
     super.onClose();
   }
-
+  void resetTimer() {
+    startTimer();
+  }
   void checkLoginStatus() {
     String? token = LocalStorage().getToken();
     if (token != null && token.isNotEmpty) {
@@ -148,6 +150,14 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
       sendOtpModel = await Repository().sendOtpRepo(requestBody);
+      if (sendOtpModel != null) {
+        Get.snackbar(
+          'Success',
+          "OTP: ${sendOtpModel?.data?.otp}",
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: AppColor.white,
+        );}
       print("Value received in controller sendOtp: $sendOtpModel");
       return sendOtpModel;
     } catch (e) {

@@ -106,6 +106,7 @@ class OtpScreen extends StatelessWidget {
                 onTap: isActive
                     ? () {
                   controller.sendOtp(phoneNumber);
+                  controller.resetTimer();
                 }
                     : null,
                 child: Text(

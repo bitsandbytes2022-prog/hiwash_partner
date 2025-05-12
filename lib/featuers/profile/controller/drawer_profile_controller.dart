@@ -11,16 +11,16 @@ import '../model/terms_and_conditions_response_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class DrawerProfileController extends GetxController {
-  var imageFile = Rx<File?>(null);
   RxBool isLoading = false.obs;
+  var  imageFile = Rx<File?>(null);
 
-  Future<void> imagePicker() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
+  Future<void> imagePicker({required ImageSource source}) async {
+    var pickedFile = await ImagePicker().pickImage(source: source,imageQuality: 20);
 
     if (pickedFile != null) {
-      imageFile.value = File(pickedFile.path);
+      imageFile.value = File(pickedFile.path,  );
+    } else {
+      print("No file selected");
     }
   }
 

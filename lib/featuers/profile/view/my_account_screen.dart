@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../generated/assets.dart';
 import '../../../styling/app_color.dart';
@@ -21,6 +22,72 @@ class MyAccountScreen extends StatelessWidget {
   DashboardController dashboardController = Get.find();
   DrawerProfileController drawerProfileController = Get.find();
   final _formKey = GlobalKey<FormState>();
+  Future<void> _showImageSourceDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Select Image Source",
+            style: w500_20a(color: AppColor.c2C2A2A),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.camera),
+                title: Text("Camera", style: w400_14p()),
+                onTap: () async {
+                  Get.back();
+                  await drawerProfileController.imagePicker(
+                    source: ImageSource.camera,
+                  );
+                  if (drawerProfileController.imageFile.value != null) {
+                    await drawerProfileController.uploadProfileImage();
+                    await Future.delayed(Duration(seconds: 1));
+                    dashboardController.getPartnerDataById(
+                      dashboardController
+                          .getPartnerModel
+                          .value
+                          ?.data
+                          ?.first
+                          .id ??
+                          0,
+                    );
+                  }
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo),
+                title: Text("Gallery", style: w400_14p()),
+                onTap: () async {
+                  Get.back();
+                  await drawerProfileController.imagePicker(
+                    source: ImageSource.gallery,
+                  );
+                  if (drawerProfileController.imageFile.value != null) {
+                    await drawerProfileController.uploadProfileImage();
+                    await Future.delayed(Duration(seconds: 1));
+
+                    dashboardController.getPartnerDataById(
+                      dashboardController
+                          .getPartnerModel
+                          .value
+                          ?.data
+                          ?.first
+                          .id ??
+                          0,
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +151,33 @@ class MyAccountScreen extends StatelessWidget {
                       ),
                     ),*/
                   ),
+
                   GestureDetector(
+                    onTap: () async {
+                      await _showImageSourceDialog(context);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: AppColor.cC41949,
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: AppColor.white, width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColor.cC41949.withOpacity(0.25),
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: ImageView(
+                        path: Assets.iconsIcEdit,
+                        height: 17,
+                        width: 17,
+                      ),
+                    ),
+                  ),
+               /*   GestureDetector(
                     onTap: () async {
                       await drawerProfileController.imagePicker();
 
@@ -122,7 +215,7 @@ class MyAccountScreen extends StatelessWidget {
                         width: 17,
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
               11.heightSizeBox,

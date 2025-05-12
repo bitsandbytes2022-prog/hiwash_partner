@@ -57,6 +57,7 @@ dependencies:
   cached_network_image: ^3.4.1
   scanning_effect: ^1.0.7
   jwt_decoder: ^2.0.1
+  permission_handler: ^11.0.0
 
 
 dev_dependencies:

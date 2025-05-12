@@ -14,6 +14,8 @@ import 'package:hiwash_partner/generated/assets.dart';
 import 'package:hiwash_partner/styling/app_color.dart';
 import 'package:hiwash_partner/widgets/components/image_view.dart';
 import 'package:hiwash_partner/widgets/components/profile_image_view.dart';
+import '../../../styling/app_font_anybody.dart';
+import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/app_home_bg.dart';
 import '../controller/dashboard_controller.dart';
 
@@ -161,88 +163,93 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     ];
 
-    return SafeArea(
-      bottom: true,
-      top: false,
-      child: Scaffold(
+    return WillPopScope(
+      onWillPop: ()async {
+        return await _showExitConfirmationDialog(context);
+      },
+      child: SafeArea(
+        bottom: true,
+        top: false,
+        child: Scaffold(
 
-        key: _scaffoldKey,
-        drawer: _currentDrawer == 'first'
-            ? DrawerScreen()
-            : SecondDrawer(),
-        drawerEnableOpenDragGesture: false,
+          key: _scaffoldKey,
+          drawer: _currentDrawer == 'first'
+              ? DrawerScreen()
+              : SecondDrawer(),
+          drawerEnableOpenDragGesture: false,
 
-        body: AppHomeBg(
-          iconLeft: SizedBox(),
-          buttonPadding:
-          _currentIndex == 0
-              ? EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 30)
-              : EdgeInsets.only(left: 16, right: 16, top: 40),
-          headingText: _headings[_currentIndex],
-          padding: _currentIndex == 2 ? EdgeInsets.zero : EdgeInsets.symmetric(horizontal: 16),
-          iconRight: GestureDetector(
-            onTap: () {
-              setState(() {
-                _currentDrawer = 'second';
-              });
-              _openDrawer('second');
-            },
-            child: ImageView(
-              height: 23,
-              width: 23,
-              path: Assets.iconsIcMessage,
-            ),
-          ),
-          child: _pages[_currentIndex],
-        ),
-        bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-          itemCount: filledImages.length,
-          tabBuilder: (int index, bool isActive) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                isActive ? filledImages[index] : outlineImages[index],
-              ],
-            );
-          },
-          activeIndex: _currentIndex,
-          gapLocation: GapLocation.center,
-          notchSmoothness: NotchSmoothness.softEdge,
-          onTap: _onItemTapped,
-          backgroundColor: AppColor.blue,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-                return QrScreen();
+          body: AppHomeBg(
+            iconLeft: SizedBox(),
+            buttonPadding:
+            _currentIndex == 0
+                ? EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 30)
+                : EdgeInsets.only(left: 16, right: 16, top: 40),
+            headingText: _headings[_currentIndex],
+            padding: _currentIndex == 2 ? EdgeInsets.zero : EdgeInsets.symmetric(horizontal: 16),
+            iconRight: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _currentDrawer = 'second';
+                });
+                _openDrawer('second');
               },
-            );
-          },
-          child: Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AppColor.cC31848,
-              borderRadius: BorderRadius.circular(100),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor.cC31848.withOpacity(0.60),
-                  spreadRadius: 0,
-                  blurRadius: 30,
-                  offset: Offset(0, 15),
-                ),
-              ],
-            ),
-            child: Center(
               child: ImageView(
-                path: Assets.iconsIcQrScanner,
-                height: 28,
-                width: 28,
+                height: 23,
+                width: 23,
+                path: Assets.iconsIcMessage,
+              ),
+            ),
+            child: _pages[_currentIndex],
+          ),
+          bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+            itemCount: filledImages.length,
+            tabBuilder: (int index, bool isActive) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  isActive ? filledImages[index] : outlineImages[index],
+                ],
+              );
+            },
+            activeIndex: _currentIndex,
+            gapLocation: GapLocation.center,
+            notchSmoothness: NotchSmoothness.softEdge,
+            onTap: _onItemTapped,
+            backgroundColor: AppColor.blue,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: GestureDetector(
+            onTap: () {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return QrScreen();
+                },
+              );
+            },
+            child: Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: AppColor.cC31848,
+                borderRadius: BorderRadius.circular(100),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.cC31848.withOpacity(0.60),
+                    spreadRadius: 0,
+                    blurRadius: 30,
+                    offset: Offset(0, 15),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: ImageView(
+                  path: Assets.iconsIcQrScanner,
+                  height: 28,
+                  width: 28,
+                ),
               ),
             ),
           ),
@@ -250,6 +257,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
 
   Widget fillNavigationImage({required String image}) {
     return Container(
@@ -265,6 +273,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       child: ImageView(path: image, height: 25, width: 25),
     );
+  }
+
+  Future<bool> _showExitConfirmationDialog(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Exit",style: w700_22a(color: AppColor.c2C2A2A),),
+          content: Text("Do you really want to close the app?",style: w400_16p(),),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text("No"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text("Yes"),
+            ),
+          ],
+        );
+      },
+    ).then((value) => value ?? false);
   }
 }
 

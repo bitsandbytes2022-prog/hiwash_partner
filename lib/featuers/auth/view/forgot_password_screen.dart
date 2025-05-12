@@ -67,10 +67,10 @@ class ForgotPasswordScreen extends StatelessWidget {
                 return HiWashButton(
                   isLoading: controller.isLoading.value,
                   text: "kRecoverPassword".tr,
-                  onTap: () {
+                  onTap: () async {
                     if (formKey.currentState?.validate() ?? false) {
                       String phoneNumber = controller.loginPhoneController.text.trim();
-                      controller.sendOtp(phoneNumber).then((value) {
+                 await     controller.sendOtp(phoneNumber).then((value) {
                         if (value != null) {
                           Get.toNamed(
                             RouteStrings.otpScreen,

@@ -8,6 +8,7 @@ import 'package:hiwash_partner/route/route_strings.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 import '../../../generated/assets.dart';
@@ -54,9 +55,14 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   }
 
   @override
-  void onReady() {
+  Future<void> onReady() async {
     super.onReady();
-
+    await requestCameraPermission();
+  /*  animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: true);
+*/
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -65,6 +71,17 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     animation = Tween<double>(begin: 0, end: 150).animate(animationController);
 
     qrController?.resumeCamera();
+  }
+
+
+  Future<void> requestCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      var result = await Permission.camera.request();
+      if (!result.isGranted) {
+        Get.snackbar("Permission Denied", "Camera permission is required to scan QR codes.");
+      }
+    }
   }
 
   void checkInternetConnection() {
@@ -158,8 +175,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
         animationController.stop();
         controller.pauseCamera();
 
-
-
         if (scannedCode.isNotEmpty && scannedCode.split('.').length == 3) {
           try {
             Map<String, dynamic> decodedToken = JwtDecoder.decode(scannedCode);
@@ -187,9 +202,9 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
 
               if (customerData != null && offerDetail != null) {
                 //clearScan();
-                await Future.delayed(Duration(milliseconds: 300));
+                 Future.delayed(Duration(milliseconds: 300));
                 Get.dialog(
-                  approveRewardDialog(customerData, offerDetail),
+                 await approveRewardDialog(customerData, offerDetail),
                   barrierDismissible: false,
                 );
               }
