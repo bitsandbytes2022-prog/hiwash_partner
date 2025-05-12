@@ -45,7 +45,7 @@ Rxn<GetPartnerModel> getPartnerModel=Rxn();
       return getPartnerModel.value;
     } catch (error) {
       // loading = false;
-      print("Error fetching customer data: $error");
+      print("Error fetching partner data: $error");
       return null;
     }
   }

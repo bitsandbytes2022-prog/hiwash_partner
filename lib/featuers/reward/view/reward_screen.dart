@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hiwash_partner/widgets/components/app_home_bg.dart';
+import 'package:hiwash_partner/widgets/components/countdown_else_full_date.dart';
 import 'package:hiwash_partner/widgets/components/hi_wash_button.dart';
 import 'package:hiwash_partner/widgets/components/hi_wash_text_field.dart';
 
@@ -15,6 +16,7 @@ import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/app_dialog.dart';
+import '../../../widgets/components/countdown_or_date_timer.dart';
 import '../../../widgets/components/custom_bottomsheet.dart';
 import '../../../widgets/components/data_formet.dart';
 import '../../../widgets/components/date_time_widget.dart';
@@ -38,18 +40,11 @@ class RewardScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        15.heightSizeBox,
         Obx(
           () => GestureDetector(
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AppDialog(
-                    child: approveRewardDialog(),
-                    padding: EdgeInsets.zero,
-                  );
-                },
-              );
+
             },
             child: Container(
               height: 95,
@@ -178,20 +173,7 @@ class RewardScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                      ) /*HiWashTextField(
-                        readOnly: true,
-                        hintStyle: w400_12p(color: AppColor.c2C2A2A),
-
-                        hintText: "All Offers",
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: ImageView(
-                            path: Assets.iconsIcDropDown,
-                            height: 5,
-                            width: 9,
-                          ),
-                        ),
-                      ),*/,
+                      )
                     ),
                     8.widthSizeBox,
                     Expanded(
@@ -228,7 +210,6 @@ class RewardScreen extends StatelessWidget {
                                 width: 9,
                                 color: AppColor.c2C2A2A,
                               ),
-                              //Icon(Icons.arrow_drop_down, size: 20),
                             ],
                           ),
                         ),
@@ -258,9 +239,10 @@ class RewardScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () async {
-
                               showLoader();
-                              await rewardController.getOffersById(data[index].id!,);
+                              await rewardController.getOffersById(
+                                data[index].id!,
+                              );
                               hideLoader();
                               showModalBottomSheet(
                                 context: Get.context!,
@@ -280,7 +262,10 @@ class RewardScreen extends StatelessWidget {
                                 rewardController.isSelected.value = 1;
                               });
                             },
-                            child: OffersGridContainer(offer: data[index]),
+                            child: OffersGridContainer(
+                               /// key to force rebuild
+                                key: ValueKey(data[index].expiryDate),
+                                offer: data[index]),
                           );
                         },
                       )
@@ -369,13 +354,11 @@ class RewardScreen extends StatelessWidget {
       child: SingleChildScrollView(
         child: Obx(() {
           var rewardDetail =
-              rewardController.getOffersByIdModel.value?.data?.first;
+              rewardController.getOffersByIdModel.value?.offerDetailList?.first;
           if (rewardDetail == null) {
             return Center(child: CircularProgressIndicator());
           }
           return Padding(
-
-
             padding: const EdgeInsets.all(1.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,13 +378,12 @@ class RewardScreen extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: CachedNetworkImage(
-
                           height: 187,
                           width: double.infinity,
                           fit: BoxFit.cover,
                           imageUrl:
-                              rewardDetail.image?.isNotEmpty == true
-                                  ? rewardDetail.image!
+                              rewardDetail.bannerImageUrl?.isNotEmpty == true
+                                  ? rewardDetail.bannerImageUrl!
                                   : Assets.imagesImOffer,
 
                           placeholder:
@@ -429,11 +411,7 @@ class RewardScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            DateTimeWidget(
-                              title: rewardController.timeUntilExpiry(
-                                rewardDetail.expiryDate ?? "No Expiry",
-                              ),
-                            ),
+                            DateTimeWidget(title: rewardDetail.businessName),
                             13.heightSizeBox,
                             Text(
                               rewardDetail.title ?? "",
@@ -446,44 +424,11 @@ class RewardScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                    /// Hide Qr image
-                    /*  Positioned(
-                        right: 16,
-                        top: 17,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(2),
-                          child: CachedNetworkImage(
-                            height: 40,
-                            width: 40,
-                            fit: BoxFit.cover,
-                            imageUrl:
-                                rewardDetail.qRCodeUrl?.isNotEmpty == true
-                                    ? rewardDetail.qRCodeUrl!
-                                    : Assets.imagesDemo,
-                            placeholder:
-                                (context, url) => Center(
-                                  child: SizedBox(
-                                    height: 25,
-                                    width: 25,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  ),
-                                ),
-                            errorWidget:
-                                (context, url, error) => Image.asset(
-                                  Assets.imagesDemo,
-                                  height: 40,
-                                  width: 40,
-                                  fit: BoxFit.cover,
-                                ),
-                          ),
-                        ),
-                      ),*/
+
                     ],
                   ),
                 ),
-               // DashedLineWidget(),
+                // DashedLineWidget(),
                 SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -499,10 +444,9 @@ class RewardScreen extends StatelessWidget {
                       ),
                       Text(rewardDetail.offerDetails ?? '', style: w400_12p()),
                       13.heightSizeBox,
-                      Align(
-                        child: ImageView(
-                          path: Assets.imagesTimeView,
-                          height: 37,
+                      Center(
+                        child: CountdownOrDateTimer(
+                          expiryDateStr: rewardDetail.expiryDate ?? '',
                         ),
                       ),
                       18.heightSizeBox,
@@ -571,7 +515,7 @@ class RewardScreen extends StatelessWidget {
                                         .getRewardedCustomersById(
                                           rewardDetail.id ?? 0,
                                         );
-                                 hideLoader();
+                                    hideLoader();
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -680,268 +624,5 @@ class RewardScreen extends StatelessWidget {
     );
   }
 
-  Widget approveRewardDialog() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              27.heightSizeBox,
-              Text(
-                "Approve Reward Sharing",
-                style: w700_18a(color: AppColor.c2C2A2A),
-              ),
-              Text("Special Offers & FREE Coupons.", style: w400_12p()),
-              6.heightSizeBox,
-              Container(
-                width: Get.width,
 
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: ImageView(path: Assets.imagesImOffer),
-                    ),
-                    Positioned(
-                      top: 35,
-                      left: 14,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DateTimeWidget(
-                            title: "0:3 HRS - 34 MINS",
-                            textColor: AppColor.c000000,
-                            color: AppColor.white.withOpacity(0.5),
-                          ),
-                          SizedBox(height: 13),
-                          Text(
-                            "Special Offers\nFREE Accessories",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.rumRaisin(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 24,
-                              color: AppColor.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      right: 16,
-                      top: 17,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(2),
-                        child: ImageView(
-                          path: Assets.imagesDemo,
-                          height: 40,
-                          width: 40,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              21.heightSizeBox,
-              ProfileImageView(radius: 24, radiusStack: 6),
-              11.heightSizeBox,
-              Text("CUSTOMER", style: w400_10a()),
-              Text("Ibrahim Bafqia", style: w400_16a(color: AppColor.c2C2A2A)),
-              11.heightSizeBox,
-              ImageView(path: Assets.imagesTimeView, height: 25),
-              22.heightSizeBox,
-            ],
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColor.cF6F7FF,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          child: Column(
-            children: [
-              DashedLineWidget(),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(top: 21, bottom: 21),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35,
-                        vertical: 13,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColor.white,
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(color: AppColor.cC31848),
-                      ),
-                      child: Text(
-                        "Decline",
-                        style: w500_14a(color: AppColor.cC31848),
-                      ),
-                    ),
-                  ),
-                  15.widthSizeBox,
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: Get.context!,
-                        builder: (context) {
-                          return AppDialog(
-                            onTap: () {
-                              Get.back();
-                              Get.back();
-                            },
-                            child: successDialog(),
-                            padding: EdgeInsets.zero,
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35,
-                        vertical: 13,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColor.c1F9D70,
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColor.c1F9D70.withOpacity(0.30),
-                            spreadRadius: 0,
-                            blurRadius: 15,
-                            offset: Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        "Approve",
-                        style: w500_14a(color: AppColor.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget successDialog() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              30.heightSizeBox,
-              Container(
-                width: Get.width,
-
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: ImageView(
-                        path: Assets.imagesImSussess,
-                        width: Get.width,
-                        height: 222,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              21.heightSizeBox,
-              Text("Success!", style: w700_22a(color: AppColor.c2C2A2A)),
-              Text(
-                "Reward Has Been\nSuccessfully Shared!",
-                textAlign: TextAlign.center,
-                style: w400_16p(),
-              ),
-              18.heightSizeBox,
-            ],
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColor.cF6F7FF,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          child: Column(
-            children: [
-              DashedLineWidget(),
-
-              Padding(
-                padding: EdgeInsets.only(top: 23, left: 19, bottom: 23),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ProfileImageView(radius: 20, radiusStack: 4),
-                    9.widthSizeBox,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Ibrahim Bafqia",
-                          style: w600_14a(color: AppColor.c2C2A2A),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IsSelectButton(),
-                            5.widthSizeBox,
-                            Text(
-                              "09-May-2024",
-                              style: w400_12a(color: AppColor.c455A64),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5, bottom: 5),
-                          child: DotedVerticalLine(height: 5),
-                        ),
-
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IsSelectButton(),
-                            5.widthSizeBox,
-                            Text(
-                              "Buy 1 Get 1 Free ",
-                              style: w400_10a(color: AppColor.c455A64),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }

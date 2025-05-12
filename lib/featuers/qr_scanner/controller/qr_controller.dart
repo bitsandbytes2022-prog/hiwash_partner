@@ -1,11 +1,13 @@
-
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hiwash_partner/route/route_strings.dart';
+import 'package:hiwash_partner/widgets/components/countdown_else_full_date.dart';
+import 'package:hiwash_partner/widgets/components/data_formet.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
+import 'package:intl/intl.dart';
 
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -18,6 +20,7 @@ import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/app_dialog.dart';
+import '../../../widgets/components/countdown_or_date_timer.dart';
 import '../../../widgets/components/date_time_widget.dart';
 import '../../../widgets/components/doted_line.dart';
 import '../../../widgets/components/doted_vertical_line.dart';
@@ -41,7 +44,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   Rxn<String> scannedCustomerId = Rxn<String>();
   Rxn<String> scannedOfferId = Rxn<String>();
 
-  late AnimationController animationController;
+  AnimationController? animationController;
   late Animation<double> animation;
   final LocalStorage localStorage = LocalStorage();
 
@@ -50,43 +53,42 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   @override
   void onInit() {
     super.onInit();
-
     checkInternetConnection();
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: true);
+
+    animation = Tween<double>(begin: 0, end: 150).animate(animationController!);
   }
 
   @override
   Future<void> onReady() async {
     super.onReady();
     await requestCameraPermission();
-  /*  animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 4),
-    )..repeat(reverse: true);
-*/
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 4),
-    )..repeat(reverse: true);
-
-    animation = Tween<double>(begin: 0, end: 150).animate(animationController);
-
     qrController?.resumeCamera();
   }
-
 
   Future<void> requestCameraPermission() async {
     var status = await Permission.camera.status;
     if (!status.isGranted) {
       var result = await Permission.camera.request();
       if (!result.isGranted) {
-        Get.snackbar("Permission Denied", "Camera permission is required to scan QR codes.");
+        Get.snackbar(
+          "Permission Denied",
+          "Camera permission is required to scan QR codes.",
+        );
       }
     }
   }
 
   void checkInternetConnection() {
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
+    Connectivity().onConnectivityChanged.listen((
+      List<ConnectivityResult> result,
+    ) {
+      if (result.contains(ConnectivityResult.mobile) ||
+          result.contains(ConnectivityResult.wifi)) {
         internetStatus.value = "";
       } else {
         internetStatus.value = "Internet is not available";
@@ -94,9 +96,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
-
-  /// Todo Not working Get back
-/*
   void onQRViewCreated(QRViewController controller) {
     qrController = controller;
 
@@ -106,7 +105,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
         scanUrl.value = scannedCode;
         hasScanned.value = true;
 
-        animationController.stop();
+        animationController?.stop();
         controller.pauseCamera();
 
         if (scannedCode.isNotEmpty && scannedCode.split('.').length == 3) {
@@ -120,101 +119,41 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
             customerId.value = id;
             getOfferId.value = offerId;
 
-            var validationResponse = await validateOfferQr(id, offerId);
+            scannedCustomerId.value = id;
+            scannedOfferId.value = offerId;
 
-            if (validationResponse != null) {
-              scannedCustomerId.value = id;
-              scannedOfferId.value = offerId;
+            final results = await Future.wait([
+              getCustomerDataById(int.parse(id)),
+              getOffersById(int.parse(offerId)),
+            ]);
 
-              final results = await Future.wait([
-                getCustomerDataById(int.parse(id)),
-                getOffersById(int.parse(offerId)),
-              ]);
+            final GetCustomerData? customerData =
+                results[0] as GetCustomerData?;
+            final GetOffersByIdModel? offerData =
+                results[1] as GetOffersByIdModel?;
+            final OfferDetailList? offerDetails =
+                offerData?.offerDetailList?.isNotEmpty == true
+                    ? offerData!.offerDetailList!.first
+                    : null;
 
-              final GetCustomerData? customerData = results[0] as GetCustomerData?;
-              final GetOffersByIdModel? offerDetail = results[1] as GetOffersByIdModel?;
-
-              if (customerData != null && offerDetail != null) {
-                clearScan();
-                await Future.delayed(Duration(milliseconds: 300));
-                Get.dialog(
-                  approveRewardDialog(customerData, offerDetail),
-                  barrierDismissible: false,
-                );
-              } else {
-              }
-            } else {
+            if (customerData != null && offerDetails != null) {
               Get.back();
-
+              Future.delayed(Duration(milliseconds: 300));
+              showDialog(
+                barrierDismissible: false,
+                context: Get.context!,
+                builder: (context) {
+                  return AppDialog(
+                    onTap: () {
+                      Get.back();
+                      Get.back();
+                    },
+                    child: approveRewardDialog(customerData, offerDetails),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+              );
             }
-          } catch (e) {
-
-          }
-        } else {
-         // clearScan();
-
-
-
-        }
-      }
-    });
-  }
-
-
-*/
-
-  void onQRViewCreated(QRViewController controller) {
-    qrController = controller;
-
-    controller.scannedDataStream.listen((scanData) async {
-      if (!hasScanned.value) {
-        final scannedCode = scanData.code ?? '';
-        scanUrl.value = scannedCode;
-        hasScanned.value = true;
-
-        animationController.stop();
-        controller.pauseCamera();
-
-        if (scannedCode.isNotEmpty && scannedCode.split('.').length == 3) {
-          try {
-            Map<String, dynamic> decodedToken = JwtDecoder.decode(scannedCode);
-            print("ScanData----->${scanData.code}");
-
-            String id = decodedToken['CustomerId'];
-            String offerId = decodedToken['OfferId'];
-
-            customerId.value = id;
-            getOfferId.value = offerId;
-
-            var validationResponse = await validateOfferQr(id, offerId);
-
-            if (validationResponse != null) {
-              scannedCustomerId.value = id;
-              scannedOfferId.value = offerId;
-
-              final results = await Future.wait([
-                getCustomerDataById(int.parse(id)),
-                getOffersById(int.parse(offerId)),
-              ]);
-
-              final GetCustomerData? customerData = results[0] as GetCustomerData?;
-              final GetOffersByIdModel? offerDetail = results[1] as GetOffersByIdModel?;
-
-              if (customerData != null && offerDetail != null) {
-                //clearScan();
-                 Future.delayed(Duration(milliseconds: 300));
-                Get.dialog(
-                 await approveRewardDialog(customerData, offerDetail),
-                  barrierDismissible: false,
-                );
-              }
-            }else{
-              await Future.delayed(Duration(seconds: 1));
-              Get.back();
-              await Future.delayed(Duration(seconds: 1));
-
-              Get.back()
-;            }
           } catch (e) {
             clearScan();
             Get.snackbar("Error", "Failed to decode QR code.");
@@ -229,20 +168,110 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
+  /*
+  void onQRViewCreated(QRViewController controller) {
+    qrController = controller;
 
+    controller.scannedDataStream.listen((scanData) async {
+      if (!hasScanned.value) {
+        final scannedCode = scanData.code ?? '';
+        scanUrl.value = scannedCode;
+        hasScanned.value = true;
 
+        animationController?.stop();
+        controller.pauseCamera();
 
+        if (scannedCode.isNotEmpty && scannedCode.split('.').length == 3) {
+          try {
+            Map<String, dynamic> decodedToken = JwtDecoder.decode(scannedCode);
+            print("ScanData----->${scanData.code}");
+
+            String id = decodedToken['CustomerId'];
+            String offerId = decodedToken['OfferId'];
+
+            customerId.value = id;
+            getOfferId.value = offerId;
+
+            var validationResponse = await validateOfferQr(id, offerId);
+
+            if (validationResponse != null) {
+              scannedCustomerId.value = id;
+              scannedOfferId.value = offerId;
+
+              final results = await Future.wait([
+                getCustomerDataById(int.parse(id)),
+                getOffersById(int.parse(offerId)),
+              ]);
+
+              final GetCustomerData? customerData =
+                  results[0] as GetCustomerData?;
+              final GetOffersByIdModel? offerData =
+                  results[1] as GetOffersByIdModel?;
+              final OfferDetailList? offerDetails =
+                  offerData?.offerDetailList?.isNotEmpty == true
+                      ? offerData!.offerDetailList!.first
+                      : null;
+
+              if (customerData != null && offerDetails != null) {
+                //clearScan();
+                Get.back();
+                Future.delayed(Duration(milliseconds: 300));
+                showDialog(
+                  barrierDismissible: false,
+                  context: Get.context!,
+
+                  builder: (context) {
+                    return AppDialog(
+                      onTap: () {
+                        Get.back();
+                        Get.back();
+                      },
+                      child: approveRewardDialog(customerData, offerDetails),
+                      padding: EdgeInsets.zero,
+                    );
+                  },
+                );
+                */
+  /* Get.dialog(
+                 await approveRewardDialog(customerData, offerDetail),
+                  barrierDismissible: false,
+                );*/ /*
+
+              }
+            } else {
+              await Future.delayed(Duration(seconds: 1));
+              Get.back();
+              await Future.delayed(Duration(seconds: 1));
+
+              Get.back();
+            }
+          } catch (e) {
+            clearScan();
+            Get.snackbar("Error", "Failed to decode QR code.");
+            Get.offAllNamed(RouteStrings.dashboardScreen);
+          }
+        } else {
+          clearScan();
+          Get.snackbar("Invalid QR", "Scanned code is not a valid JWT.");
+          Get.offAllNamed(RouteStrings.dashboardScreen);
+        }
+      }
+    });
+  }
+*/
 
   void clearScan() {
     scanUrl.value = '';
     customerId.value = '';
-    getOfferId.value="";
+    getOfferId.value = "";
     hasScanned.value = false;
     scannedCustomerId.value = null;
     scannedOfferId.value = null;
 
     qrController?.resumeCamera();
-    animationController.repeat(reverse: true);
+    if (animationController?.isAnimating == false) {
+      animationController?.repeat(reverse: true);
+    }
   }
 
   void clearScanResult() {
@@ -251,34 +280,30 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   }
 
   ///Get customer id
-  Rxn<GetCustomerData> getCustomerData=Rxn();
-  Future<GetCustomerData?> getCustomerDataById(int id) async {
+  Rxn<GetCustomerData> getCustomerData = Rxn();
 
+  Future<GetCustomerData?> getCustomerDataById(int id) async {
     try {
-      getCustomerData.value= await Repository().getCustomerData(id);
+      getCustomerData.value = await Repository().getCustomerData(id);
 
       getCustomerData.value;
       getCustomerData.refresh();
       return getCustomerData.value;
     } catch (error) {
-
       print("Error fetching customer data: $error");
       return null;
     }
-
   }
 
   ///  Get offer id by id
   Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
+
   Future<GetOffersByIdModel?> getOffersById(int id) async {
     try {
-
       getOffersByIdModel.value = await Repository().getOfferById(id);
 
-      getOffersByIdModel.value;
+      return getOffersByIdModel.value;
     } catch (error) {
-
-
       print("Error fetching Offers by Di: $error");
     }
     return null;
@@ -287,7 +312,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   @override
   void onClose() {
     qrController?.dispose();
-    animationController.dispose();
+    animationController?.dispose();
     super.onClose();
   }
 
@@ -298,7 +323,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     };
 
     try {
-     var response = await Repository().validateOfferQrRepo(requestBody);
+      var response = await Repository().validateOfferQrRepo(requestBody);
       print("Value received in controller validateOfferQr: $response");
       return response;
     } catch (e) {
@@ -307,8 +332,10 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-
-  Widget approveRewardDialog(GetCustomerData customerData, GetOffersByIdModel offerDetail) {
+  Widget approveRewardDialog(
+    GetCustomerData customerData,
+    OfferDetailList offerDetailList,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -321,16 +348,54 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                 "Approve Reward Sharing",
                 style: w700_18a(color: AppColor.c2C2A2A),
               ),
-              Text("Special Offers & FREE Coupons.", style: w400_12p()),
-              6.heightSizeBox,
               Container(
-                width: Get.width,
+                padding: EdgeInsets.only(left: 20),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  offerDetailList.offerDetails ?? "",
+                  style: w400_12p(),
+                ),
+              ),
+              6.heightSizeBox,
 
+              Container(
+                height: 187,
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: AppColor.c2C2A2A.withOpacity(0.2)),
+                ),
                 child: Stack(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: ImageView(path: Assets.imagesImOffer),
+                      child: CachedNetworkImage(
+                        height: 172,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        imageUrl:
+                            offerDetailList.image?.isNotEmpty == true
+                                ? offerDetailList.image!
+                                : Assets.imagesImOffer,
+
+                        placeholder:
+                            (context, url) => Center(
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                        errorWidget:
+                            (context, url, error) => Image.asset(
+                              Assets.imagesImOffer,
+                              height: 187,
+                              width: double.infinity,
+                              fit: BoxFit.fitWidth,
+                            ),
+                      ),
                     ),
                     Positioned(
                       top: 35,
@@ -338,15 +403,13 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          DateTimeWidget(
-                            title: "0:3 HRS - 34 MINS",
-                            textColor: AppColor.c000000,
-                            color: AppColor.white.withOpacity(0.5),
+                          CountdownElseFullDate(
+                            expiryDateStr: offerDetailList.expiryDate ?? '',
                           ),
-                          SizedBox(height: 13),
+
+                          13.heightSizeBox,
                           Text(
-                            "Special Offers\nFREE Accessories",
-                            textAlign: TextAlign.center,
+                            offerDetailList.title ?? "",
                             style: GoogleFonts.rumRaisin(
                               fontWeight: FontWeight.w400,
                               fontSize: 24,
@@ -356,28 +419,31 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                         ],
                       ),
                     ),
-                    Positioned(
-                      right: 16,
-                      top: 17,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(2),
-                        child: ImageView(
-                          path: Assets.imagesDemo,
-                          height: 40,
-                          width: 40,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
               21.heightSizeBox,
-              ProfileImageView(radius: 24, radiusStack: 6),
+              ProfileImageView(
+                radius: 24,
+                radiusStack: 6,
+
+                imagePath:
+                    customerData.data?.customerDetails?.profilePicUrl ?? '',
+
+                isVisibleStack:
+                    customerData.data?.subscriptionDetails?.isPremium,
+              ),
               11.heightSizeBox,
               Text("CUSTOMER", style: w400_10a()),
-              Text("Ibrahim Bafqia", style: w400_16a(color: AppColor.c2C2A2A)),
+              Text(
+                customerData.data?.customerDetails?.fullName ?? "",
+                style: w400_16a(color: AppColor.c2C2A2A),
+              ),
               11.heightSizeBox,
-              ImageView(path: Assets.imagesTimeView, height: 25),
+              CountdownOrDateTimer(
+                expiryDateStr: offerDetailList.expiryDate ?? '',
+              ),
+              // ImageView(path: Assets.imagesTimeView, height: 25),
               22.heightSizeBox,
             ],
           ),
@@ -421,15 +487,79 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                   ),
                   15.widthSizeBox,
                   GestureDetector(
+                    onTap: () async {
+                      Get.back();
+                      try {
+                        final response = await validateOfferQr(
+                          customerData.data!.customerDetails!.id.toString(),
+                          offerDetailList.id.toString(),
+                        );
+
+                        if (response != null) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: Get.context!,
+                            builder: (context) {
+                              return AppDialog(
+                                onTap: () {
+                                  Get.back();
+                                  Get.back();
+                                },
+                                padding: EdgeInsets.zero,
+                                child: successDialog(
+                                  customerDataSuccess: customerData,
+                                  offerDetailListSuccess: offerDetailList,
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          Get.snackbar(
+                            "Failed",
+                            "Offer validation failed. Please try again.",
+                          );
+                        }
+                      } catch (e) {
+                        Get.snackbar(
+                          "Error",
+                          "Something went wrong. Please try again.",
+                        );
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 35,
+                        vertical: 13,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColor.c1F9D70,
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColor.c1F9D70.withOpacity(0.30),
+                            spreadRadius: 0,
+                            blurRadius: 15,
+                            offset: Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        "Approve",
+                        style: w500_14a(color: AppColor.white),
+                      ),
+                    ),
+                  ),
+
+                  /*  GestureDetector(
                     onTap: () {
+                      Get.back();
+                      validateOfferQr(customerData.data!.customerDetails!.id.toString(), offerDetailList.id.toString());
                       showDialog(
                         barrierDismissible: false,
                         context: Get.context!,
                         builder: (context) {
                           return AppDialog(
                             onTap: () {
-                              Get.back();
-                              Get.back();
                             },
                             child: successDialog(),
                             padding: EdgeInsets.zero,
@@ -459,7 +589,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                         style: w500_14a(color: AppColor.white),
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ],
@@ -468,7 +598,12 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       ],
     );
   }
-  Widget successDialog() {
+
+  Widget successDialog({
+    required GetCustomerData customerDataSuccess,
+
+    required OfferDetailList offerDetailListSuccess,
+  }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -522,13 +657,25 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ProfileImageView(radius: 20, radiusStack: 4),
+                    ProfileImageView(
+                      isVisibleStack:
+                          customerDataSuccess.data?.subscriptionDetails?.isPremium,
+                      radius: 20,
+                      radiusStack: 4,
+
+                      imagePath:
+                          customerDataSuccess
+                              .data
+                              ?.customerDetails
+                              ?.profilePicUrl,
+                    ),
                     9.widthSizeBox,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Ibrahim Bafqia",
+                          customerDataSuccess.data?.customerDetails?.fullName ??
+                              '',
                           style: w600_14a(color: AppColor.c2C2A2A),
                         ),
                         Row(
@@ -537,13 +684,17 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                           children: [
                             IsSelectButton(),
                             5.widthSizeBox,
+
+                            /// Todo part of discussion which date show here
                             Text(
-                              "09-May-2024",
+                              formatDate("${DateTime.now()}"),
                               style: w400_12a(color: AppColor.c455A64),
                             ),
                           ],
                         ),
-                        Padding(
+
+                        /// Todo part of discussion
+                        /*  Padding(
                           padding: const EdgeInsets.only(left: 5, bottom: 5),
                           child: DotedVerticalLine(height: 5),
                         ),
@@ -559,7 +710,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                               style: w400_10a(color: AppColor.c455A64),
                             ),
                           ],
-                        ),
+                        ),*/
                       ],
                     ),
                   ],
@@ -572,4 +723,3 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     );
   }
 }
-

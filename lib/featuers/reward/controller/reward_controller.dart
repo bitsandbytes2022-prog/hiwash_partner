@@ -7,28 +7,25 @@ import '../model/get_offers_by_id_model.dart';
 import '../model/get_rewarded_customers_model.dart';
 import '../model/offer_response_model.dart';
 
-class RewardController extends GetxController{
-  RxBool isWashSelected=true.obs;
+class RewardController extends GetxController {
+  RxBool isWashSelected = true.obs;
   final RxBool isVisible = false.obs;
-  RxInt isSelected=1.obs;
+  RxInt isSelected = 1.obs;
   var isLoadingCustomers = false.obs;
   Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
-  Rxn<GetRewardedCustomersModel> getRewardedCustomersModel=Rxn();
+  Rxn<GetRewardedCustomersModel> getRewardedCustomersModel = Rxn();
+
   @override
   void onInit() {
-
- getAllOffers();
- getRewardedCustomersAll();
+    getAllOffers();
+    getRewardedCustomersAll();
     super.onInit();
   }
 
-
-
-
   Rxn<GetOfferResponseModel> offerResponseModel = Rxn();
+
   Future<GetOfferResponseModel?> getAllOffers() async {
     try {
-
       offerResponseModel.value = await Repository().getAllOffer();
 
       return offerResponseModel.value;
@@ -40,48 +37,40 @@ class RewardController extends GetxController{
 
   Future<GetOffersByIdModel?> getOffersById(int id) async {
     try {
-
       getOffersByIdModel.value = await Repository().getOfferById(id);
 
       getOffersByIdModel.value;
     } catch (error) {
-
-
       print("Error fetching Offers by Di: $error");
     }
     return null;
   }
 
-
-  Future<GetRewardedCustomersModel?> getRewardedCustomersAll()async{
-
-    try{
-//showLoader();
-      getRewardedCustomersModel.value=await Repository().GetRewardedCustomersRepo();
-//hideLoader();
+  Future<GetRewardedCustomersModel?> getRewardedCustomersAll() async {
+    try {
+      //showLoader();
+      getRewardedCustomersModel.value =
+          await Repository().GetRewardedCustomersRepo();
+      //hideLoader();
       return getRewardedCustomersModel.value;
-    }catch (e){
+    } catch (e) {
       print("Error fetching Terms And Condition: $e");
       return null;
     }
-
   }
 
-
-
-Future<GetRewardedCustomersModel?> getRewardedCustomersById(int offerId)async{
-
-  try{
-
-    getRewardedCustomersModel.value=await Repository().GetRewardedCustomersByIdRepo(offerId);
-    return getRewardedCustomersModel.value;
-  }catch (e){
-    print("Error fetching Terms And Condition: $e");
-    return null;
+  Future<GetRewardedCustomersModel?> getRewardedCustomersById(
+    int offerId,
+  ) async {
+    try {
+      getRewardedCustomersModel.value = await Repository()
+          .GetRewardedCustomersByIdRepo(offerId);
+      return getRewardedCustomersModel.value;
+    } catch (e) {
+      print("Error fetching Terms And Condition: $e");
+      return null;
+    }
   }
-
-  }
-
 
   RxBool isAscending = true.obs;
   RxString sortByText = "Sort by Expiry".obs;
@@ -103,7 +92,7 @@ Future<GetRewardedCustomersModel?> getRewardedCustomersById(int offerId)async{
     });
 
     sortByText.value =
-    isAscending.value ? "Ascending order" : "Descending order";
+        isAscending.value ? "Ascending order" : "Descending order";
 
     offerResponseModel.update((val) {
       val?.data?.offers = offers;
@@ -139,8 +128,4 @@ Future<GetRewardedCustomersModel?> getRewardedCustomersById(int offerId)async{
       return "Invalid date";
     }
   }
-
 }
-
-
-

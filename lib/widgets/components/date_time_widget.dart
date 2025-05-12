@@ -13,18 +13,18 @@ class DateTimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //margin: EdgeInsets.only(top: 10, right: 10),
+      //margin: EdgeInsets.only(top: 10, right: 60),
       padding: EdgeInsets.symmetric(
-        horizontal: 6,
+        horizontal: 12,
         vertical: 4,
       ),
       decoration: BoxDecoration(
-        color:color?? AppColor.cF6DBE2,
-        borderRadius: BorderRadius.circular(10),
+        color:color?? AppColor.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Text(
         title??''.tr,
-        style: w500_7a(color: textColor??AppColor.cC31848),
+        style: w400_8a(color: textColor??AppColor.c000000),
       ),
     );
   }

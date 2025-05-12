@@ -1,3 +1,5 @@
+import '../../../network_manager/api_constant.dart';
+
 class GetRewardedCustomersModel {
   bool? success;
   String? message;
@@ -45,8 +47,12 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     customerId = json['customerId'];
+
     customerName = json['customerName'];
-    profilePicUrl = json['profilePicUrl'];
+    profilePicUrl =
+    json['profilePicUrl'] != null
+        ? "${ApiConstant.baseImageUrl}${json['profilePicUrl']}"
+        : null;
     offerTitle = json['offerTitle'];
     redeemedAt = json['redeemedAt'];
     isPremium = json['isPremium'];

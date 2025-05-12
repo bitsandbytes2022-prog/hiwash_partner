@@ -66,9 +66,9 @@ class _QrScreenState extends State<QrScreen> {
                   Obx(() {
                     if (controller.scanUrl.value.isEmpty &&
                         controller.animationController != null &&
-                        controller.animationController.isAnimating) {
+                        controller.animationController!.isAnimating) {
                       return AnimatedBuilder(
-                        animation: controller.animationController,
+                        animation: controller.animationController!,
                         builder: (context, child) {
                           return Positioned(
                             top: controller.animation.value,
