@@ -118,14 +118,24 @@ class OtpScreen extends StatelessWidget {
               );
             }),
             26.heightSizeBox,
-
             Obx(
-                  () => HiWashButton(
+                    () => HiWashButton(
                   isLoading: controller.isLoading.value,
                   text: "kVerify".tr,
                   onTap: () {
                     if (formKey.currentState!.validate()) {
-                      if (controller.enteredOtp.value != "1234") {
+                      final enteredOtp = controller.enteredOtp.value.trim();
+                      final serverOtp = controller.sendOtpModel?.data?.otp?.toString();
+
+                      print("Entered OTP: $enteredOtp (${enteredOtp.runtimeType})");
+                      print("Server OTP: $serverOtp (${serverOtp.runtimeType})");
+
+                      if (enteredOtp == serverOtp) {
+                        Get.offNamed(
+                            RouteStrings.resetPasswordScreen,arguments: phoneNumber
+
+                        );
+                      } else {
                         Get.snackbar(
                           "Invalid OTP",
                           "Please enter the correct OTP",
@@ -135,37 +145,15 @@ class OtpScreen extends StatelessWidget {
                           margin: const EdgeInsets.all(16),
                           borderRadius: 10,
                         );
-                        return;
                       }
-                      Get.offNamed(
-                        RouteStrings.resetPasswordScreen,arguments: phoneNumber
-
-                      );
-                    /*  controller.getToken(phoneNumber).then((value) {
-                        if (value != null) {
-                          Get.offNamed(
-                            RouteStrings.dashboardScreen,
-                            arguments: controller.getTokenModel?.data?.id,
-                          );
-                        }
-                      });*/
                     }
-                  }
+                  },
+                )
 
-                /* onTap: () {
-                  if (formKey.currentState!.validate()) {
-                    controller.getToken(phoneNumber).then((value) {
-                      if (value != null) {
-                        Get.offNamed(
-                          RouteStrings.dashboardScreen,
-                          arguments: controller.getTokenModel?.data?.id,
-                        );
-                      }
-                    });
-                  }
-                },*/
-              ),
+
             ),
+
+
 
             30.heightSizeBox,
           ],

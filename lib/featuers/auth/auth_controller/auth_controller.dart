@@ -56,11 +56,11 @@ class AuthController extends GetxController {
 
   /// login controller
   TextEditingController loginPhoneController = TextEditingController(
-    text: "9012345678",
+    text: "6212345678901",
   );
 
   TextEditingController emailController = TextEditingController(
-    text: "partner2@gmail.com",
+    text: "partner1@gmail.com",
   );
   TextEditingController passwordController = TextEditingController(
     text: "Hiwash@5432",

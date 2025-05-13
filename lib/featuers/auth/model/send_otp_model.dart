@@ -30,7 +30,7 @@ class Data {
   Data({this.otp, this.otpExpiredDate, this.mobileNumber});
 
   Data.fromJson(Map<String, dynamic> json) {
-    otp = json['otp'];
+    otp = json['otp'] != null ? int.tryParse(json['otp'].toString()) : null;
     otpExpiredDate = json['otpExpiredDate'];
     mobileNumber = json['mobileNumber'];
   }
