@@ -18,7 +18,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDeE04laXbAPJe0uTPa5H7o87VVB1HPdY8',
-    appId: '1:771921395674:android:065131a16efdebe4d9cae3',
+    appId: '1:771921395674:android:5e8f9aaf5ba0df89d9cae3',
     messagingSenderId: '771921395674',
     projectId: 'self-service-iphone',
     storageBucket: 'self-service-iphone.firebasestorage.app',
