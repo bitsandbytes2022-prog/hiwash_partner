@@ -19,6 +19,8 @@ static const getOffers="$baseUrl/offer";
 static  getOffersById(int id)=>"$baseUrl/offer/$id";
 static  const offerCategories="$baseUrl/offer/categories";
 static const validateWashQr="$baseUrl/worker/validate-wash-qr";
+static const notificationUrl="$baseUrl/notification";
+
 
 
 static const uploadProfileImage="$baseUrl/partner/upload-profile-picture";

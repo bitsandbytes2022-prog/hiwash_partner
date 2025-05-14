@@ -1,17 +1,17 @@
 class NotificationModel {
   bool? success;
   String? message;
-  List<Data>? data;
+  List<NotificationData>? notificationData;
 
-  NotificationModel({this.success, this.message, this.data});
+  NotificationModel({this.success, this.message, this.notificationData});
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      notificationData = <NotificationData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        notificationData!.add(new NotificationData.fromJson(v));
       });
     }
   }
@@ -20,14 +20,14 @@ class NotificationModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
     data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    if (this.notificationData != null) {
+      data['data'] = this.notificationData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Data {
+class NotificationData {
   int? id;
   String? message;
   bool? isRead;
@@ -35,7 +35,7 @@ class Data {
   int? notificationType;
   String? createdAt;
 
-  Data(
+  NotificationData(
       {this.id,
         this.message,
         this.isRead,
@@ -43,7 +43,7 @@ class Data {
         this.notificationType,
         this.createdAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  NotificationData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     message = json['message'];
     isRead = json['isRead'];

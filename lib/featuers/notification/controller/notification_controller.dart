@@ -1,64 +1,89 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
+import 'package:hiwash_partner/featuers/notification/model/notification.dart';
 import '../../../network_manager/repository.dart';
-import '../model/notification.dart';
+import 'package:flutter/material.dart';
+
 class NotificationController extends GetxController {
+  RxList<NotificationData> notifications = <NotificationData>[].obs;
   RxList<RxBool> selectedStates = <RxBool>[].obs;
-  Rxn<NotificationModel> notificationModel = Rxn();
+
   RxBool isLoading = false.obs;
+  RxBool hasMore = true.obs;
+  RxInt currentPage = 1.obs;
+  RxInt pageSize = 10.obs;
   RxString errorMessage = ''.obs;
 
+  final ScrollController scrollController = ScrollController();
+
+/*
   @override
   void onInit() {
     super.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getNotification();
-    });
+    scrollController.addListener(scrollListener);
+    fetchInitialNotifications();
+  }
+*/
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
   }
 
-  void toggleSelection(int index) {
-    if (index >= 0 && index < selectedStates.length) {
-      selectedStates[index].value = !selectedStates[index].value;
+  void scrollListener() {
+    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 300) {
+      if (!isLoading.value && hasMore.value) {
+        getNotification();
+      }
     }
   }
 
+  void fetchInitialNotifications() {
+    currentPage.value = 1;
+    hasMore.value = true;
+    notifications.clear();
+    selectedStates.clear();
+    getNotification();
+  }
+
   Future<void> getNotification() async {
+    if (isLoading.value || !hasMore.value) return;
+
+    isLoading.value = true;
+    errorMessage.value = '';
 
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
-      final response = await Repository().notificationRepo();
-      notificationModel.value = response;
+      final response = await Repository().getNotificationRepo({
+        "pageNo": currentPage.value.toString(),
+        "pageSize": pageSize.value.toString(),
+      });
 
+      final NotificationModel model = NotificationModel.fromJson(response);
 
-      if (response.data != null) {
-        selectedStates.value = List.generate(response.data!.length, (_) => false.obs);
+      if (model.success == true) {
+        final newNotifications = model.notificationData ?? [];
+
+        if (newNotifications.isNotEmpty) {
+          notifications.addAll(newNotifications);
+          selectedStates.addAll(List.generate(newNotifications.length, (_) => false.obs));
+          currentPage.value++;
+
+          if (newNotifications.length < pageSize.value) {
+            hasMore.value = false;
+          }
+        } else {
+          hasMore.value = false;
+        }
       } else {
-        selectedStates.clear();
+        errorMessage.value = model.message ?? "Failed to load notifications.";
       }
-    } catch (error) {
-      errorMessage.value = "Error fetching notifications, please try again.";
-      print("Error fetching notifications: $error");
+    } catch (e) {
+      errorMessage.value = "Error fetching notifications: $e";
     } finally {
       isLoading.value = false;
     }
   }
-}
-/*
-class NotificationController extends GetxController {
-  RxList<RxBool> selectedStates = <RxBool>[].obs;
-  Rxn<NotificationModel> notificationModel = Rxn();
-  RxBool isWashSelected = true.obs;
-  bool loading = false;
-
-  @override
-  void onInit() {
-    super.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getNotification();
-    });
-  }
 
   void toggleSelection(int index) {
     if (index >= 0 && index < selectedStates.length) {
@@ -66,22 +91,20 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<NotificationModel?> getNotification() async {
-   int id=0;
-   showLoader();
-    try {
+  void updateNotificationReadStatus(NotificationData item, int index) {
+    if (item.isRead == true) return;
 
-      final response = await Repository().notificationRepo(id);
-      notificationModel.value = response;
-      return notificationModel.value;
-    } catch (error) {
-      print("Error fetching notifications: $error");
-    } finally {
+    item.isRead = true;
 
-      hideLoader();
+    if (index >= 0 && index < notifications.length) {
+      notifications[index] = item;
     }
-    return null;
-  }
 
+    if (index >= 0 && index < selectedStates.length) {
+      selectedStates[index].value = true;
+    }
+  }
 }
-*/
+
+
+

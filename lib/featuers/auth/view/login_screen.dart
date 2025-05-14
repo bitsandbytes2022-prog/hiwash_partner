@@ -34,7 +34,11 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final formKey = GlobalKey<FormState>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      authController.getFCMTokenIn();
+    });
     return Scaffold(
       body: AuthBg(
         headingText: "kWelcomeBack".tr,

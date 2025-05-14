@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_storage/get_storage.dart';
 
 class LocalStorage {
@@ -7,6 +8,8 @@ class LocalStorage {
   final String _userIdKey = 'user_id';
   final String _customerIdKey = 'customer_id';
   final String _scannedQrCodeKey = 'scanned_qr_code';
+  final  String _fcmToken = "fcmToken";
+
 
   Future<void> saveToken(String token) async {
     await _storage.write(_tokenKey, token);
@@ -22,6 +25,13 @@ class LocalStorage {
   String? getUserId() {
     return _storage.read(_userIdKey);
   }
+  saveFCMToken({var token}) {
+    _storage.write(_fcmToken, token);
+  }
+
+  String getFCMToken() {
+    return _storage.read(_fcmToken) ?? '';
+  }
 
 
 Future<void> saveScannedQrCode(String qrCode) async {
@@ -34,6 +44,10 @@ String? getCustomerId() => _storage.read(_customerIdKey);
     await _storage.remove(_tokenKey);
     await _storage.remove(_userIdKey);
     await _storage.remove(_customerIdKey);
+    /// Remove Fcm token
+    await _storage.remove(_fcmToken);
+    await FirebaseMessaging.instance.deleteToken();
+
 
   }
 }

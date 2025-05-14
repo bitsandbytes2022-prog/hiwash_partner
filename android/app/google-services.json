@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "771921395674",
+    "project_id": "self-service-iphone",
+    "storage_bucket": "self-service-iphone.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771921395674:android:827e10b0fa8e1bbed9cae3",
+        "android_client_info": {
+          "package_name": "com.hiwash.customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeE04laXbAPJe0uTPa5H7o87VVB1HPdY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771921395674:android:5e8f9aaf5ba0df89d9cae3",
+        "android_client_info": {
+          "package_name": "com.hiwash.partner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeE04laXbAPJe0uTPa5H7o87VVB1HPdY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771921395674:android:065131a16efdebe4d9cae3",
+        "android_client_info": {
+          "package_name": "com.hiwash.worker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeE04laXbAPJe0uTPa5H7o87VVB1HPdY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
