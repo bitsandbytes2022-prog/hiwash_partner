@@ -12,11 +12,21 @@ import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../controller/rewarded_customer_controller.dart';
 
-class RewardedCustomersScreen extends StatelessWidget {
+class RewardedCustomersScreen extends StatefulWidget {
   RewardedCustomersScreen({super.key});
 
-  RewardedCustomerController rewardedCustomerController = Get.put(RewardedCustomerController());
+  @override
+  State<RewardedCustomersScreen> createState() => _RewardedCustomersScreenState();
+}
 
+class _RewardedCustomersScreenState extends State<RewardedCustomersScreen> {
+  RewardedCustomerController rewardedCustomerController = Get.put(RewardedCustomerController());
+@override
+  void initState() {
+rewardedCustomerController.getRewardedCustomersAll();
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     // rewardController.getRewardedCustomersAll();

@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:hiwash_partner/widgets/components/loader.dart';
 
 import '../../../network_manager/repository.dart';
+import '../model/get_offer_categories.dart';
 import '../model/get_offers_by_id_model.dart';
 import '../model/get_rewarded_customers_model.dart';
 import '../model/offer_response_model.dart';
@@ -10,10 +11,17 @@ import '../model/offer_response_model.dart';
 class RewardController extends GetxController {
   RxBool isWashSelected = true.obs;
   final RxBool isVisible = false.obs;
+  final RxBool isVisibleAllOffer = false.obs;
   RxInt isSelected = 1.obs;
   var isLoadingCustomers = false.obs;
   Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
   Rxn<GetRewardedCustomersModel> getRewardedCustomersModel = Rxn();
+  Rxn<GetOfferCategoriesModel> getOfferCategoriesModel = Rxn();
+  var selectedCategoryIndex = 0.obs;
+
+
+
+
 
   @override
   void onInit() {
@@ -71,7 +79,16 @@ class RewardController extends GetxController {
       return null;
     }
   }
+  Future<GetOfferCategoriesModel?> getOfferCategories() async {
+    try {
 
+      getOfferCategoriesModel.value = await Repository().getOfferCategoriesRepo();
+      return getOfferCategoriesModel.value;
+    } catch (error) {
+      print("Error fetching Offers Categories: $error");
+    }
+    return null;
+  }
   RxBool isAscending = true.obs;
   RxString sortByText = "Sort by Expiry".obs;
 

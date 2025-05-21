@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiwash_partner/featuers/auth/model/login_model.dart';
@@ -57,14 +58,14 @@ class AuthController extends GetxController {
 
   /// login controller
   TextEditingController loginPhoneController = TextEditingController(
-    text: "6212345678901",
+    text:kDebugMode? "6212345678901":"",
   );
 
   TextEditingController emailController = TextEditingController(
-    text: "partner1@gmail.com",
+    text:kDebugMode? "partner1@gmail.com":"",
   );
   TextEditingController passwordController = TextEditingController(
-    text: "Hiwash@5432",
+    text:kDebugMode? "Hiwash@5432":"",
   );
   TextEditingController phoneRestController = TextEditingController();
   TextEditingController passwordRestController = TextEditingController();

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:hiwash_partner/featuers/profile/view/widget/custome_switch.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
@@ -11,6 +12,7 @@ import '../../../route/route_strings.dart';
 import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
+import '../../../widgets/components/doted_horizontal_line.dart';
 import '../../../widgets/components/doted_line.dart';
 import '../../../widgets/components/hi_wash_text_field.dart';
 import '../../../widgets/components/image_view.dart';
@@ -34,30 +36,24 @@ class DrawerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: true,
-      top: false,
-      child: Scaffold(
-        body: Obx(() {
-          return Drawer(
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColor.white,
-                borderRadius: BorderRadius.horizontal(
-                  right: Radius.circular(15),
-                ),
-              ),
-              child:
-                  drawerController.currentDrawerSection.value == ''
-                      ? mainDrawerUI()
-                      : sectionDrawerUI(
-                        drawerController.currentDrawerSection.value,
-                      ),
+    return  Obx(() {
+      return Drawer(
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColor.white,
+            borderRadius: BorderRadius.horizontal(
+              right: Radius.circular(15),
             ),
-          );
-        }),
-      ),
-    );
+          ),
+          child:
+          drawerController.currentDrawerSection.value == ''
+              ? mainDrawerUI()
+              : sectionDrawerUI(
+            drawerController.currentDrawerSection.value,
+          ),
+        ),
+      );
+    });
   }
 
   /// **Main Drawer**
@@ -137,13 +133,20 @@ class DrawerScreen extends StatelessWidget {
           image: Assets.iconsIcAccount,
         ),
 
-        drawerRowWidget(
-          onTap: () => drawerController.toggleDrawer('Theme'),
+        Obx(() => drawerRowForTheme(
           title: 'Theme',
           image: Assets.iconsIcTheme,
-        ),
+          switchValue: drawerController.isSwitchOn.value,
+          onSwitchChanged: (bool value) {
+            drawerController.isSwitchOn.value = value;
+
+             // Optional: toggle theme
+            // Get.changeTheme(value ? ThemeData.dark() : ThemeData.light());
+          },
+        )),
         drawerRowWidget(
-          onTap: () => drawerController.toggleDrawer('Language'),
+          padding: EdgeInsets.only(left: 15,right: 15,top: 15),
+          onTap: () => Get.toNamed(RouteStrings.languageScreen),
           title: 'Language',
           image: Assets.iconsIcLanguage,
         ),
@@ -394,13 +397,14 @@ class DrawerScreen extends StatelessWidget {
     required String title,
     required String image,
     bool dashedLineWidget = true,
+    EdgeInsets?padding
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 18, right: 12),
+            padding: padding??EdgeInsets.only(left: 18, right: 12),
             child: Row(
               children: [
                 ImageView(path: image, height: 20, width: 20),
@@ -422,7 +426,37 @@ class DrawerScreen extends StatelessWidget {
       ),
     );
   }
-
+  Widget drawerRowForTheme({
+    required String title,
+    required String image,
+    required bool switchValue,
+    required ValueChanged<bool> onSwitchChanged,
+    bool dashedLineWidget = true,
+  }) {
+    return Column(
+      children: [
+        Container(
+          color: Colors.transparent,
+          child: Padding(
+            padding:  EdgeInsets.only(left: 15,right: 15,bottom: 15),
+            child: Row(
+              children: [
+                ImageView(path: image, height: 20, width: 20),
+                const SizedBox(width: 10),
+                Text(title, style: w500_14a(color: AppColor.c2C2A2A)),
+                const Spacer(),
+                CustomContainerSwitch(
+                  value: switchValue,
+                  onChanged: onSwitchChanged,
+                ),
+              ],
+            ),
+          ),
+        ),
+        dashedLineWidget ? DotedHorizontalLine() : const SizedBox(),
+      ],
+    );
+  }
   /// **Reusable  Row for subscriptionPlanUI Widget**
   Widget subscriptionRowWidget({
     required String title,

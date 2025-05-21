@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hiwash_partner/route/route_strings.dart';
 import 'package:hiwash_partner/widgets/components/countdown_else_full_date.dart';
 import 'package:hiwash_partner/widgets/components/data_formet.dart';
+import 'package:hiwash_partner/widgets/components/loader.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 import 'package:intl/intl.dart';
 
@@ -28,11 +29,13 @@ import '../../../widgets/components/image_view.dart';
 import '../../../widgets/components/is_select_button.dart';
 import '../../../widgets/components/profile_image_view.dart';
 import '../../reward/model/get_offers_by_id_model.dart';
+import '../../rewarded_customers/controller/rewarded_customer_controller.dart';
 import '../model/get_customer_data_model.dart';
 
 class QrController extends GetxController with GetTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrController;
+  RewardedCustomerController rewardedCustomerController = Get.isRegistered<RewardedCustomerController>() ? Get.find<RewardedCustomerController>() : Get.put(RewardedCustomerController());
 
   RxString scanUrl = ''.obs;
   RxString customerId = ''.obs;
@@ -145,7 +148,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                 builder: (context) {
                   return AppDialog(
                     onTap: () {
-                      Get.back();
                       Get.back();
                     },
                     child: approveRewardDialog(customerData, offerDetails),
@@ -323,10 +325,13 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
     };
 
     try {
+     showLoader();
       var response = await Repository().validateOfferQrRepo(requestBody);
+      hideLoader();
       print("Value received in controller validateOfferQr: $response");
       return response;
     } catch (e) {
+      hideLoader();
       print("Error in controller while validating QR: $e");
       return null;
     }
@@ -496,14 +501,16 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                         );
 
                         if (response != null) {
+                          await rewardedCustomerController.getRewardedCustomersAll();
+
+                          // Show the success dialog
                           showDialog(
                             barrierDismissible: false,
                             context: Get.context!,
                             builder: (context) {
                               return AppDialog(
                                 onTap: () {
-                                  Get.back();
-                                  Get.back();
+                                  Get.back(); // Close the success dialog
                                 },
                                 padding: EdgeInsets.zero,
                                 child: successDialog(
@@ -548,24 +555,50 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                         style: w500_14a(color: AppColor.white),
                       ),
                     ),
-                  ),
+                  )
 
                   /*  GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       Get.back();
-                      validateOfferQr(customerData.data!.customerDetails!.id.toString(), offerDetailList.id.toString());
-                      showDialog(
-                        barrierDismissible: false,
-                        context: Get.context!,
-                        builder: (context) {
-                          return AppDialog(
-                            onTap: () {
+                      try {
+                        final response = await validateOfferQr(
+                          customerData.data!.customerDetails!.id.toString(),
+                          offerDetailList.id.toString(),
+                        );
+                        if (response != null) {
+                       await rewardedCustomerController.getRewardedCustomersAll();
+                        }
+
+                        if (response != null) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: Get.context!,
+                            builder: (context) {
+                              return AppDialog(
+                                onTap: () {
+                                  Get.back();
+                                  // Get.back();
+                                },
+                                padding: EdgeInsets.zero,
+                                child: successDialog(
+                                  customerDataSuccess: customerData,
+                                  offerDetailListSuccess: offerDetailList,
+                                ),
+                              );
                             },
-                            child: successDialog(),
-                            padding: EdgeInsets.zero,
                           );
-                        },
-                      );
+                        } else {
+                          Get.snackbar(
+                            "Failed",
+                            "Offer validation failed. Please try again.",
+                          );
+                        }
+                      } catch (e) {
+                        Get.snackbar(
+                          "Error",
+                          "Something went wrong. Please try again.",
+                        );
+                      }
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -590,6 +623,8 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                       ),
                     ),
                   ),*/
+
+
                 ],
               ),
             ],
@@ -659,7 +694,10 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                   children: [
                     ProfileImageView(
                       isVisibleStack:
-                          customerDataSuccess.data?.subscriptionDetails?.isPremium,
+                          customerDataSuccess
+                              .data
+                              ?.subscriptionDetails
+                              ?.isPremium,
                       radius: 20,
                       radiusStack: 4,
 
@@ -694,7 +732,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                         ),
 
                         /// Todo part of discussion
-                        /*  Padding(
+                        Padding(
                           padding: const EdgeInsets.only(left: 5, bottom: 5),
                           child: DotedVerticalLine(height: 5),
                         ),
@@ -706,11 +744,11 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                             IsSelectButton(),
                             5.widthSizeBox,
                             Text(
-                              "Buy 1 Get 1 Free ",
+                              offerDetailListSuccess.title ?? '',
                               style: w400_10a(color: AppColor.c455A64),
                             ),
                           ],
-                        ),*/
+                        ),
                       ],
                     ),
                   ],

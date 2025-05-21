@@ -111,6 +111,103 @@ class MyAccountScreen extends StatelessWidget {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
+                  Obx(() {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(color: AppColor.blue.withOpacity(0.2)),
+                          ),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.white,
+                            child: drawerProfileController.imageFile.value != null
+                                ? ClipOval(
+                              child: Image.file(
+                                drawerProfileController.imageFile.value!,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                                : (userData?.profilePicUrl ?? '').isNotEmpty
+                                ? ClipOval(
+                              child: Image.network(
+                                userData!.profilePicUrl!,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                                : ClipOval(
+                              child: Image.asset(
+                                Assets.imagesDemoProfile,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Loader over image
+                        if (drawerProfileController.isUploadingProfileImage.value)
+                          Container(
+                            width: 112,
+                            height: 112,
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.3),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(
+                                  //color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
+
+                  // Edit Icon
+                  GestureDetector(
+                    onTap: () async {
+                      await _showImageSourceDialog(context);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: AppColor.cC41949,
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: AppColor.white, width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColor.cC41949.withOpacity(0.25),
+                            blurRadius: 10,
+                            offset: Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: ImageView(
+                        path: Assets.iconsIcEdit,
+                        height: 17,
+                        width: 17,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+           /*   Stack(
+                alignment: Alignment.bottomRight,
+                children: [
                   Container(
                     padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
@@ -139,7 +236,7 @@ class MyAccountScreen extends StatelessWidget {
                         );
                       }
                     }),
-                    /* child: Obx(
+                    *//* child: Obx(
                       () => CircleAvatar(
                         radius: 50,
                         backgroundImage:
@@ -149,7 +246,7 @@ class MyAccountScreen extends StatelessWidget {
                                 )
                                 : AssetImage(Assets.imagesDemoProfile),
                       ),
-                    ),*/
+                    ),*//*
                   ),
 
                   GestureDetector(
@@ -177,7 +274,7 @@ class MyAccountScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-               /*   GestureDetector(
+               *//*   GestureDetector(
                     onTap: () async {
                       await drawerProfileController.imagePicker();
 
@@ -215,12 +312,11 @@ class MyAccountScreen extends StatelessWidget {
                         width: 17,
                       ),
                     ),
-                  ),*/
+                  ),*//*
                 ],
-              ),
+              ),*/
               11.heightSizeBox,
               Obx(() {
-                // Use Obx to make the Text widget reactive
                 final updatedUserData = dashboardController.getPartnerModel.value?.data?.first;
                 return Text(
                   updatedUserData?.businessName ?? '',
@@ -249,6 +345,7 @@ class MyAccountScreen extends StatelessWidget {
               ),
               20.heightSizeBox,
               HiWashTextField(
+                readOnly: true,
                 controller: drawerProfileController.emailController,
                 keyboardType: TextInputType.emailAddress,
                 hintText: "Email",

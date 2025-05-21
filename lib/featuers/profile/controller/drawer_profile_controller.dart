@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
@@ -13,6 +14,8 @@ import 'package:image_picker/image_picker.dart';
 class DrawerProfileController extends GetxController {
   RxBool isLoading = false.obs;
   var  imageFile = Rx<File?>(null);
+  var isSwitchOn = false.obs;
+  RxBool isUploadingProfileImage = false.obs;
 
   Future<void> imagePicker({required ImageSource source}) async {
     var pickedFile = await ImagePicker().pickImage(source: source,imageQuality: 20);
@@ -31,14 +34,14 @@ class DrawerProfileController extends GetxController {
   TextEditingController addressController = TextEditingController();
   TextEditingController carNumberController = TextEditingController();
 
-  TextEditingController zoneController = TextEditingController(text: "Zone 50");
+  TextEditingController zoneController = TextEditingController(text:kDebugMode? "Zone 50":"");
   TextEditingController streetController = TextEditingController(
-    text: "al Matar Street",
+    text: kDebugMode?"al Matar Street":""
   );
   TextEditingController buildingController = TextEditingController(
-    text: 'Abcd',
+    text:kDebugMode? 'Abcd':"",
   );
-  TextEditingController unitController = TextEditingController(text: 'Abcd');
+  TextEditingController unitController = TextEditingController(text:kDebugMode? 'Abcd':"");
 
   Rxn<TermsAndConditionsResponseModel> termsAndConditionsResponseModel = Rxn();
 
@@ -62,7 +65,27 @@ class DrawerProfileController extends GetxController {
     return dio.FormData.fromMap({"file": file});
   }
 
-  Future<dynamic> uploadProfileImage() async {
+  Future<bool> uploadProfileImage() async {
+    isUploadingProfileImage.value = true;
+    try {
+      final formData = await getFormDataForUpload();
+      final response = await Repository().uploadProfilePicture(formData);
+
+      if (response != null && response['success'] == true) {
+        return true;
+      } else {
+        imageFile.value = null;
+        return false;
+      }
+    } catch (e) {
+      imageFile.value = null;
+      return false;
+    } finally {
+      isUploadingProfileImage.value = false;
+    }
+  }
+
+/*  Future<dynamic> uploadProfileImage() async {
     try {
       showLoader();
       final formData = await getFormDataForUpload();
@@ -72,7 +95,7 @@ class DrawerProfileController extends GetxController {
     } catch (e) {
       print("Upload error: $e");
     }
-  }
+  }*/
 
   Future<TermsAndConditionsResponseModel?> getTermsAndConditions() async {
     var entityType = 0;

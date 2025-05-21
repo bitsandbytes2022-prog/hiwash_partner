@@ -12,6 +12,7 @@ import '../featuers/dashboard/view/widget/second_drawer/faq_screen.dart';
 import '../featuers/dashboard/view/widget/second_drawer/help_desk_ticket_screen.dart';
 import '../featuers/dashboard/view/widget/second_drawer/step_by_step_guide_detail_screen.dart';
 import '../featuers/dashboard/view/widget/second_drawer/step_by_step_guide_screen.dart';
+import '../featuers/profile/view/language_screen.dart';
 import '../featuers/reward/view/reward_screen.dart';
 
 import 'route_strings.dart';
@@ -81,6 +82,11 @@ class Routes {
     GetPage(
       name: RouteStrings.stepByStepGuideDetailScreen,
       page: () => StepByStepGuideDetailScreen(),
+    ),
+
+    GetPage(
+      name: RouteStrings.languageScreen,
+      page: () => LanguageScreen(),
     ),
 
 

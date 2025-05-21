@@ -12,6 +12,7 @@ import '../featuers/dashboard/view/widget/second_drawer/model/guides_response_mo
 import '../featuers/notification/model/notification.dart';
 import '../featuers/profile/model/terms_and_conditions_response_model.dart';
 import '../featuers/qr_scanner/model/get_customer_data_model.dart';
+import '../featuers/reward/model/get_offer_categories.dart';
 import '../featuers/reward/model/get_offers_by_id_model.dart';
 import '../featuers/reward/model/get_rewarded_customers_model.dart';
 import '../featuers/reward/model/offer_response_model.dart';
@@ -159,9 +160,22 @@ class Repository {
 
 
 
+  Future<dynamic> uploadProfilePicture(requestBody) async {
+    try {
+      final response = await dioHelper.post(
+        url: ApiConstant.uploadProfileImage,
+        requestBody: requestBody,
+        isAuthRequired: true,
+      );
+      print("Upload success: $response");
 
+      return response;
+    } catch (e) {
+      print("Upload failed: $e");
+    }
+  }
 
-  Future<void> uploadProfilePicture(requestBody) async {
+/*  Future<void> uploadProfilePicture(requestBody) async {
     try {
       final response = await dioHelper.post(
         url: ApiConstant.uploadProfileImage,
@@ -172,7 +186,7 @@ class Repository {
     } catch (e) {
       print("Upload failed: $e");
     }
-  }
+  }*/
 
   Future<dynamic> uploadProfile(Object requestBody) async {
     try {
@@ -263,5 +277,15 @@ class Repository {
     );
 
     return response;
+  }
+
+  Future<GetOfferCategoriesModel> getOfferCategoriesRepo() async {
+    // print("url--->:${ApiConstant.offerCategories}");
+    Map<String, dynamic> response = await dioHelper.get(
+      url: ApiConstant.offerCategories,
+      isAuthRequired: true,
+    );
+    // print("Response--->: $response");
+    return GetOfferCategoriesModel.fromJson(response);
   }
 }

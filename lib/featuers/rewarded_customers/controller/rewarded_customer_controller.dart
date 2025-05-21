@@ -7,12 +7,7 @@ class RewardedCustomerController extends GetxController{
 
 
   Rxn<GetRewardedCustomersModel> getRewardedCustomersModel=Rxn();
-  @override
-  void onInit() {
 
-    getRewardedCustomersAll();
-    super.onInit();
-  }
 
   Future<GetRewardedCustomersModel?> getRewardedCustomersAll()async{
 

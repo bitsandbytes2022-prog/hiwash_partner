@@ -16,7 +16,7 @@ class RouteStrings {
   static const String helpDeskTicketScreen = '/helpDeskTicketScreen';
   static const String stepByStepGuideScreen = '/stepByStepGuideScreen';
   static const String stepByStepGuideDetailScreen = '/stepByStepGuideDetailScreen';
-
+  static const String languageScreen = '/languageScreen';
 
 
 

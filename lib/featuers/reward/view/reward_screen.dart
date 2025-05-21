@@ -43,9 +43,7 @@ class RewardScreen extends StatelessWidget {
         15.heightSizeBox,
         Obx(
           () => GestureDetector(
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Container(
               height: 95,
               decoration: BoxDecoration(
@@ -84,7 +82,7 @@ class RewardScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 10, bottom: 9),
                         child: Text(
-                          "kTotalWashes".tr,
+                          "Total Reward",
                           style: w500_12p(
                             color: AppColor.white.withOpacity(0.7),
                           ),
@@ -101,20 +99,22 @@ class RewardScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 14, top: 12),
-                        child: Text(
-                          rewardController
-                                  .offerResponseModel
-                                  .value
-                                  ?.data
-                                  ?.summary
-                                  ?.rewardedCustomers
-                                  .toString() ??
-                              '',
-                          style: w700_27a(color: AppColor.white),
-                        ),
-                      ),
+                      Obx(() {
+                        return Padding(
+                          padding: EdgeInsets.only(right: 14, top: 12),
+                          child: Text(
+                            rewardController
+                                    .offerResponseModel
+                                    .value
+                                    ?.data
+                                    ?.summary
+                                    ?.rewardedCustomers
+                                    .toString() ??
+                                '',
+                            style: w700_27a(color: AppColor.white),
+                          ),
+                        );
+                      }),
                       Padding(
                         padding: const EdgeInsets.only(right: 15, bottom: 9),
                         child: Text(
@@ -141,7 +141,9 @@ class RewardScreen extends StatelessWidget {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          rewardController.getAllOffers();
+                          rewardController.isVisibleAllOffer.value =
+                              !rewardController.isVisibleAllOffer.value;
+                          rewardController.getOfferCategories();
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -149,7 +151,6 @@ class RewardScreen extends StatelessWidget {
                             vertical: 15,
                           ),
                           decoration: BoxDecoration(
-                            //color: AppColor.c5C6B72.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(28),
                             border: Border.all(
                               color: AppColor.c5C6B72.withOpacity(0.3),
@@ -157,11 +158,39 @@ class RewardScreen extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Text(
-                                "All offers",
-                                style: w400_12p(color: AppColor.c2C2A2A),
-                              ),
+                              Obx(() {
+                                final categories =
+                                    rewardController
+                                        .getOfferCategoriesModel
+                                        .value
+                                        ?.offerCategory;
+                                final selectedIndex =
+                                    rewardController
+                                        .selectedCategoryIndex
+                                        .value;
 
+                                // Compose a list with "All offers" at front + categories
+                                final extendedCategories = [
+                                  null, // Represents "All offers"
+                                  ...?categories,
+                                ];
+
+                                final categoryName =
+                                    selectedIndex == 0
+                                        ? "All offers"
+                                        : (selectedIndex > 0 &&
+                                            selectedIndex <
+                                                extendedCategories.length)
+                                        ? extendedCategories[selectedIndex]
+                                                ?.name ??
+                                            'Unknown'
+                                        : "All offers";
+
+                                return Text(
+                                  categoryName,
+                                  style: w400_12p(color: AppColor.c2C2A2A),
+                                );
+                              }),
                               Spacer(),
                               ImageView(
                                 path: Assets.iconsIcDropDown,
@@ -169,11 +198,10 @@ class RewardScreen extends StatelessWidget {
                                 width: 9,
                                 color: AppColor.c2C2A2A,
                               ),
-                              //Icon(Icons.arrow_drop_down, size: 20),
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ),
                     8.widthSizeBox,
                     Expanded(
@@ -219,64 +247,38 @@ class RewardScreen extends StatelessWidget {
                 ),
                 19.heightSizeBox,
                 Obx(() {
-                  final List<Offers> data =
-                      rewardController.offerResponseModel.value?.data?.offers ??
-                      [];
-                  return data.isNotEmpty
-                      ? GridView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(bottom: 30),
-                        // padding: EdgeInsets.symmetric(horizontal: 10),
-                        clipBehavior: Clip.hardEdge,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 15,
-                          mainAxisSpacing: 15,
-                          //  mainAxisExtent: Get.height * 0.22,
-                        ),
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              showLoader();
-                              await rewardController.getOffersById(
-                                data[index].id!,
-                              );
-                              hideLoader();
-                              showModalBottomSheet(
-                                context: Get.context!,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                  ),
-                                ),
-                                builder: (BuildContext context) {
-                                  return CustomBottomSheet(
-                                    child: viewOfferDetailBottomSheet(),
-                                  );
-                                },
-                              ).then((_) {
-                                rewardController.isSelected.value = 1;
-                              });
-                            },
-                            child: OffersGridContainer(
-                               /// key to force rebuild
-                                key: ValueKey(data[index].expiryDate),
-                                offer: data[index]),
-                          );
-                        },
-                      )
-                      : Padding(
-                        padding: const EdgeInsets.only(top: 30),
+                  final List<Offers> allOffers = rewardController.offerResponseModel.value?.data?.offers ?? [];
+                  final categories = rewardController.getOfferCategoriesModel.value?.offerCategory;
+                  final selectedCategoryIndex = rewardController.selectedCategoryIndex.value;
+
+                  final extendedCategories = [null, ...?categories];
+
+                  if (selectedCategoryIndex == 0 || selectedCategoryIndex >= extendedCategories.length) {
+                    return buildOffersGrid(allOffers);
+                  }
+                  final selectedCategoryName = extendedCategories[selectedCategoryIndex]?.name;
+
+                  final filteredOffers = (selectedCategoryName == null)
+                      ? allOffers
+                      : allOffers
+                      .where((offer) =>
+                  offer.categoryName?.toLowerCase().trim() ==
+                      selectedCategoryName.toLowerCase().trim())
+                      .toList();
+                  if (filteredOffers.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Container(
+                        height: 200,
                         child: Text(
-                          'Data is not found',
-                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          '',
+                          style: w400_18p(color: AppColor.c2C2A2A),
                         ),
-                      );
-                  ;
+                      ),
+                    );
+                  }
+
+                  return buildOffersGrid(filteredOffers);
                 }),
               ],
             ),
@@ -289,8 +291,8 @@ class RewardScreen extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
 
-                          width: 180,
-                          height: 110,
+                          width: 160,
+                          height: 130,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: Colors.white,
@@ -342,9 +344,133 @@ class RewardScreen extends StatelessWidget {
                       )
                       : Container(),
             ),
+            Obx(
+              () =>
+                  rewardController.isVisibleAllOffer.value
+                      ? Positioned(
+                        top: 50,
+                        left: 0,
+                        child: Container(
+                          alignment: Alignment.topLeft,
+                          width: 160,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.deepPurple.withOpacity(0.3),
+                                blurRadius: 10,
+                                offset: Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 15,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  rewardController.selectedCategoryIndex.value =
+                                      0;
+                                  rewardController.isVisibleAllOffer.value =
+                                      false;
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  child: Text(
+                                    "All offers",
+                                    style: w400_14p(color: AppColor.c2C2A2A),
+                                  ),
+                                ),
+                              ),
+                              ...(rewardController
+                                          .getOfferCategoriesModel
+                                          .value
+                                          ?.offerCategory ??
+                                      [])
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                    (entry) => GestureDetector(
+                                      onTap: () {
+                                        rewardController
+                                            .selectedCategoryIndex
+                                            .value = entry.key + 1;
+                                        rewardController
+                                            .isVisibleAllOffer
+                                            .value = false;
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 8,
+                                        ),
+                                        child: Text(
+                                          entry.value.name ?? '',
+                                          style: w400_14p(
+                                            color: AppColor.c2C2A2A,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ],
+                          ),
+                        ),
+                      )
+                      : Container(),
+            ),
           ],
         ),
       ],
+    );
+  }
+
+  Widget buildOffersGrid(List<Offers> offers) {
+    return GridView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.only(bottom: 30),
+      clipBehavior: Clip.hardEdge,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 15,
+        mainAxisSpacing: 15,
+      ),
+      itemCount: offers.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () async {
+            showLoader();
+            await rewardController.getOffersById(offers[index].id!);
+            hideLoader();
+            showModalBottomSheet(
+              context: Get.context!,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+              ),
+              builder: (BuildContext context) {
+                return CustomBottomSheet(child: viewOfferDetailBottomSheet());
+              },
+            ).then((_) {
+              rewardController.isSelected.value = 1;
+            });
+          },
+          child: OffersGridContainer(
+            key: ValueKey(offers[index].expiryDate),
+            offer: offers[index],
+          ),
+        );
+      },
     );
   }
 
@@ -424,7 +550,6 @@ class RewardScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -623,6 +748,4 @@ class RewardScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }

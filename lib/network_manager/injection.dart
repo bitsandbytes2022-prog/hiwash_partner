@@ -40,7 +40,9 @@ Dio getDio() {
         );
         return handler.next(response);
       },
-      onError: (DioException e, handler) async {
+
+
+       onError: (DioException e, handler) async {
         printValue(
           tag: 'STATUS CODE:${e.response?.statusCode}--onError STATUS CODE--->',
           "${e.response?.statusCode ?? ""}",
@@ -88,6 +90,50 @@ Dio getDio() {
 
         return handler.next(e);
       },
+
+
+
+
+
+
+
+      /* onError: (DioException e, handler) async {
+          final statusCode = e.response?.statusCode;
+          final data = e.response?.data;
+
+          printValue(
+            tag: 'STATUS CODE:${statusCode}--onError STATUS CODE--->',
+            "$statusCode",
+          );
+          printValue(
+            tag: 'ERROR DATA :--onError ERROR DATA--->',
+            data ?? "",
+          );
+
+          String errorMessage = "Something went wrong";
+
+          if (data != null) {
+            if (data is Map<String, dynamic> && data.containsKey('message')) {
+              errorMessage = data['message'];
+            } else if (data is String) {
+              errorMessage = data;
+            }
+          }
+
+          if (statusCode == 400 || statusCode == 401 || statusCode == 404 || statusCode == 500) {
+            Get.snackbar(
+              "Error",
+              errorMessage,
+              colorText: Colors.white,
+              backgroundColor: Colors.red,
+            );
+            if (statusCode == 401) {
+              Get.offAllNamed(RouteStrings.welcomeScreen);
+            }
+          }
+
+          return handler.next(e); // continue with error
+        }*/
     ),
   );
   return dio;
