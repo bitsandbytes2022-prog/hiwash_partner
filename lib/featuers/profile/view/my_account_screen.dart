@@ -342,6 +342,7 @@ class MyAccountScreen extends StatelessWidget {
                   }
                   return null;
                 },
+
               ),
               20.heightSizeBox,
               HiWashTextField(
