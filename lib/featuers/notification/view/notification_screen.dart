@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../generated/assets.dart';
 import '../../../styling/app_color.dart';
 import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/data_formet.dart';
@@ -102,8 +103,73 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
+  Widget _notificationContainer(NotificationData item, int index) {
+    return GestureDetector(
+      onTap: () {
+        controller.toggleSelection(index);
+        controller.updateNotificationReadStatus(item, index);
+      },
+      child: Container(
+        width: Get.width,
+        color:
+        controller.selectedStates[index].value
+            ? AppColor.white
+            : AppColor.cF6F7FF,
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+
+                  borderRadius: BorderRadius.circular(100),
+                  border: Border.all(color: AppColor.blue.withOpacity(0.2)),
+                ),
+                child:CircleAvatar(
+
+                  backgroundColor: AppColor.c142293.withOpacity(0.2),
+                  radius: 20,
+
+                  child:Image.asset(item.notificationType==0?Assets.iconsIcAlert:Assets.iconsIcInfo,height: 20,width: 20,color: AppColor.c000000,),
+                )
 
 
+            ),
+            /*  ProfileImageView(
+              radiusStack: 5,
+              isVisibleStack: false,
+              radius: 20,
+              imagePath: item.notificationType == 1 ? Assets.iconsIcAlert : null
+            ),*/
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.message ?? '',
+                    style: w500_12p(color: AppColor.c2C2A2A),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    formatDate(item.createdAt),
+                    style: w400_10p(color: AppColor.c455A64),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+/*
   Widget _notificationContainer(NotificationData item, int index) {
     return GestureDetector(
       onTap: () {
@@ -149,4 +215,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
     );
   }
+  */
+
 }

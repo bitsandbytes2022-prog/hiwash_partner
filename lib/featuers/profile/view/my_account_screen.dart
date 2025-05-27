@@ -133,13 +133,23 @@ class MyAccountScreen extends StatelessWidget {
                                 fit: BoxFit.cover,
                               ),
                             )
-                                : (userData?.profilePicUrl ?? '').isNotEmpty
+                                : (userData?.profilePicUrl != null &&
+                                userData!.profilePicUrl!.trim().isNotEmpty &&
+                                Uri.tryParse(userData.profilePicUrl!)?.hasAbsolutePath == true)
                                 ? ClipOval(
                               child: Image.network(
-                                userData!.profilePicUrl!,
+                                userData.profilePicUrl!,
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    Assets.imagesDemoProfile,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
                               ),
                             )
                                 : ClipOval(
@@ -205,116 +215,7 @@ class MyAccountScreen extends StatelessWidget {
                   ),
                 ],
               ),
-           /*   Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: AppColor.blue.withOpacity(0.2)),
-                    ),
-                    child: Obx(() {
-                      if (drawerProfileController.imageFile.value != null) {
-                        return CircleAvatar(
-                          radius: 50,
-                          backgroundImage: FileImage(
-                            drawerProfileController.imageFile.value!,
-                          ),
-                        );
-                      } else if ((userData?.profilePicUrl ?? '').isNotEmpty) {
-                        return CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage(
-                            userData!.profilePicUrl!,
-                          ),
-                        );
-                      } else {
-                        return CircleAvatar(
-                          radius: 50,
-                          backgroundImage: AssetImage(Assets.imagesDemoProfile),
-                        );
-                      }
-                    }),
-                    *//* child: Obx(
-                      () => CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                            drawerProfileController.imageFile.value != null
-                                ? FileImage(
-                                  drawerProfileController.imageFile.value!,
-                                )
-                                : AssetImage(Assets.imagesDemoProfile),
-                      ),
-                    ),*//*
-                  ),
 
-                  GestureDetector(
-                    onTap: () async {
-                      await _showImageSourceDialog(context);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: AppColor.cC41949,
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(color: AppColor.white, width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColor.cC41949.withOpacity(0.25),
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: ImageView(
-                        path: Assets.iconsIcEdit,
-                        height: 17,
-                        width: 17,
-                      ),
-                    ),
-                  ),
-               *//*   GestureDetector(
-                    onTap: () async {
-                      await drawerProfileController.imagePicker();
-
-                      await drawerProfileController.uploadProfileImage().then((
-                          value,
-                          ) {
-                        dashboardController.getPartnerDataById(
-                          dashboardController
-                              .getPartnerModel
-                              .value
-                              ?.data
-                              ?.first
-                              .id ??
-                              0,
-                        );
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: AppColor.cC41949,
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(color: AppColor.white, width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColor.cC41949.withOpacity(0.25),
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: ImageView(
-                        path: Assets.iconsIcEdit,
-                        height: 17,
-                        width: 17,
-                      ),
-                    ),
-                  ),*//*
-                ],
-              ),*/
               11.heightSizeBox,
               Obx(() {
                 final updatedUserData = dashboardController.getPartnerModel.value?.data?.first;

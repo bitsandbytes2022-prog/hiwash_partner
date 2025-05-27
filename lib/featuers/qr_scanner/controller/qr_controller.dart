@@ -169,9 +169,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       }
     });
   }
-
-  /*
-  void onQRViewCreated(QRViewController controller) {
+/*  void onQRViewCreated(QRViewController controller) {
     qrController = controller;
 
     controller.scannedDataStream.listen((scanData) async {
@@ -179,6 +177,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
         final scannedCode = scanData.code ?? '';
         scanUrl.value = scannedCode;
         hasScanned.value = true;
+        print("ScanData----->1--->${scanData.code}");
 
         animationController?.stop();
         controller.pauseCamera();
@@ -188,79 +187,113 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
             Map<String, dynamic> decodedToken = JwtDecoder.decode(scannedCode);
             print("ScanData----->${scanData.code}");
 
+            final id = decodedToken['CustomerId'];
+            final offerId = decodedToken['OfferId'];
+
+            if (id == null || offerId == null) {
+              throw Exception('CustomerId or OfferId is null');
+            }
+
+            customerId.value = id.toString();
+            getOfferId.value = offerId.toString();
+
+            scannedCustomerId.value = id.toString();
+            scannedOfferId.value = offerId.toString();
+
+            final results = await Future.wait([
+              getCustomerDataById(int.parse(id.toString())),
+              getOffersById(int.parse(offerId.toString())),
+            ]);
+
+            final GetCustomerData? customerData = results[0] as GetCustomerData?;
+            final GetOffersByIdModel? offerData = results[1] as GetOffersByIdModel?;
+            final OfferDetailList? offerDetails = offerData?.offerDetailList?.isNotEmpty == true
+                ? offerData!.offerDetailList!.first
+                : null;
+
+            if (customerData != null && offerDetails != null) {
+              Get.back();
+              Future.delayed(Duration(milliseconds: 300));
+              showDialog(
+                barrierDismissible: false,
+                context: Get.context!,
+                builder: (context) {
+                  return AppDialog(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: approveRewardDialog(customerData, offerDetails),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+              );
+            }
+          } catch (e) {
+            clearScan();
+            print("data nhi aunda piya---->{$e}");
+            Get.snackbar("Error", "Failed to decode QR code.");
+            Get.offAllNamed(RouteStrings.dashboardScreen);
+          }
+
+          /*  try {
+            Map<String, dynamic> decodedToken = JwtDecoder.decode(scannedCode);
+            print("ScanData----->${scanData.code}");
+
             String id = decodedToken['CustomerId'];
             String offerId = decodedToken['OfferId'];
 
             customerId.value = id;
             getOfferId.value = offerId;
 
-            var validationResponse = await validateOfferQr(id, offerId);
+            scannedCustomerId.value = id;
+            scannedOfferId.value = offerId;
 
-            if (validationResponse != null) {
-              scannedCustomerId.value = id;
-              scannedOfferId.value = offerId;
+            final results = await Future.wait([
+              getCustomerDataById(int.parse(id)),
+              getOffersById(int.parse(offerId)),
+            ]);
 
-              final results = await Future.wait([
-                getCustomerDataById(int.parse(id)),
-                getOffersById(int.parse(offerId)),
-              ]);
+            final GetCustomerData? customerData =
+                results[0] as GetCustomerData?;
+            final GetOffersByIdModel? offerData =
+                results[1] as GetOffersByIdModel?;
+            final OfferDetailList? offerDetails =
+                offerData?.offerDetailList?.isNotEmpty == true
+                    ? offerData!.offerDetailList!.first
+                    : null;
 
-              final GetCustomerData? customerData =
-                  results[0] as GetCustomerData?;
-              final GetOffersByIdModel? offerData =
-                  results[1] as GetOffersByIdModel?;
-              final OfferDetailList? offerDetails =
-                  offerData?.offerDetailList?.isNotEmpty == true
-                      ? offerData!.offerDetailList!.first
-                      : null;
-
-              if (customerData != null && offerDetails != null) {
-                //clearScan();
-                Get.back();
-                Future.delayed(Duration(milliseconds: 300));
-                showDialog(
-                  barrierDismissible: false,
-                  context: Get.context!,
-
-                  builder: (context) {
-                    return AppDialog(
-                      onTap: () {
-                        Get.back();
-                        Get.back();
-                      },
-                      child: approveRewardDialog(customerData, offerDetails),
-                      padding: EdgeInsets.zero,
-                    );
-                  },
-                );
-                */
-  /* Get.dialog(
-                 await approveRewardDialog(customerData, offerDetail),
-                  barrierDismissible: false,
-                );*/ /*
-
-              }
-            } else {
-              await Future.delayed(Duration(seconds: 1));
+            if (customerData != null && offerDetails != null) {
               Get.back();
-              await Future.delayed(Duration(seconds: 1));
-
-              Get.back();
+              Future.delayed(Duration(milliseconds: 300));
+              showDialog(
+                barrierDismissible: false,
+                context: Get.context!,
+                builder: (context) {
+                  return AppDialog(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: approveRewardDialog(customerData, offerDetails),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+              );
             }
           } catch (e) {
             clearScan();
+            print("data nhi aunda piya---->{$e}");
             Get.snackbar("Error", "Failed to decode QR code.");
             Get.offAllNamed(RouteStrings.dashboardScreen);
-          }
-        } else {
+          }*/
+        }
+        else {
           clearScan();
           Get.snackbar("Invalid QR", "Scanned code is not a valid JWT.");
           Get.offAllNamed(RouteStrings.dashboardScreen);
         }
       }
     });
-  }
-*/
+  }*/
 
   void clearScan() {
     scanUrl.value = '';
@@ -349,18 +382,23 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
           child: Column(
             children: [
               27.heightSizeBox,
-              Text(
-                "Approve Reward Sharing",
-                style: w700_18a(color: AppColor.c2C2A2A),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 20),
-                alignment: Alignment.topLeft,
-                child: Text(
-                  offerDetailList.offerDetails ?? "",
-                  style: w400_12p(),
+              Padding(
+                padding: const EdgeInsets.only(left: 1),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Approve Reward Sharing",
+                      style: w700_18a(color: AppColor.c2C2A2A),
+                    ),
+                    Text(
+                      offerDetailList.offerDetails ?? "",
+                      style: w400_12p(),
+                    ),
+                  ],
                 ),
-              ),
+              )
+            ,
               6.heightSizeBox,
 
               Container(
@@ -413,14 +451,14 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                           ),
 
                           13.heightSizeBox,
-                          Text(
+                         /* Text(
                             offerDetailList.title ?? "",
                             style: GoogleFonts.rumRaisin(
                               fontWeight: FontWeight.w400,
                               fontSize: 24,
                               color: AppColor.white,
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
