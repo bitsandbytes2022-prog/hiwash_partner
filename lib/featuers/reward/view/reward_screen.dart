@@ -538,7 +538,7 @@ class RewardScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             DateTimeWidget(title: rewardDetail.businessName),
-                            13.heightSizeBox,
+                         /*   13.heightSizeBox,
                             Text(
                               rewardDetail.title ?? "",
                               style: GoogleFonts.rumRaisin(
@@ -546,7 +546,7 @@ class RewardScreen extends StatelessWidget {
                                 fontSize: 24,
                                 color: AppColor.white,
                               ),
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
