@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hiwash_partner/route/route_strings.dart';
+import 'package:hiwash_partner/widgets/components/app_snack_bar.dart';
 import 'package:hiwash_partner/widgets/components/countdown_else_full_date.dart';
 import 'package:hiwash_partner/widgets/components/data_formet.dart';
 import 'package:hiwash_partner/widgets/components/loader.dart';
@@ -35,7 +36,10 @@ import '../model/get_customer_data_model.dart';
 class QrController extends GetxController with GetTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrController;
-  RewardedCustomerController rewardedCustomerController = Get.isRegistered<RewardedCustomerController>() ? Get.find<RewardedCustomerController>() : Get.put(RewardedCustomerController());
+  RewardedCustomerController rewardedCustomerController =
+      Get.isRegistered<RewardedCustomerController>()
+          ? Get.find<RewardedCustomerController>()
+          : Get.put(RewardedCustomerController());
 
   RxString scanUrl = ''.obs;
   RxString customerId = ''.obs;
@@ -147,9 +151,10 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                 context: Get.context!,
                 builder: (context) {
                   return AppDialog(
-                    onTap: () {
+                 /*   onTap: () {
                       Get.back();
-                    },
+                    },*/
+                    closeIconShow: false,
                     child: approveRewardDialog(customerData, offerDetails),
                     padding: EdgeInsets.zero,
                   );
@@ -163,13 +168,29 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
           }
         } else {
           clearScan();
-          Get.snackbar("Invalid QR", "Scanned code is not a valid JWT.");
+          print("Invalid QR Scanned code is not a valid JWT.");
+          appSnackBar(title: "", message: "Something went wrong try again.");
           Get.offAllNamed(RouteStrings.dashboardScreen);
         }
       }
     });
   }
-/*  void onQRViewCreated(QRViewController controller) {
+
+  void clearScan() {
+    scanUrl.value = '';
+    customerId.value = '';
+    getOfferId.value = "";
+    hasScanned.value = false;
+    scannedCustomerId.value = null;
+    scannedOfferId.value = null;
+
+    qrController?.resumeCamera();
+    if (animationController?.isAnimating == false) {
+      animationController?.repeat(reverse: true);
+    }
+  }
+
+  /*  void onQRViewCreated(QRViewController controller) {
     qrController = controller;
 
     controller.scannedDataStream.listen((scanData) async {
@@ -281,7 +302,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
             }
           } catch (e) {
             clearScan();
-            print("data nhi aunda piya---->{$e}");
             Get.snackbar("Error", "Failed to decode QR code.");
             Get.offAllNamed(RouteStrings.dashboardScreen);
           }*/
@@ -294,21 +314,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       }
     });
   }*/
-
-  void clearScan() {
-    scanUrl.value = '';
-    customerId.value = '';
-    getOfferId.value = "";
-    hasScanned.value = false;
-    scannedCustomerId.value = null;
-    scannedOfferId.value = null;
-
-    qrController?.resumeCamera();
-    if (animationController?.isAnimating == false) {
-      animationController?.repeat(reverse: true);
-    }
-  }
-
   void clearScanResult() {
     scannedCustomerId.value = null;
     scannedOfferId.value = null;
@@ -357,18 +362,35 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       "offerId": offerIdd,
     };
 
+    isLoading.value = true;
+
     try {
-     showLoader();
       var response = await Repository().validateOfferQrRepo(requestBody);
-      hideLoader();
+
       print("Value received in controller validateOfferQr: $response");
+
+      if (response != null && response['success'] == true) {
+      /*  appSnackBar(
+          message: response['message'] ?? "Offer validated successfully.",
+        );*/
+      } else {
+        appSnackBar(
+          message: response['message'] ?? "Failed to validate offer.",
+        );
+      }
+
       return response;
     } catch (e) {
-      hideLoader();
       print("Error in controller while validating QR: $e");
       return null;
+    } finally {
+      isLoading.value = false;
     }
   }
+
+
+
+
 
   Widget approveRewardDialog(
     GetCustomerData customerData,
@@ -391,14 +413,10 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                       "Approve Reward Sharing",
                       style: w700_18a(color: AppColor.c2C2A2A),
                     ),
-                    Text(
-                      offerDetailList.offerDetails ?? "",
-                      style: w400_12p(),
-                    ),
+                    Text(offerDetailList.offerDetails ?? "", style: w400_12p()),
                   ],
                 ),
-              )
-            ,
+              ),
               6.heightSizeBox,
 
               Container(
@@ -451,7 +469,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                           ),
 
                           13.heightSizeBox,
-                         /* Text(
+                          /* Text(
                             offerDetailList.title ?? "",
                             style: GoogleFonts.rumRaisin(
                               fontWeight: FontWeight.w400,
@@ -529,7 +547,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                     ),
                   ),
                   15.widthSizeBox,
-                  GestureDetector(
+                /*  GestureDetector(
                     onTap: () async {
                       Get.back();
                       try {
@@ -539,75 +557,8 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                         );
 
                         if (response != null) {
-                          await rewardedCustomerController.getRewardedCustomersAll();
-
-                          // Show the success dialog
-                          showDialog(
-                            barrierDismissible: false,
-                            context: Get.context!,
-                            builder: (context) {
-                              return AppDialog(
-                                onTap: () {
-                                  Get.back(); // Close the success dialog
-                                },
-                                padding: EdgeInsets.zero,
-                                child: successDialog(
-                                  customerDataSuccess: customerData,
-                                  offerDetailListSuccess: offerDetailList,
-                                ),
-                              );
-                            },
-                          );
-                        } else {
-                          Get.snackbar(
-                            "Failed",
-                            "Offer validation failed. Please try again.",
-                          );
-                        }
-                      } catch (e) {
-                        Get.snackbar(
-                          "Error",
-                          "Something went wrong. Please try again.",
-                        );
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35,
-                        vertical: 13,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColor.c1F9D70,
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColor.c1F9D70.withOpacity(0.30),
-                            spreadRadius: 0,
-                            blurRadius: 15,
-                            offset: Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        "Approve",
-                        style: w500_14a(color: AppColor.white),
-                      ),
-                    ),
-                  )
-
-                  /*  GestureDetector(
-                    onTap: () async {
-                      Get.back();
-                      try {
-                        final response = await validateOfferQr(
-                          customerData.data!.customerDetails!.id.toString(),
-                          offerDetailList.id.toString(),
-                        );
-                        if (response != null) {
-                       await rewardedCustomerController.getRewardedCustomersAll();
-                        }
-
-                        if (response != null) {
+                          await rewardedCustomerController
+                              .getRewardedCustomersAll();
                           showDialog(
                             barrierDismissible: false,
                             context: Get.context!,
@@ -615,7 +566,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                               return AppDialog(
                                 onTap: () {
                                   Get.back();
-                                  // Get.back();
                                 },
                                 padding: EdgeInsets.zero,
                                 child: successDialog(
@@ -624,11 +574,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                                 ),
                               );
                             },
-                          );
-                        } else {
-                          Get.snackbar(
-                            "Failed",
-                            "Offer validation failed. Please try again.",
                           );
                         }
                       } catch (e) {
@@ -661,7 +606,71 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                       ),
                     ),
                   ),*/
+                  Obx(() {
+                    return isLoading.value
+                        ? CircularProgressIndicator()
+                        : GestureDetector(
+                      onTap: () async {
+                        isLoading.value = true;
+                        Get.back();
+                        try {
+                          final response = await validateOfferQr(
+                            customerData.data!.customerDetails!.id.toString(),
+                            offerDetailList.id.toString(),
+                          );
 
+                          if (response != null) {
+                            await rewardedCustomerController.getRewardedCustomersAll();
+                            showDialog(
+                              barrierDismissible: false,
+                              context: Get.context!,
+                              builder: (context) {
+                                return AppDialog(
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                  padding: EdgeInsets.zero,
+                                  child: successDialog(
+                                    customerDataSuccess: customerData,
+                                    offerDetailListSuccess: offerDetailList,
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        } catch (e) {
+                          Get.snackbar(
+                            "Error",
+                            "Something went wrong. Please try again.",
+                          );
+                        } finally {
+                          isLoading.value = false;
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 35,
+                          vertical: 13,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColor.c1F9D70,
+                          borderRadius: BorderRadius.circular(100),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColor.c1F9D70.withOpacity(0.30),
+                              spreadRadius: 0,
+                              blurRadius: 15,
+                              offset: Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          "Approve",
+                          style: w500_14a(color: AppColor.white),
+                        ),
+                      ),
+                    );
+                  }),
 
                 ],
               ),

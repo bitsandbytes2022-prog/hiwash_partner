@@ -13,7 +13,8 @@ class AppDialog extends StatelessWidget {
   String? remainingText;
   EdgeInsets?padding;
  VoidCallback?onTap;
-   AppDialog({super.key, this.child,this.padding,this.onTap});
+final bool closeIconShow;
+   AppDialog({super.key, this.child,this.padding,this.onTap,this.closeIconShow=true});
 
   @override
   Widget build(BuildContext context) {
@@ -34,72 +35,23 @@ class AppDialog extends StatelessWidget {
                 padding: padding??EdgeInsets.symmetric(horizontal: 14),
                 child: child
             ),
-            GestureDetector(
-              onTap: onTap??(){
-                Get.back();
-              },
-              child: Container(
-                padding: EdgeInsets.only(right: 18,top: 10),
-                child: ImageView(
-                  path: Assets.iconsIcClose,
-                  height: 28,
-                  width: 32,
+            if (closeIconShow)
+              GestureDetector(
+                onTap: onTap ?? () {
+                  Get.back();
+                },
+                child: Container(
+                  padding: EdgeInsets.only(right: 18, top: 10),
+                  child: ImageView(
+                    path: Assets.iconsIcClose,
+                    height: 28,
+                    width: 32,
+                  ),
                 ),
               ),
-            )
           ],
         ),
 
-        /* Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 16, right: 16,bottom: 11),
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 27),
-                  child: child
-                ),
-                GestureDetector(
-                  onTap: (){
-                    Get.back();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.only(right: 18,top: 10),
-                    child: ImageView(
-                      path: Assets.iconsIcClose,
-                      height: 28,
-                      width: 32,
-                    ),
-                  ),
-                )
-              ],
-            ),
-
-            Container(
-                padding: EdgeInsets.only(bottom: 0),
-                margin: EdgeInsets.only(left: 50,right: 50,top: 40),
-                *//*  decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage(Assets.imagesDialogBottom),
-                ),*//*
-
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(Assets.imagesDialogBottom),
-                    Text(remainingText??''.tr,style:w500_14p(color: AppColor.c2C2A2A) ,)
-                  ],
-                )
-
-            )
-          ],
-        ),*/
       ),
     );
   }

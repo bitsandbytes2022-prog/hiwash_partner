@@ -196,6 +196,7 @@ class Repository {
         isAuthRequired: true,
       );
       print("Save profile success: $response");
+      return response;
     } catch (e) {
       print("Save profile failed: $e");
     }

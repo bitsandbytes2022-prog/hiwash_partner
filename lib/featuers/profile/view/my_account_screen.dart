@@ -94,8 +94,9 @@ class MyAccountScreen extends StatelessWidget {
     final userData = dashboardController.getPartnerModel.value?.data?.first;
 
     drawerProfileController.businessNameController.text = userData?.businessName ?? '';
-    drawerProfileController.emailController.text = userData?.email ?? '';
+    drawerProfileController.phoneController.text = userData?.mobileNumber ?? '';
     drawerProfileController.addressController.text = userData?.address ?? '';
+    drawerProfileController.emailController.text = userData?.email ?? '';
 
     return AppHomeBg(
       headingText: "My Account",
@@ -248,6 +249,20 @@ class MyAccountScreen extends StatelessWidget {
               20.heightSizeBox,
               HiWashTextField(
                 readOnly: true,
+                controller: drawerProfileController.phoneController,
+                keyboardType: TextInputType.number,
+                hintText: "Phone",
+                labelText: "Phone",
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter your Phone';
+                  }
+                  return null;
+                },
+              ),
+              20.heightSizeBox,
+              HiWashTextField(
+                readOnly: true,
                 controller: drawerProfileController.emailController,
                 keyboardType: TextInputType.emailAddress,
                 hintText: "Email",
@@ -347,7 +362,7 @@ class MyAccountScreen extends StatelessWidget {
                     if (_formKey.currentState!.validate()) {
                       drawerProfileController.uploadProfile(
                         drawerProfileController.businessNameController.text,
-                        drawerProfileController.emailController.text,
+                        drawerProfileController.phoneController.text,
                         drawerProfileController.addressController.text,
                       );
 
