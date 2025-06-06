@@ -1,3 +1,4 @@
+/*
 class GetTokenModel {
   bool? success;
   String? message;
@@ -59,6 +60,7 @@ class Data {
   }
 }
 
+*/
 
 /*
 class GetTokenModel {

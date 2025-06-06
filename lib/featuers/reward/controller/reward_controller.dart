@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:hiwash_partner/widgets/components/loader.dart';
@@ -15,20 +16,82 @@ class RewardController extends GetxController {
   RxInt isSelected = 1.obs;
   var isLoadingCustomers = false.obs;
   Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
-  Rxn<GetRewardedCustomersModel> getRewardedCustomersModel = Rxn();
   Rxn<GetOfferCategoriesModel> getOfferCategoriesModel = Rxn();
   var selectedCategoryIndex = 0.obs;
 
 
-
-
+  RxInt currentPage = 1.obs;
+  final int pageSize = 10;
+  final RxList<GetRewardedCustomersData> allCustomers = <GetRewardedCustomersData>[].obs;
+  final RxBool isLoading = false.obs;
+  final RxBool hasMore = true.obs;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     getAllOffers();
-   // getRewardedCustomersAll();
     super.onInit();
+    scrollController.addListener(onScroll);
   }
+
+  void fetchInitialCustomers() {
+    currentPage.value = 1;
+    hasMore.value = true;
+    allCustomers.clear();
+    fetchCustomersById(  getOffersByIdModel.value?.offerDetailList?.first.id.toString()??'');
+  }
+
+  void onScroll() {
+    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 300) {
+      if (!isLoading.value && hasMore.value) {
+        fetchCustomersById(  getOffersByIdModel.value?.offerDetailList?.first.id.toString()??'');
+      }
+    }
+  }
+
+  Future<void> fetchCustomersById(String offerId) async {
+    if (isLoading.value || !hasMore.value) return;
+    isLoading.value = true;
+
+    Map<String, dynamic> requestBody = {
+      "offerId": offerId,
+      "pageNo": currentPage.value.toString(),
+      "pageSize": pageSize.toString(),
+    };
+
+    try {
+      final result = await Repository().GetRewardedCustomersRepo(requestBody);
+
+      if (result != null && result.getRewardedCustomersData != null) {
+        final newList = result.getRewardedCustomersData!;
+        if (newList.isNotEmpty) {
+          allCustomers.addAll(newList);
+          currentPage.value++;
+          if (newList.length < pageSize) {
+            hasMore.value = false;
+          }
+        } else {
+          hasMore.value = false;
+        }
+      } else {
+        hasMore.value = false;
+      }
+    } catch (e) {
+      print("Error fetching customers: $e");
+      hasMore.value = false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
+
+
+
 
   Rxn<GetOfferResponseModel> offerResponseModel = Rxn();
 
@@ -54,7 +117,8 @@ class RewardController extends GetxController {
     return null;
   }
 
-/*  Future<GetRewardedCustomersModel?> getRewardedCustomersAll() async {
+/*
+  Future<GetRewardedCustomersModel?> getRewardedCustomersAll() async {
     try {
       //showLoader();
       getRewardedCustomersModel.value =
@@ -65,9 +129,10 @@ class RewardController extends GetxController {
       print("Error fetching Terms And Condition: $e");
       return null;
     }
-  }*/
+  }
+*/
 
-  Future<GetRewardedCustomersModel?> getRewardedCustomersById(
+/*  Future<GetRewardedCustomersModel?> getRewardedCustomersById(
     int offerId,
   ) async {
     try {
@@ -78,7 +143,10 @@ class RewardController extends GetxController {
       print("Error fetching Terms And Condition: $e");
       return null;
     }
-  }
+    */
+
+
+
   Future<GetOfferCategoriesModel?> getOfferCategories() async {
     try {
 

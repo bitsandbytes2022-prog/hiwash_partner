@@ -550,7 +550,7 @@ class RewardScreen extends StatelessWidget {
                 ),
                 // DashedLineWidget(),
                 SizedBox(height: 15),
-                Padding(
+                Padding (
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
@@ -631,11 +631,11 @@ class RewardScreen extends StatelessWidget {
                                   onTap: () async {
                                     rewardController.isSelected.value = 2;
                                     showLoader();
-                                    await rewardController
-                                        .getRewardedCustomersById(
-                                          rewardDetail.id ?? 0,
+                                    await rewardController.fetchCustomersById(
+                                          rewardDetail.id.toString(),
                                         );
                                     hideLoader();
+                                    print("kwegyhw${rewardDetail.id}");
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -680,6 +680,72 @@ class RewardScreen extends StatelessWidget {
                       15.heightSizeBox,
                       if (rewardController.isSelected.value == 1)
                         Text(rewardDetail.description ?? ''),
+                      if (rewardController.isSelected.value == 2)
+                        Obx(() {
+                         final customers =
+                              rewardController.allCustomers;
+
+
+                          if (customers.isEmpty && rewardController.isLoading.value) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+
+                          if (customers.isEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text("No rewarded customers found."),
+                            );
+                          }
+
+                          return ListView.separated(
+                            controller: rewardController.scrollController,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: customers.length + (rewardController.hasMore.value ? 1 : 0),
+                            separatorBuilder: (context, index) => Column(
+                              children: [
+                                10.heightSizeBox,
+                                DashedLineWidget(),
+                                10.heightSizeBox,
+                              ],
+                            ),
+                            itemBuilder: (context, index) {
+                              if (index < customers.length) {
+                                final customer = customers[index];
+                                return Row(
+                                  children: [
+                                    ProfileImageView(
+                                      radiusStack: 4,
+                                      radius: 17,
+                                      isVisibleStack: false,
+                                      imagePath: customer.profilePicUrl ?? '',
+                                    ),
+                                    9.widthSizeBox,
+                                    Expanded(
+                                      child: Text(
+                                        customer.customerName ?? '',
+                                        style: w600_12a(color: AppColor.c2C2A2A),
+                                      ),
+                                    ),
+                                    20.widthSizeBox,
+                                    Text(
+                                      formatServerDate(customer.redeemedAt ?? ''),
+                                      style: w400_10a(),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Center(child: CircularProgressIndicator()),
+                                );
+                              }
+                            },
+                          );
+                        }),
+
+
+                      /*
                       if (rewardController.isSelected.value == 2)
                         Obx(() {
                           final customers =
@@ -732,7 +798,7 @@ class RewardScreen extends StatelessWidget {
                               );
                             },
                           );
-                        }),
+                        }),*/
                     ],
                   ),
                 ),

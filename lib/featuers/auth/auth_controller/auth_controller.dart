@@ -56,7 +56,6 @@ class AuthController extends GetxController {
     }
   }
 
-  GetTokenModel? getTokenModel;
   LoginModel? loginModel;
   SendOtpModel? sendOtpModel;
   SignUpModel? signUpModel;
@@ -70,7 +69,7 @@ class AuthController extends GetxController {
     text:kDebugMode? "partner1@gmail.com":"",
   );
   TextEditingController passwordController = TextEditingController(
-    text:kDebugMode? "Hiwash@5432":"",
+    text:kDebugMode? "Hiwash@54321":"",
   );
   TextEditingController phoneRestController = TextEditingController();
   TextEditingController passwordRestController = TextEditingController();
@@ -196,43 +195,19 @@ class AuthController extends GetxController {
       LocalStorage tokenStorage = LocalStorage();
       await tokenStorage.saveToken(value.data!.token!);
       await tokenStorage.saveUserId(value.data!.id.toString());
+      await tokenStorage.saveRefreshToken(value.data!.refreshToken!);
 
       return value;
     } catch (error) {
-      print(" Error in controller send otp: $error");
+      print(" Error in controller login : $error");
       return null;
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<GetTokenModel?> getToken(String phoneNumber) async {
-    Map<String, dynamic> requestBody = {
-      "mobileNumber": phoneNumber,
-      "userType": "2",
-    };
-    print("Calling getToken with $phoneNumber");
-    isLoading.value = true;
 
-    try {
-      final value = await Repository().getTokens(requestBody);
-      print(" Value received in controller token: $value");
-      getTokenModel = value;
-      LocalStorage token = LocalStorage();
-      token.saveToken(value.data?.token ?? '');
-      await token.saveRefreshToken(value.data!.refreshToken!);
-
-
-      return value;
-    } catch (error) {
-      print(" Error in controller send otp: $error");
-      return null;
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<GetTokenModel?> refreshToken() async {
+  Future<LoginModel?> refreshToken() async {
     final storedRefreshToken = LocalStorage().getRefreshToken();
 
     if (storedRefreshToken == null || storedRefreshToken.isEmpty) {

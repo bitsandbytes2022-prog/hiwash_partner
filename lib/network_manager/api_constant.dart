@@ -27,7 +27,7 @@ static const notificationUrl="$baseUrl/notification";
 
 static const uploadProfileImage="$baseUrl/partner/upload-profile-picture";
 static const uploadProfile="$baseUrl/partner/update-profile";
-static  rewardedCustomerById(int offerId)=>"$baseUrl/offer/rewarded-customers?offerId=$offerId";
+//static  rewardedCustomerById(int offerId)=>"$baseUrl/offer/rewarded-customers?offerId=$offerId";
 static const rewardedCustomer ="$baseUrl/offer/rewarded-customers";
 static  getCustomerId(int id)=>"$baseUrl/customer/$id";
 static const validateOfferQr="$baseUrl/offer/validate-offer-qr";

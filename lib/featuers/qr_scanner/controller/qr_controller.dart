@@ -29,6 +29,7 @@ import '../../../widgets/components/doted_vertical_line.dart';
 import '../../../widgets/components/image_view.dart';
 import '../../../widgets/components/is_select_button.dart';
 import '../../../widgets/components/profile_image_view.dart';
+import '../../reward/controller/reward_controller.dart';
 import '../../reward/model/get_offers_by_id_model.dart';
 import '../../rewarded_customers/controller/rewarded_customer_controller.dart';
 import '../model/get_customer_data_model.dart';
@@ -36,10 +37,10 @@ import '../model/get_customer_data_model.dart';
 class QrController extends GetxController with GetTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrController;
-  RewardedCustomerController rewardedCustomerController =
-      Get.isRegistered<RewardedCustomerController>()
-          ? Get.find<RewardedCustomerController>()
-          : Get.put(RewardedCustomerController());
+  RewardController rewardController =
+      Get.isRegistered<RewardController>()
+          ? Get.find<RewardController>()
+          : Get.put(RewardController());
 
   RxString scanUrl = ''.obs;
   RxString customerId = ''.obs;
@@ -151,7 +152,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                 context: Get.context!,
                 builder: (context) {
                   return AppDialog(
-                 /*   onTap: () {
+                    /*   onTap: () {
                       Get.back();
                     },*/
                     closeIconShow: false,
@@ -370,7 +371,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       print("Value received in controller validateOfferQr: $response");
 
       if (response != null && response['success'] == true) {
-      /*  appSnackBar(
+        /*  appSnackBar(
           message: response['message'] ?? "Offer validated successfully.",
         );*/
       } else {
@@ -387,10 +388,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       isLoading.value = false;
     }
   }
-
-
-
-
 
   Widget approveRewardDialog(
     GetCustomerData customerData,
@@ -547,132 +544,83 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                     ),
                   ),
                   15.widthSizeBox,
-                /*  GestureDetector(
-                    onTap: () async {
-                      Get.back();
-                      try {
-                        final response = await validateOfferQr(
-                          customerData.data!.customerDetails!.id.toString(),
-                          offerDetailList.id.toString(),
-                        );
 
-                        if (response != null) {
-                          await rewardedCustomerController
-                              .getRewardedCustomersAll();
-                          showDialog(
-                            barrierDismissible: false,
-                            context: Get.context!,
-                            builder: (context) {
-                              return AppDialog(
-                                onTap: () {
-                                  Get.back();
-                                },
-                                padding: EdgeInsets.zero,
-                                child: successDialog(
-                                  customerDataSuccess: customerData,
-                                  offerDetailListSuccess: offerDetailList,
-                                ),
-                              );
-                            },
-                          );
-                        }
-                      } catch (e) {
-                        Get.snackbar(
-                          "Error",
-                          "Something went wrong. Please try again.",
-                        );
-                      }
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35,
-                        vertical: 13,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColor.c1F9D70,
-                        borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColor.c1F9D70.withOpacity(0.30),
-                            spreadRadius: 0,
-                            blurRadius: 15,
-                            offset: Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        "Approve",
-                        style: w500_14a(color: AppColor.white),
-                      ),
-                    ),
-                  ),*/
                   Obx(() {
                     return isLoading.value
                         ? CircularProgressIndicator()
                         : GestureDetector(
-                      onTap: () async {
-                        isLoading.value = true;
-                        Get.back();
-                        try {
-                          final response = await validateOfferQr(
-                            customerData.data!.customerDetails!.id.toString(),
-                            offerDetailList.id.toString(),
-                          );
+                          onTap: () async {
+                            isLoading.value = true;
+                            Get.back();
+                            try {
+                              final response = await validateOfferQr(
+                                customerData.data!.customerDetails!.id
+                                    .toString(),
+                                offerDetailList.id.toString(),
+                              );
 
-                          if (response != null) {
-                            /// Toto add this line
-                        //    await rewardedCustomerController.getRewardedCustomersAll();
-                            showDialog(
-                              barrierDismissible: false,
-                              context: Get.context!,
-                              builder: (context) {
-                                return AppDialog(
-                                  onTap: () {
-                                    Get.back();
-                                  },
-                                  padding: EdgeInsets.zero,
-                                  child: successDialog(
-                                    customerDataSuccess: customerData,
-                                    offerDetailListSuccess: offerDetailList,
-                                  ),
+                              if (response != null) {
+                                /// Toto add this line
+                                await rewardController.fetchCustomersById(
+                                  getOffersByIdModel
+                                          .value
+                                          ?.offerDetailList
+                                          ?.first
+                                          .id
+                                          .toString() ??
+                                      '',
                                 );
-                              },
-                            );
-                          }
-                        } catch (e) {
-                          Get.snackbar(
-                            "Error",
-                            "Something went wrong. Please try again.",
-                          );
-                        } finally {
-                          isLoading.value = false;
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 35,
-                          vertical: 13,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColor.c1F9D70,
-                          borderRadius: BorderRadius.circular(100),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColor.c1F9D70.withOpacity(0.30),
-                              spreadRadius: 0,
-                              blurRadius: 15,
-                              offset: Offset(0, 10),
+                                //await rewardController.getRewardedCustomersById();
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: Get.context!,
+                                  builder: (context) {
+                                    return AppDialog(
+                                      onTap: () {
+                                        Get.back();
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      child: successDialog(
+                                        customerDataSuccess: customerData,
+                                        offerDetailListSuccess: offerDetailList,
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            } catch (e) {
+                              Get.snackbar(
+                                "Error",
+                                "Something went wrong. Please try again.",
+                              );
+                            } finally {
+                              isLoading.value = false;
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 35,
+                              vertical: 13,
                             ),
-                          ],
-                        ),
-                        child: Text(
-                          "Approve",
-                          style: w500_14a(color: AppColor.white),
-                        ),
-                      ),
-                    );
+                            decoration: BoxDecoration(
+                              color: AppColor.c1F9D70,
+                              borderRadius: BorderRadius.circular(100),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColor.c1F9D70.withOpacity(0.30),
+                                  spreadRadius: 0,
+                                  blurRadius: 15,
+                                  offset: Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              "Approve",
+                              style: w500_14a(color: AppColor.white),
+                            ),
+                          ),
+                        );
                   }),
-
                 ],
               ),
             ],

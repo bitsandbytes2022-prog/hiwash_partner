@@ -44,7 +44,7 @@ class Repository {
     return LoginModel.fromJson(response);
   }
 
-  Future<GetTokenModel> refreshToken(Object requestBody) async {
+  Future<LoginModel> refreshToken(Object requestBody) async {
     // print("body--->: $requestBody");
     //  print("url--->: ${ApiConstant.getToken}");
 
@@ -54,7 +54,7 @@ class Repository {
     );
     //   print("Response--->: $response");
 
-    return GetTokenModel.fromJson(response);
+    return LoginModel.fromJson(response);
   }
 
   Future<dynamic> resetPasswordRepo(Object requestBody) async {
@@ -64,18 +64,7 @@ class Repository {
     return response;
   }
 
-  Future<GetTokenModel> getTokens(Object requestBody) async {
-    print("body--->: $requestBody");
-    print("url--->: ${ApiConstant.getToken}");
 
-    var response = await dioHelper.post(
-      url: ApiConstant.getToken,
-      requestBody: requestBody,
-    );
-    print("Response--->: $response");
-
-    return GetTokenModel.fromJson(response);
-  }
 
   Future<SignUpModel> signUp(Object requestBody) async {
     var response = await dioHelper.post(
@@ -147,7 +136,9 @@ class Repository {
     return GetRewardedCustomersModel.fromJson(response);
   }
 
-  Future<GetRewardedCustomersModel> GetRewardedCustomersByIdRepo(
+
+
+/*  Future<GetRewardedCustomersModel> GetRewardedCustomersByIdRepo(
       int offerId,) async {
     Map<String, dynamic> response = await dioHelper.get(
       url: ApiConstant.rewardedCustomerById(offerId),
@@ -155,7 +146,21 @@ class Repository {
     );
     print("---->termcondition${response.toString()}");
     return GetRewardedCustomersModel.fromJson(response);
+  }*/
+
+  Future<GetRewardedCustomersModel> GetRewardedCustomersByIdRepo(
+      Object requestBody) async {
+    Map<String, dynamic> response = await dioHelper.post(
+      url: ApiConstant.rewardedCustomer,
+      isAuthRequired: true,
+      requestBody: requestBody
+    );
+    print("---->termcondition${response.toString()}");
+    return GetRewardedCustomersModel.fromJson(response);
   }
+
+
+
  Future<GetRewardedCustomersModel> GetRewardedCustomersAlldRepo(
       ) async {
     Map<String, dynamic> response = await dioHelper.get(
