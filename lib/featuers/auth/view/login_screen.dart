@@ -64,19 +64,34 @@ class LoginScreen extends StatelessWidget {
                 },
               ),
               24.heightSizeBox,
-              HiWashTextField(
-                controller: authController.passwordController,
-                keyboardType: TextInputType.visiblePassword,
-                hintText: "kPassword".tr,
-                labelText: "kPassword".tr,
+              Obx(() {
+                return HiWashTextField(
+                  controller: authController.passwordController,
+                  keyboardType: TextInputType.visiblePassword,
+                  hintText: "kPassword".tr,
+                  labelText: "kPassword".tr,
+                  obscuringCharacter: '*',
+                  obscure: !authController.isPasswordVisibleLogin.value,
 
-                validator: (value) {
-                  return authController.validatePassword(value);
-                },
-              ),
-              12.heightSizeBox,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      authController.isPasswordVisibleLogin.value
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColor.c455A64.withOpacity(0.5),
+                    ),
+                    onPressed: () {
+                      authController.togglePasswordVisibilityLogin();
+                    },
+                  ),
 
-              56.heightSizeBox,
+                  validator: (value) {
+                    return authController.validatePassword(value);
+                  },
+                );
+              }),
+
+              68.heightSizeBox,
               Obx(() {
                 return HiWashButton(
                   isLoading: authController.isLoading.value,

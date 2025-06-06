@@ -6,6 +6,8 @@ static const String baseImageUrl = "https://loyaltyapistaging.pipelinedns.com";
 
 static const login="$baseUrl/authentication/partner/login";
 static const sendOtp="$baseUrl/authentication/send-otp";
+static const refreshToken="$baseUrl/authentication/refresh-token";
+
 static const resetPassword="$baseUrl/authentication/partner/reset-password";
 static const getToken="$baseUrl/authentication/token";
 static const signUp="$baseUrl/customer";

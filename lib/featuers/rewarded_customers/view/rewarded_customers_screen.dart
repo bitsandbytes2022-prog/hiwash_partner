@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -16,24 +17,28 @@ class RewardedCustomersScreen extends StatefulWidget {
   RewardedCustomersScreen({super.key});
 
   @override
-  State<RewardedCustomersScreen> createState() => _RewardedCustomersScreenState();
+  State<RewardedCustomersScreen> createState() =>
+      _RewardedCustomersScreenState();
 }
 
 class _RewardedCustomersScreenState extends State<RewardedCustomersScreen> {
-  RewardedCustomerController rewardedCustomerController = Get.put(RewardedCustomerController());
-@override
-  void initState() {
-rewardedCustomerController.getRewardedCustomersAll();
+  final RewardedCustomerController rewardedCustomerController = Get.put(RewardedCustomerController());
 
+  @override
+  void initState() {
     super.initState();
+    rewardedCustomerController.scrollController.addListener(
+      rewardedCustomerController.onScroll,
+    );
+    rewardedCustomerController.fetchInitialCustomers();
   }
+
   @override
   Widget build(BuildContext context) {
-    // rewardController.getRewardedCustomersAll();
     return Padding(
-      padding: EdgeInsets.only(bottom: 40, top: 15),
+      padding: EdgeInsets.only(bottom: 80, top: 15),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        padding: const EdgeInsets.only(top: 14,bottom: 60),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: AppColor.white,
@@ -46,39 +51,29 @@ rewardedCustomerController.getRewardedCustomersAll();
             ),
           ],
         ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: Obx(() {
+            final customers = rewardedCustomerController.allCustomers;
 
-        child: Obx(() {
-          return rewardedCustomerController
-                      .getRewardedCustomersModel
-                      .value
-                      ?.data
-                      ?.isNotEmpty ==
-                  true
-              ? ListView.separated(
-                padding: EdgeInsets.zero,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                separatorBuilder: (BuildContext context, int index) {
-                  return Column(
-                    children: [
-                      10.heightSizeBox,
-                      DashedLineWidget(),
-                      10.heightSizeBox,
-                    ],
-                  );
-                },
-                itemCount:
-                rewardedCustomerController
-                        .getRewardedCustomersModel
-                        .value!
-                        .data!
-                        .length,
-                itemBuilder: (context, index) {
-                  var customerAllData =
-                  rewardedCustomerController
-                          .getRewardedCustomersModel
-                          .value!
-                          .data![index];
+            return customers.isNotEmpty
+                ? ListView.separated(
+
+              controller: rewardedCustomerController.scrollController,
+              padding: EdgeInsets.only(bottom: 70),
+              physics: AlwaysScrollableScrollPhysics(),
+              itemCount: customers.length +
+                  (rewardedCustomerController.hasMore.value ? 1 : 0),
+              separatorBuilder: (context, index) => Column(
+                children: [
+                  10.heightSizeBox,
+                  DashedLineWidget(),
+                  10.heightSizeBox,
+                ],
+              ),
+              itemBuilder: (context, index) {
+                if (index < customers.length) {
+                  var customer = customers[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
@@ -86,8 +81,8 @@ rewardedCustomerController.getRewardedCustomersAll();
                         ProfileImageView(
                           radiusStack: 4,
                           radius: 17,
-                          imagePath: customerAllData.profilePicUrl ?? '',
-                          isVisibleStack: customerAllData.isPremium==0?false:true,
+                          imagePath: customer.profilePicUrl ?? '',
+                          isVisibleStack: customer.isPremium == 1,
                         ),
                         9.widthSizeBox,
                         Expanded(
@@ -95,11 +90,11 @@ rewardedCustomerController.getRewardedCustomersAll();
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                customerAllData.customerName ?? '',
+                                customer.customerName ?? '',
                                 style: w600_12a(color: AppColor.c2C2A2A),
                               ),
                               Text(
-                                customerAllData.offerTitle ?? '',
+                                customer.offerTitle ?? '',
                                 style: w400_10a(),
                               ),
                             ],
@@ -107,22 +102,30 @@ rewardedCustomerController.getRewardedCustomersAll();
                         ),
                         20.widthSizeBox,
                         Text(
-                          formatServerDate(
-                            customerAllData.redeemedAt.toString(),
-                          ),
+                          formatServerDate(customer.redeemedAt.toString()),
                           style: w400_10a(),
                         ),
                       ],
                     ),
                   );
-                },
-              )
-              : Container(
+                } else {
+                  return rewardedCustomerController.isLoading.value
+                      ? Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                      : SizedBox(); // No loader when finished
+                }
+              },
+            )
+                : Center(
+              child: Padding(
                 padding: const EdgeInsets.all(16),
-                alignment: Alignment.center,
                 child: Text("No rewards available"),
-              );
-        }),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

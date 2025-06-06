@@ -44,6 +44,18 @@ class Repository {
     return LoginModel.fromJson(response);
   }
 
+  Future<GetTokenModel> refreshToken(Object requestBody) async {
+    // print("body--->: $requestBody");
+    //  print("url--->: ${ApiConstant.getToken}");
+
+    var response = await dioHelper.post(
+      url: ApiConstant.refreshToken,
+      requestBody: requestBody,
+    );
+    //   print("Response--->: $response");
+
+    return GetTokenModel.fromJson(response);
+  }
 
   Future<dynamic> resetPasswordRepo(Object requestBody) async {
     var response = await dioHelper.post(
@@ -85,22 +97,7 @@ class Repository {
     return GetPartnerModel.fromJson(response);
   }
 
-/*  Future<GetSubscriptionModel> getSubscription() async {
-    Map<String, dynamic> response = await dioHelper.get(
-      url: ApiConstant.getSubscription,
-      isAuthRequired: true,
-    );
-    return GetSubscriptionModel.fromJson(response);
-  }
 
-  Future<ApiResponse> getSubscriptionMembership(Object requestBody) async {
-    Map<String, dynamic> response = await dioHelper.post(
-      url: ApiConstant.baseUrl + ApiConstant.getSubscriptionMembership,
-      isAuthRequired: true,
-      requestBody: requestBody,
-    );
-    return ApiResponse.fromJson(response);
-  }*/
 
   Future<FaqResponseModel> getFaq(int entityType) async {
     Map<String, dynamic> response = await dioHelper.get(
@@ -129,11 +126,22 @@ class Repository {
     return TermsAndConditionsResponseModel.fromJson(response);
   }
 
-  Future<GetRewardedCustomersModel> GetRewardedCustomersRepo(
+ /* Future<GetRewardedCustomersModel> GetRewardedCustomersRepo(
       ) async {
     Map<String, dynamic> response = await dioHelper.get(
       url: ApiConstant.rewardedCustomer,
       isAuthRequired: true,
+    );
+    print("---->GetRewardedCustomersRepo${response.toString()}");
+    return GetRewardedCustomersModel.fromJson(response);
+  }*/
+
+   Future<GetRewardedCustomersModel> GetRewardedCustomersRepo(Object requestBody
+      ) async {
+    Map<String, dynamic> response = await dioHelper.post(
+      url: ApiConstant.rewardedCustomer,
+      isAuthRequired: true,
+    requestBody: requestBody,
     );
     print("---->GetRewardedCustomersRepo${response.toString()}");
     return GetRewardedCustomersModel.fromJson(response);

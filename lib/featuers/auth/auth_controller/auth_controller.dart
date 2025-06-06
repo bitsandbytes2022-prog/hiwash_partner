@@ -23,6 +23,11 @@ class AuthController extends GetxController {
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
+
+  var isPasswordVisibleLogin = false.obs;
+  void togglePasswordVisibilityLogin() {
+    isPasswordVisibleLogin.value = !isPasswordVisibleLogin.value;
+  }
   @override
   void onInit() {
     pageController.addListener(() {
@@ -215,10 +220,52 @@ class AuthController extends GetxController {
       getTokenModel = value;
       LocalStorage token = LocalStorage();
       token.saveToken(value.data?.token ?? '');
+      await token.saveRefreshToken(value.data!.refreshToken!);
+
 
       return value;
     } catch (error) {
       print(" Error in controller send otp: $error");
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<GetTokenModel?> refreshToken() async {
+    final storedRefreshToken = LocalStorage().getRefreshToken();
+
+    if (storedRefreshToken == null || storedRefreshToken.isEmpty) {
+      print("No refresh token found, user needs to login again.");
+      Get.offAllNamed(RouteStrings.welcomeScreen);
+      return null;
+    }
+
+    Map<String, dynamic> requestBody = {
+      "refreshToken": storedRefreshToken,
+    };
+
+    print("Calling refreshToken API");
+    isLoading.value = true;
+
+    try {
+      final response = await Repository().refreshToken(requestBody);
+      print("Refresh token response: $response");
+
+      if (response.data?.token != null && response.data!.token!.isNotEmpty) {
+        await LocalStorage().saveToken(response.data!.token!);
+      }
+
+      if (response.data?.refreshToken != null && response.data!.refreshToken!.isNotEmpty) {
+        await LocalStorage().saveRefreshToken(response.data!.refreshToken!);
+      }
+
+      isLoggedIn.value = true;
+      return response;
+    } catch (error) {
+      print("Error refreshing token: $error");
+      await LocalStorage().removeToken();
+      Get.offAllNamed(RouteStrings.welcomeScreen);
       return null;
     } finally {
       isLoading.value = false;

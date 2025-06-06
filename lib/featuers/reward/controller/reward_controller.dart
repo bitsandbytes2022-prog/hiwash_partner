@@ -26,7 +26,7 @@ class RewardController extends GetxController {
   @override
   void onInit() {
     getAllOffers();
-    getRewardedCustomersAll();
+   // getRewardedCustomersAll();
     super.onInit();
   }
 
@@ -54,7 +54,7 @@ class RewardController extends GetxController {
     return null;
   }
 
-  Future<GetRewardedCustomersModel?> getRewardedCustomersAll() async {
+/*  Future<GetRewardedCustomersModel?> getRewardedCustomersAll() async {
     try {
       //showLoader();
       getRewardedCustomersModel.value =
@@ -65,7 +65,7 @@ class RewardController extends GetxController {
       print("Error fetching Terms And Condition: $e");
       return null;
     }
-  }
+  }*/
 
   Future<GetRewardedCustomersModel?> getRewardedCustomersById(
     int offerId,

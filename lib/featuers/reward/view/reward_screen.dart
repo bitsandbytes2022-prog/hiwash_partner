@@ -169,9 +169,8 @@ class RewardScreen extends StatelessWidget {
                                         .selectedCategoryIndex
                                         .value;
 
-                                // Compose a list with "All offers" at front + categories
                                 final extendedCategories = [
-                                  null, // Represents "All offers"
+                                  null,
                                   ...?categories,
                                 ];
 
@@ -375,8 +374,7 @@ class RewardScreen extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  rewardController.selectedCategoryIndex.value =
-                                      0;
+                                  rewardController.selectedCategoryIndex.value = 0;
                                   rewardController.isVisibleAllOffer.value =
                                       false;
                                 },
@@ -388,14 +386,11 @@ class RewardScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              ...(rewardController
+                              ...(
+                                  rewardController
                                           .getOfferCategoriesModel
                                           .value
-                                          ?.offerCategory ??
-                                      [])
-                                  .asMap()
-                                  .entries
-                                  .map(
+                                          ?.offerCategory ?? []).asMap().entries.map(
                                     (entry) => GestureDetector(
                                       onTap: () {
                                         rewardController
@@ -691,7 +686,7 @@ class RewardScreen extends StatelessWidget {
                               rewardController
                                   .getRewardedCustomersModel
                                   .value
-                                  ?.data ??
+                                  ?.getRewardedCustomersData ??
                               [];
                           if (customers.isEmpty) {
                             return Padding(

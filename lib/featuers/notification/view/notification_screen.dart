@@ -169,52 +169,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
 
-/*
-  Widget _notificationContainer(NotificationData item, int index) {
-    return GestureDetector(
-      onTap: () {
-        controller.toggleSelection(index);
-        controller.updateNotificationReadStatus(item, index);
-      },
-      child: Container(
-        width: Get.width,
-        color:
-            controller.selectedStates[index].value
-                ? AppColor.white
-                : AppColor.cF6F7FF,
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const ProfileImageView(
-              radiusStack: 5,
-              isVisibleStack: false,
-              radius: 20,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.message ?? '',
-                    style: w500_12p(color: AppColor.c2C2A2A),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    formatDate(item.createdAt),
-                    style: w400_10p(color: AppColor.c455A64),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  */
+
 
 }

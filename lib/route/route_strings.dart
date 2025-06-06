@@ -17,6 +17,7 @@ class RouteStrings {
   static const String stepByStepGuideScreen = '/stepByStepGuideScreen';
   static const String stepByStepGuideDetailScreen = '/stepByStepGuideDetailScreen';
   static const String languageScreen = '/languageScreen';
+  static const String privacySettingScreen = '/privacySettingScreen';
 
 
 

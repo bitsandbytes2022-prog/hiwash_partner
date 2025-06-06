@@ -13,6 +13,7 @@ import '../featuers/dashboard/view/widget/second_drawer/help_desk_ticket_screen.
 import '../featuers/dashboard/view/widget/second_drawer/step_by_step_guide_detail_screen.dart';
 import '../featuers/dashboard/view/widget/second_drawer/step_by_step_guide_screen.dart';
 import '../featuers/profile/view/language_screen.dart';
+import '../featuers/profile/view/privacy_setting_screen.dart';
 import '../featuers/reward/view/reward_screen.dart';
 
 import 'route_strings.dart';
@@ -88,7 +89,10 @@ class Routes {
       name: RouteStrings.languageScreen,
       page: () => LanguageScreen(),
     ),
-
+    GetPage(
+      name: RouteStrings.privacySettingScreen,
+      page: () => PrivacySettingScreen(),
+    ),
 
 
 

@@ -620,7 +620,8 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                           );
 
                           if (response != null) {
-                            await rewardedCustomerController.getRewardedCustomersAll();
+                            /// Toto add this line
+                        //    await rewardedCustomerController.getRewardedCustomersAll();
                             showDialog(
                               barrierDismissible: false,
                               context: Get.context!,
