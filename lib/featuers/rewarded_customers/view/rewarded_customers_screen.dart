@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:hiwash_partner/featuers/reward/controller/reward_controller.dart';
 import 'package:hiwash_partner/styling/app_color.dart';
 import 'package:hiwash_partner/styling/app_font_anybody.dart';
-import 'package:hiwash_partner/widgets/components/app_home_bg.dart';
 import 'package:hiwash_partner/widgets/components/data_formet.dart';
 import 'package:hiwash_partner/widgets/components/doted_line.dart';
 import 'package:hiwash_partner/widgets/components/profile_image_view.dart';
@@ -54,8 +52,11 @@ class _RewardedCustomersScreenState extends State<RewardedCustomersScreen> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.7,
           child: Obx(() {
-            final customers = rewardedCustomerController.allCustomers;
 
+            final customers = rewardedCustomerController.allCustomers;
+         /*   if (rewardedCustomerController.isLoading.value) {
+              return  Center(child: CircularProgressIndicator());
+            }*/
             return customers.isNotEmpty
                 ? ListView.separated(
 
@@ -121,7 +122,7 @@ class _RewardedCustomersScreenState extends State<RewardedCustomersScreen> {
                 : Center(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text("No rewards available"),
+                child: Text("No rewards available",style: TextStyle(color: Colors.white),),
               ),
             );
           }),

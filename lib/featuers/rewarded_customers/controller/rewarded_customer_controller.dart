@@ -8,12 +8,13 @@ import 'package:get/get.dart';
 import '../../../network_manager/repository.dart';
 
 class RewardedCustomerController extends GetxController {
-  RxInt currentPage = 1.obs;
+  var currentPage = 1.obs;
   final int pageSize = 10;
   final RxList<GetRewardedCustomersData> allCustomers = <GetRewardedCustomersData>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool hasMore = true.obs;
   final ScrollController scrollController = ScrollController();
+
 
   @override
   void onInit() {
