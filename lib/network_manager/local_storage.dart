@@ -75,6 +75,7 @@ String? getCustomerId() => _storage.read(_customerIdKey);
     await _storage.remove(_refreshTokenKey);
     await _storage.remove(_localeKey);
 
+
     await FirebaseMessaging.instance.deleteToken();
 
 
