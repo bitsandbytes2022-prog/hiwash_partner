@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/export.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:intl/intl.dart';
 
 import '../../styling/app_color.dart';
@@ -71,7 +73,7 @@ class _CountdownOrDateTimerState extends State<CountdownOrDateTimer> {
   @override
   Widget build(BuildContext context) {
     if (expiryDate == null) {
-      return Text("Invalid date", style: w400_12a(color: AppColor.white));
+      return Text(StringConstant.kInvalidDate.tr, style: w400_12a(color: AppColor.white));
     }
 
     if (remaining.inHours >= 24) {
@@ -80,7 +82,7 @@ class _CountdownOrDateTimerState extends State<CountdownOrDateTimer> {
     }
 
     if (remaining.isNegative) {
-      return Text("Expired", style: w400_12a(color: AppColor.white));
+      return Text(StringConstant.kExpired.tr, style: w400_12a(color: AppColor.white));
     }
 
     final h = remaining.inHours;
@@ -94,17 +96,17 @@ class _CountdownOrDateTimerState extends State<CountdownOrDateTimer> {
       children: [
         _timeContainer(
           value: _twoDigits(h),
-          bottomText: h == 1 ? 'hour' : 'hours',
+          bottomText: h == 1 ? "${StringConstant.kHour.tr}" : "${StringConstant.kHours.tr}",
         ),
         Text(" : ", style: w700_22a(color: AppColor.cC31848)),
         _timeContainer(
           value: _twoDigits(m),
-          bottomText: m == 1 ? 'minute' : 'minutes',
+          bottomText: m == 1 ? "${StringConstant.kMinute.tr}" : "${StringConstant.kMinutes.tr}",
         ),
         Text(" : ", style: w700_22a(color: AppColor.cC31848)),
         _timeContainer(
           value: _twoDigits(s),
-          bottomText: s == 1 ? 'second' : 'seconds',
+          bottomText: s == 1 ? "${StringConstant.kSecond.tr}" : "${StringConstant.kSeconds.tr}",
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiwash_partner/featuers/dashboard/view/widget/second_drawer/second_drawer_controller/second_drawer_controller.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -45,7 +46,7 @@ class SecondDrawer extends StatelessWidget {
           ),
           ImageView(path: Assets.imagesHelpSupport, height: 180),
           31.heightSizeBox,
-          Text("Get Help?", style: w700_22a()),
+          Text(StringConstant.kGetHelp.tr, style: w700_22a()),
           40.heightSizeBox,
 
           /// **Drawer Options**
@@ -57,12 +58,12 @@ class SecondDrawer extends StatelessWidget {
                 throw Exception('Could not launch $url');
               }
             },
-            title: 'Chat with Support',
+            title: StringConstant.kChatWithSupport.tr,
             image: Assets.iconsIcChat,
           ),
           drawerRowWidget(
             onTap: () => Get.toNamed(RouteStrings.helpDeskTicketScreen),
-            title: 'Help Desk Ticket',
+            title: StringConstant.kHelpDeskTicket.tr,
             image: Assets.iconsIcTicket,
           ),
           drawerRowWidget(
@@ -70,7 +71,7 @@ class SecondDrawer extends StatelessWidget {
               //await controller.getFaq();
               Get.toNamed(RouteStrings.faqScreen);
             },
-            title: 'FAQ’s',
+            title: StringConstant.kFAQ.tr,
             image: Assets.iconsIcFaq,
           ),
           /*   drawerRowWidget(
@@ -82,7 +83,7 @@ class SecondDrawer extends StatelessWidget {
             onTap: () {
               Get.toNamed(RouteStrings.stepByStepGuideScreen);
             },
-            title: 'Step-by-Step Guide',
+            title: StringConstant.kStepByStepGuide.tr,
             dashedLineWidget: false,
             image: Assets.iconsIcGuideBook,
           ),

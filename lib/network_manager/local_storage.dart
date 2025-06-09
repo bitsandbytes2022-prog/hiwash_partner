@@ -10,6 +10,8 @@ class LocalStorage {
   final String _scannedQrCodeKey = 'scanned_qr_code';
   final  String _fcmToken = "fcmToken";
   final String _refreshTokenKey = 'refresh_token';
+  final String _localeKey = 'selected_locale';
+
 
 
 
@@ -52,13 +54,27 @@ String? getCustomerId() => _storage.read(_customerIdKey);
   String? getRefreshToken() {
     return _storage.read(_refreshTokenKey);
   }
+  /// Language
 
+  // Store selected locale
+  Future<void> saveLocale(String localeCode) async {
+    await _storage.write(_localeKey, localeCode);
+    print("Locale saved: $localeCode");
+  }
+
+  String? getSavedLocale() {
+    final locale = _storage.read(_localeKey);
+    print("Retrieved saved locale: $locale");
+    return locale;
+  }
   Future<void> removeToken() async {
     await _storage.remove(_tokenKey);
     await _storage.remove(_userIdKey);
     await _storage.remove(_customerIdKey);
     await _storage.remove(_fcmToken);
     await _storage.remove(_refreshTokenKey);
+    await _storage.remove(_localeKey);
+
     await FirebaseMessaging.instance.deleteToken();
 
 

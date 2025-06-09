@@ -1,8 +1,8 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
-
 
 import '../../../generated/assets.dart';
 import '../../../styling/app_color.dart';
@@ -64,33 +64,28 @@ class ChatScreen extends StatelessWidget {
                 Expanded(
                   child: ListView(
                     reverse: true,
-                    children: [
-                      rightChatBox(),
-                      20.heightSizeBox,
-                      leftChatBox(),
-
-
-                    ],
+                    children: [rightChatBox(), 20.heightSizeBox, leftChatBox()],
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 16,right: 16),
+                  margin: EdgeInsets.only(left: 16, right: 16),
                   decoration: BoxDecoration(
-                    color: AppColor.white
-                        ,
+                    color: AppColor.white,
                     borderRadius: BorderRadius.circular(35),
-                    border: Border.all(color: AppColor.c142293.withOpacity(0.20)),
-                    boxShadow: [BoxShadow(
-                      color: AppColor.c142293.withOpacity(0.10),
-                      spreadRadius: 0,
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    )]
+                    border: Border.all(
+                      color: AppColor.c142293.withOpacity(0.20),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColor.c142293.withOpacity(0.10),
+                        spreadRadius: 0,
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
                   ),
                   child: HiWashTextField(
-                    
                     fillColor: AppColor.white,
-                    
 
                     hintText: "Type a message...",
                     suffixIcon: ImageView(
@@ -100,11 +95,10 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                60.heightSizeBox
+                60.heightSizeBox,
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -200,7 +194,6 @@ class ChatScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(35),
                       border: Border.all(color: AppColor.c101D8D),
-                      
                     ),
                     child: CircleAvatar(
                       radius: 15,
@@ -216,3 +209,4 @@ class ChatScreen extends StatelessWidget {
     );
   }
 }
+*/

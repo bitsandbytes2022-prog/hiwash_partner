@@ -58,56 +58,52 @@ class ResetPasswordScreen extends StatelessWidget {
                 },
               ),
               20.heightSizeBox,
-              Obx(
-                 () {
-                  return HiWashTextField(
-                    controller: authController.passwordRestController,
-                    hintText: "kPassword".tr,
-                    labelText: "kPassword".tr,
+              Obx(() {
+                return HiWashTextField(
+                  controller: authController.passwordRestController,
+                  hintText: "kPassword".tr,
+                  labelText: "kPassword".tr,
 
-                    obscuringCharacter: '*',
-                    obscure: !authController.isPasswordVisible.value,
-                    validator: (value) {
-                      return authController.validatePassword(value);
-                    },
-                    onTap: (){
-                      authController.togglePasswordVisibility();
-                    },
-                    suffixIcon: Icon(
-                      authController.isPasswordVisible.value
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: AppColor.c455A64.withOpacity(0.5),
-                    ),
-                  );
-                }
-              ),
+                  obscuringCharacter: '*',
+                  obscure: !authController.isPasswordVisible.value,
+                  validator: (value) {
+                    return authController.validatePassword(value);
+                  },
+                  onTap: () {
+                    authController.togglePasswordVisibility();
+                  },
+                  suffixIcon: Icon(
+                    authController.isPasswordVisible.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: AppColor.c455A64.withOpacity(0.5),
+                  ),
+                );
+              }),
               105.heightSizeBox,
-              Obx(
-                () {
-                  return HiWashButton(
-                    isLoading: authController.isLoading.value,
-                    text: 'kSave'.tr,
-                    onTap: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        authController
-                            .resetPassword(
-                              authController.phoneRestController.text,
-                              authController.passwordRestController.text,
-                            )
-                            .then((value) {
-                              if (value != null) {
-                                Get.offNamedUntil(
-                                  RouteStrings.loginScreen,
-                                  (route) => false,
-                                );
-                              }
-                            });
-                      }
-                    },
-                  );
-                }
-              ),
+              Obx(() {
+                return HiWashButton(
+                  isLoading: authController.isLoading.value,
+                  text: 'kSave'.tr,
+                  onTap: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      authController
+                          .resetPassword(
+                            authController.phoneRestController.text,
+                            authController.passwordRestController.text,
+                          )
+                          .then((value) {
+                            if (value != null) {
+                              Get.offNamedUntil(
+                                RouteStrings.loginScreen,
+                                (route) => false,
+                              );
+                            }
+                          });
+                    }
+                  },
+                );
+              }),
 
               30.heightSizeBox,
             ],

@@ -53,7 +53,6 @@ class AuthBg extends StatelessWidget {
               GestureDetector(
                 onTap: (){
                   Get.back();
-                  print("kshdjkfh");
                 },
                 child: Padding(
                   padding: EdgeInsets.only(left: 11, top: 50),

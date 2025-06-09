@@ -13,7 +13,6 @@ class DateTimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //margin: EdgeInsets.only(top: 10, right: 60),
       padding: EdgeInsets.symmetric(
         horizontal: 12,
         vertical: 4,

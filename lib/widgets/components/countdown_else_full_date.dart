@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/export.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:intl/intl.dart';
 
 import '../../styling/app_color.dart';
@@ -50,13 +52,13 @@ class _CountdownElseFullDateState extends State<CountdownElseFullDate> {
   @override
   Widget build(BuildContext context) {
     if (expiryDate == null) {
-      return Text("Invalid date", style: w400_12a(color: AppColor.white));
+      return Text(StringConstant.kInvalidDate.tr, style: w400_12a(color: AppColor.white));
     }
 
     if (remaining.inHours >= 24) {
       if (remaining.inDays < 30) {
         final dayText =
-            remaining.inDays == 1 ? "day" : "${remaining.inDays} days";
+        remaining.inDays == 1 ? "${StringConstant.kDays}" : "${remaining.inDays} ${StringConstant.kDays}";
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
@@ -68,7 +70,7 @@ class _CountdownElseFullDateState extends State<CountdownElseFullDate> {
       } else {
         final formatted = DateFormat('dd MMM yyyy').format(expiryDate!);
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding:  EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             color: AppColor.cC7F6E5,
             borderRadius: BorderRadius.circular(15),
@@ -79,14 +81,14 @@ class _CountdownElseFullDateState extends State<CountdownElseFullDate> {
     }
 
     if (remaining.isNegative) {
-      return Text("Expired", style: w500_7a(color: AppColor.white));
+      return Text(StringConstant.kExpired.tr, style: w500_7a(color: AppColor.white));
     }
 
     final h = remaining.inHours;
     final m = remaining.inMinutes % 60;
     final s = remaining.inSeconds % 60;
 
-    final formattedCountdown = "$h:$m HRS - ${_twoDigits(s)} MINS";
+    final formattedCountdown = "$h:$m ${StringConstant.kHRS.tr} - ${_twoDigits(s)} ${StringConstant.kMINS.tr}{}";
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
@@ -94,7 +96,7 @@ class _CountdownElseFullDateState extends State<CountdownElseFullDate> {
         color: AppColor.cF6DBE2,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Text(formattedCountdown, style: w500_7a(color: AppColor.cC31848)),
+      child: Text(formattedCountdown.tr, style: w500_7a(color: AppColor.cC31848)),
     );
   }
 }

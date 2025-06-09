@@ -1,6 +1,7 @@
 // qr_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
@@ -20,7 +21,6 @@ class _QrScreenState extends State<QrScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     controller.clearScan();
     super.initState();
   }
@@ -37,7 +37,7 @@ class _QrScreenState extends State<QrScreen> {
           GestureDetector(
             onTap: controller.clearScan,
             child: Text(
-              "Clear",
+              StringConstant.kClear.tr,
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
@@ -88,29 +88,7 @@ class _QrScreenState extends State<QrScreen> {
                     }
                   }),
 
-                  /*   Obx(() {
-                    if (controller.scanUrl.value.isEmpty &&
-                        controller.animationController.isAnimating) {
-                      return AnimatedBuilder(
-                        animation: controller.animationController,
-                        builder: (context, child) {
-                          return Positioned(
-                            top: controller.animation.value,
-                            child: Container(
-                              width: 280,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                color: AppColor.cFFC727,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }),*/
+
 
 
                 ],
@@ -124,8 +102,8 @@ class _QrScreenState extends State<QrScreen> {
               children: [
                 Text(
                   controller.customerId.value.isNotEmpty
-                      ? 'Customer ID: ${controller.customerId.value}'
-                      : 'Scan a QR code',
+                      ? '${StringConstant.kCustomerID.tr} ${controller.customerId.value}'
+                      : StringConstant.kScanAQRCode.tr,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -149,8 +127,8 @@ class _QrScreenState extends State<QrScreen> {
             print("ScanUrl----->${controller.scanUrl.value}");
             return Text(
               controller.getOfferId.value.isNotEmpty
-                  ? 'Offer ID: ${controller.getOfferId.value}'
-                  : 'No URL scanned yet',
+                  ? '${StringConstant.kOfferID.tr}${controller.getOfferId.value}'
+                  : StringConstant.kScanAQRCode.tr,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

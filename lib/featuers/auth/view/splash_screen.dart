@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:hiwash_partner/widgets/components/doted_line.dart';
+import 'package:hiwash_partner/featuers/auth/auth_controller/auth_controller.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
+import 'package:hiwash_partner/widgets/components/dashed_line_widget.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
@@ -12,23 +14,24 @@ import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
 import '../../../widgets/components/image_view.dart';
 
-
 class SplashScreen extends StatefulWidget {
-   SplashScreen({super.key});
+  SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
     _checkLoginStatus();
   }
 
-
+  AuthController authController =
+      Get.isRegistered<AuthController>()
+          ? Get.find<AuthController>()
+          : Get.put(AuthController());
 
   void _checkLoginStatus() async {
     final LocalStorage localStorage = LocalStorage();
@@ -38,6 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     print("Token retrieved: $token");
 
     if (token != null && token.isNotEmpty) {
+      authController.refreshToken();
       Get.offNamed(RouteStrings.dashboardScreen);
     } else {
       Get.offNamed(RouteStrings.welcomeScreen);
@@ -49,15 +53,15 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          ImageView(path: Assets.imagesSplashBg,
-
+          ImageView(
+            path: Assets.imagesSplashBg,
 
             width: Get.width,
-            fit: BoxFit.cover,),
+            fit: BoxFit.cover,
+          ),
           Stack(
-           alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomCenter,
             children: [
-
               Align(
                 alignment: Alignment.center,
                 child: Container(
@@ -87,7 +91,10 @@ class _SplashScreenState extends State<SplashScreen> {
                       Container(
                         padding: EdgeInsets.only(top: 115, left: 20, right: 20),
 
-                        child: ImageView(path: Assets.imagesAppLogo, height: 55),
+                        child: ImageView(
+                          path: Assets.imagesAppLogo,
+                          height: 55,
+                        ),
                       ),
 
                       30.heightSizeBox,
@@ -124,10 +131,13 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
 
               Padding(
-                padding:  EdgeInsets.only(bottom: 60),
-                child: Text("Drive More Business with Us!",style: w500_16a(color: AppColor.white.withOpacity(0.4)),textAlign: TextAlign.center,),
+                padding: EdgeInsets.only(bottom: 60),
+                child: Text(
+                  StringConstant.kDriveMoreBusinessWith.tr,
+                  style: w500_16a(color: AppColor.white.withOpacity(0.4)),
+                  textAlign: TextAlign.center,
+                ),
               ),
-
             ],
           ),
         ],
@@ -135,5 +145,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-

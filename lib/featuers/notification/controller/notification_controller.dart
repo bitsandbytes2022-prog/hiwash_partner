@@ -16,14 +16,6 @@ class NotificationController extends GetxController {
 
   final ScrollController scrollController = ScrollController();
 
-/*
-  @override
-  void onInit() {
-    super.onInit();
-    scrollController.addListener(scrollListener);
-    fetchInitialNotifications();
-  }
-*/
 
   @override
   void onClose() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 
 import '../../../generated/assets.dart';
 import '../../../styling/app_color.dart';
@@ -10,7 +11,6 @@ import '../../../widgets/components/data_formet.dart';
 import '../../../widgets/components/profile_image_view.dart';
 import '../controller/notification_controller.dart';
 import '../model/notification.dart';
-
 
 import '../../../widgets/components/doted_horizontal_line.dart';
 
@@ -26,23 +26,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   void initState() {
-
     controller.scrollController.addListener(controller.scrollListener);
-   controller.fetchInitialNotifications();
+    controller.fetchInitialNotifications();
     // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Obx(() {
-      if (controller.isLoading.value &&
-          controller.notifications.isEmpty) {
+    return Obx(() {
+      if (controller.isLoading.value && controller.notifications.isEmpty) {
         return _buildLoadingIndicator();
       }
 
       if (controller.errorMessage.value.isNotEmpty) {
-        return _buildErrorMessage();
+        return SizedBox();
       }
 
       if (controller.notifications.isNotEmpty) {
@@ -51,7 +49,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           controller: controller.scrollController,
           padding: const EdgeInsets.only(top: 1, bottom: 40),
           itemCount:
-          controller.notifications.length +
+              controller.notifications.length +
               (controller.hasMore.value ? 1 : 0),
           separatorBuilder: (context, index) => DotedHorizontalLine(),
           itemBuilder: (context, index) {
@@ -64,7 +62,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           },
         );
       } else {
-        return const Center(child: Text("No Notifications Found"));
+        return Center(child: Text(StringConstant.kNoNotificationFound.tr));
       }
     });
   }
@@ -77,30 +75,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Widget _buildPaginationLoader() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: Center(child: CircularProgressIndicator()),
-    );
-  }
-
-  Widget _buildErrorMessage() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        children: [
-          Text(
-            controller.errorMessage.value,
-            style: const TextStyle(color: Colors.red),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              controller.fetchInitialNotifications();
-            },
-            child: const Text("Retry"),
-          ),
-        ],
-      ),
-    );
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget _notificationContainer(NotificationData item, int index) {
@@ -112,37 +87,34 @@ class _NotificationScreenState extends State<NotificationScreen> {
       child: Container(
         width: Get.width,
         color:
-        controller.selectedStates[index].value
-            ? AppColor.white
-            : AppColor.cF6F7FF,
+            controller.selectedStates[index].value
+                ? AppColor.white
+                : AppColor.cF6F7FF,
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                border: Border.all(color: AppColor.blue.withOpacity(0.2)),
+              ),
+              child: CircleAvatar(
+                backgroundColor: AppColor.c142293.withOpacity(0.2),
+                radius: 20,
 
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(color: AppColor.blue.withOpacity(0.2)),
+                child: Image.asset(
+                  item.notificationType == 0
+                      ? Assets.iconsIcAlert
+                      : Assets.iconsIcInfo,
+                  height: 20,
+                  width: 20,
+                  color: AppColor.c000000,
                 ),
-                child:CircleAvatar(
-
-                  backgroundColor: AppColor.c142293.withOpacity(0.2),
-                  radius: 20,
-
-                  child:Image.asset(item.notificationType==0?Assets.iconsIcAlert:Assets.iconsIcInfo,height: 20,width: 20,color: AppColor.c000000,),
-                )
-
-
+              ),
             ),
-            /*  ProfileImageView(
-              radiusStack: 5,
-              isVisibleStack: false,
-              radius: 20,
-              imagePath: item.notificationType == 1 ? Assets.iconsIcAlert : null
-            ),*/
+
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -167,8 +139,4 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
     );
   }
-
-
-
-
 }

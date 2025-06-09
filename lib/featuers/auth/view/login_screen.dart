@@ -34,7 +34,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final formKey = GlobalKey<FormState>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       authController.getFCMTokenIn();
@@ -97,7 +96,6 @@ class LoginScreen extends StatelessWidget {
                   isLoading: authController.isLoading.value,
                   text: "kLogIn".tr,
                   onTap: () {
-                    // Get.offNamed(RouteStrings.dashboardScreen);
                     if (formKey.currentState?.validate() ?? false) {
                       authController
                           .login(
@@ -105,10 +103,9 @@ class LoginScreen extends StatelessWidget {
                             authController.passwordController.text,
                           )
                           .then((value) {
-                            if (value !=null){
+                            if (value != null) {
                               Get.offNamed(RouteStrings.dashboardScreen);
                             }
-
                           });
                     }
                   },

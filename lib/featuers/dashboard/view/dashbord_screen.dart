@@ -11,6 +11,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:hiwash_partner/featuers/reward/view/reward_screen.dart';
 import 'package:hiwash_partner/featuers/rewarded_customers/view/rewarded_customers_screen.dart';
 import 'package:hiwash_partner/generated/assets.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/styling/app_color.dart';
 import 'package:hiwash_partner/widgets/components/image_view.dart';
 import 'package:hiwash_partner/widgets/components/profile_image_view.dart';
@@ -32,10 +33,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _currentDrawer = 'first';
   final DashboardController dashboardController =
-  Get.isRegistered<DashboardController>()
-      ? Get.find<DashboardController>()
-      : Get.put(DashboardController());
-
+      Get.isRegistered<DashboardController>()
+          ? Get.find<DashboardController>()
+          : Get.put(DashboardController());
 
   final List<Widget> _pages = [
     RewardScreen(),
@@ -44,9 +44,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   final List<String> _headings = [
-    "Your Exclusive Reward",
-    "Rewarded Customers",
-    "Notification’s",
+    StringConstant.kYourExclusiveReward.tr,
+    StringConstant.kRewardedCustomers.tr,
+    StringConstant.kNotification.tr,
   ];
 
   void _onItemTapped(int index) {
@@ -58,7 +58,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     }
   }
-
 
   void _openDrawer(String drawerType) {
     setState(() {
@@ -84,8 +83,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           border: Border.all(color: AppColor.blue.withOpacity(0.2)),
         ),
         child: Obx(() {
-          final profilePicUrl = dashboardController
-              .getPartnerModel.value?.data?.first.profilePicUrl;
+          final profilePicUrl =
+              dashboardController
+                  .getPartnerModel
+                  .value
+                  ?.data
+                  ?.first
+                  .profilePicUrl;
 
           final hasValidUrl = profilePicUrl?.isNotEmpty ?? false;
 
@@ -97,24 +101,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 imageUrl: hasValidUrl ? profilePicUrl! : '',
                 fit: BoxFit.cover,
 
-                placeholder: (context, url) => Center(
-                  child: SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-                errorWidget: (context, url, error) => Image.asset(
-                  Assets.imagesDemoProfile,
-                  fit: BoxFit.cover,
-
-                ),
+                placeholder:
+                    (context, url) => Center(
+                      child: SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                errorWidget:
+                    (context, url, error) => Image.asset(
+                      Assets.imagesDemoProfile,
+                      fit: BoxFit.cover,
+                    ),
               ),
             ),
           );
         }),
-
-
       ),
     ];
 
@@ -129,8 +132,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           border: Border.all(color: AppColor.blue.withOpacity(0.2)),
         ),
         child: Obx(() {
-          final profilePicUrl = dashboardController
-              .getPartnerModel.value?.data?.first.profilePicUrl;
+          final profilePicUrl =
+              dashboardController
+                  .getPartnerModel
+                  .value
+                  ?.data
+                  ?.first
+                  .profilePicUrl;
 
           final hasValidUrl = profilePicUrl?.isNotEmpty ?? false;
 
@@ -142,50 +150,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 imageUrl: hasValidUrl ? profilePicUrl! : '',
                 fit: BoxFit.cover,
 
-                placeholder: (context, url) => Center(
-                  child: SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-                errorWidget: (context, url, error) => Image.asset(
-                  Assets.imagesDemoProfile,
-                  fit: BoxFit.cover,
-
-                ),
+                placeholder:
+                    (context, url) => Center(
+                      child: SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                errorWidget:
+                    (context, url, error) => Image.asset(
+                      Assets.imagesDemoProfile,
+                      fit: BoxFit.cover,
+                    ),
               ),
             ),
           );
         }),
-
-
       ),
     ];
 
     return WillPopScope(
-      onWillPop: ()async {
+      onWillPop: () async {
         return await _showExitConfirmationDialog(context);
       },
       child: SafeArea(
         bottom: true,
         top: false,
         child: Scaffold(
-
           key: _scaffoldKey,
-          drawer: _currentDrawer == 'first'
-              ? DrawerScreen()
-              : SecondDrawer(),
+          drawer: _currentDrawer == 'first' ? DrawerScreen() : SecondDrawer(),
           drawerEnableOpenDragGesture: false,
 
           body: AppHomeBg(
             iconLeft: SizedBox(),
             buttonPadding:
-            _currentIndex == 0
-                ? EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 30)
-                : EdgeInsets.only(left: 16, right: 16, top: 40),
+                _currentIndex == 0
+                    ? EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 30)
+                    : EdgeInsets.only(left: 16, right: 16, top: 40),
             headingText: _headings[_currentIndex],
-            padding: _currentIndex == 2 ? EdgeInsets.zero : EdgeInsets.symmetric(horizontal: 16),
+            padding:
+                _currentIndex == 2
+                    ? EdgeInsets.zero
+                    : EdgeInsets.symmetric(horizontal: 16),
             iconRight: GestureDetector(
               onTap: () {
                 setState(() {
@@ -218,7 +225,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onTap: _onItemTapped,
             backgroundColor: AppColor.blue,
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: GestureDetector(
             onTap: () {
               showDialog(
@@ -258,7 +266,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-
   Widget fillNavigationImage({required String image}) {
     return Container(
       decoration: BoxDecoration(
@@ -280,20 +287,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Confirm Exit",style: w700_22a(color: AppColor.c2C2A2A),),
-          content: Text("Do you really want to close the app?",style: w400_16p(),),
+          title: Text(
+            StringConstant.kConfirmExit.tr,
+            style: w700_22a(color: AppColor.c2C2A2A),
+          ),
+          content: Text(StringConstant.kDoYouReally.tr, style: w400_16p()),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text("No"),
+              child: Text(StringConstant.kNo.tr),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text("Yes"),
+              child: Text(StringConstant.kYes.tr),
             ),
           ],
         );
@@ -301,6 +311,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ).then((value) => value ?? false);
   }
 }
-
-
-

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 
 void appSnackBar({
   String? title,
@@ -14,8 +15,8 @@ void appSnackBar({
   Duration? duration,
 }) {
   Get.snackbar(
-    title ?? 'Error',
-    message ?? 'Something went wrong',
+    title ?? StringConstant.kError.tr,
+    message ?? StringConstant.kSomethingWentWrong.tr,
     snackPosition: position ?? SnackPosition.TOP,
     backgroundColor: backgroundColor ?? Colors.red,
     colorText: textColor ?? Colors.white,

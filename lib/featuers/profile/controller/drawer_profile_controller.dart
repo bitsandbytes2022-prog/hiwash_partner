@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/widgets/components/loader.dart';
 import '../../../network_manager/repository.dart';
 import '../../../widgets/components/app_snack_bar.dart';
@@ -14,15 +15,18 @@ import 'package:image_picker/image_picker.dart';
 
 class DrawerProfileController extends GetxController {
   RxBool isLoading = false.obs;
-  var  imageFile = Rx<File?>(null);
+  var imageFile = Rx<File?>(null);
   var isSwitchOn = false.obs;
   RxBool isUploadingProfileImage = false.obs;
 
   Future<void> imagePicker({required ImageSource source}) async {
-    var pickedFile = await ImagePicker().pickImage(source: source,imageQuality: 20);
+    var pickedFile = await ImagePicker().pickImage(
+      source: source,
+      imageQuality: 20,
+    );
 
     if (pickedFile != null) {
-      imageFile.value = File(pickedFile.path,  );
+      imageFile.value = File(pickedFile.path);
     } else {
       print("No file selected");
     }
@@ -35,14 +39,18 @@ class DrawerProfileController extends GetxController {
   TextEditingController addressController = TextEditingController();
   TextEditingController carNumberController = TextEditingController();
 
-  TextEditingController zoneController = TextEditingController(text:kDebugMode? "Zone 50":"");
+  TextEditingController zoneController = TextEditingController(
+    text: kDebugMode ? "Zone 50" : "",
+  );
   TextEditingController streetController = TextEditingController(
-    text: kDebugMode?"al Matar Street":""
+    text: kDebugMode ? "al Matar Street" : "",
   );
   TextEditingController buildingController = TextEditingController(
-    text:kDebugMode? 'Abcd':"",
+    text: kDebugMode ? 'Abcd' : "",
   );
-  TextEditingController unitController = TextEditingController(text:kDebugMode? 'Abcd':"");
+  TextEditingController unitController = TextEditingController(
+    text: kDebugMode ? 'Abcd' : "",
+  );
 
   Rxn<TermsAndConditionsResponseModel> termsAndConditionsResponseModel = Rxn();
 
@@ -53,7 +61,6 @@ class DrawerProfileController extends GetxController {
       currentDrawerSection.value = section;
     }
   }
-
 
   Future<dio.FormData> getFormDataForUpload() async {
     if (imageFile == null) {}
@@ -74,9 +81,11 @@ class DrawerProfileController extends GetxController {
 
       if (response != null && response['success'] == true) {
         appSnackBar(
-          title: "Success",
+          title: StringConstant.kSuccess.tr,
           backgroundColor: Colors.green,
-          message: response['message'] ?? 'Profile updated successfully',
+          message:
+              response['message'] ??
+              StringConstant.kProfileUpdatedSuccessfully.tr,
         );
 
         return true;
@@ -92,8 +101,6 @@ class DrawerProfileController extends GetxController {
     }
   }
 
-
-
   Future<TermsAndConditionsResponseModel?> getTermsAndConditions() async {
     var entityType = 0;
     try {
@@ -106,57 +113,13 @@ class DrawerProfileController extends GetxController {
     }
   }
 
-
-
-
   Future<dynamic> uploadProfile(
-      String businessName,
-      String phone,
-      String address,
-      ) async {
+    String businessName,
+    String phone,
+    String address,
+  ) async {
     isLoading.value = true;
     try {
-
-     Map<String, dynamic> requestBody = {
-        "businessName": businessName,
-        "phone": phone,
-        "address": address,
-      };
-
-      final response = await Repository().uploadProfile(requestBody);
-     if (response != null && response['success'] == true) {
-       //isLoading.value = false;
-       //await Future.delayed(Duration(milliseconds: 100));
-
-       appSnackBar(
-         title: "Success",
-         backgroundColor: Colors.green,
-         message: response['message'] ?? 'Profile updated successfully',
-       );
-     }
-      return response;
-    } catch (e) {
-      print("Update profile error: $e");
-      appSnackBar(
-
-        message:"Something went wrong while updating profile",
-      );
-
-      return null;
-    } finally {
-      isLoading.value = false;
-    }}
-
-
-
-/*  Future<dynamic> uploadProfile(
-      String businessName,
-      String phone,
-      String address,
-      ) async {
-    try {
-      isLoading.value = true;
-
       Map<String, dynamic> requestBody = {
         "businessName": businessName,
         "phone": phone,
@@ -164,32 +127,26 @@ class DrawerProfileController extends GetxController {
       };
 
       final response = await Repository().uploadProfile(requestBody);
-
       if (response != null && response['success'] == true) {
+        //isLoading.value = false;
+        //await Future.delayed(Duration(milliseconds: 100));
+
         appSnackBar(
-          title: "Success",
+          title: StringConstant.kSuccess.tr,
           backgroundColor: Colors.green,
-          message: response['message'] ?? 'Profile updated successfully',
+          message:
+              response['message'] ??
+              StringConstant.kProfileUpdatedSuccessfully.tr,
         );
-
       }
-
       return response;
     } catch (e) {
       print("Update profile error: $e");
-
-      Get.snackbar(
-        "Error",
-        "Something went wrong while updating profile",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      appSnackBar(message: StringConstant.kSomethingWentWrong.tr);
 
       return null;
     } finally {
       isLoading.value = false;
     }
-  }*/
-
+  }
 }

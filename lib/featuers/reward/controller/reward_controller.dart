@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/widgets/components/loader.dart';
 
 import '../../../network_manager/repository.dart';
@@ -19,13 +20,15 @@ class RewardController extends GetxController {
   Rxn<GetOfferCategoriesModel> getOfferCategoriesModel = Rxn();
   var selectedCategoryIndex = 0.obs;
 
-
   RxInt currentPage = 1.obs;
   final int pageSize = 10;
-  final RxList<GetRewardedCustomersData> allCustomers = <GetRewardedCustomersData>[].obs;
+  final RxList<GetRewardedCustomersData> allCustomers =
+      <GetRewardedCustomersData>[].obs;
   final RxBool isLoading = false.obs;
   final RxBool hasMore = true.obs;
   final ScrollController scrollController = ScrollController();
+  RxBool isAscending = true.obs;
+  RxString sortByText = StringConstant.kSortByExpiry.tr.obs;
 
   @override
   void onInit() {
@@ -38,13 +41,18 @@ class RewardController extends GetxController {
     currentPage.value = 1;
     hasMore.value = true;
     allCustomers.clear();
-    fetchCustomersById(  getOffersByIdModel.value?.offerDetailList?.first.id.toString()??'');
+    fetchCustomersById(
+      getOffersByIdModel.value?.offerDetailList?.first.id.toString() ?? '',
+    );
   }
 
   void onScroll() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 300) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 300) {
       if (!isLoading.value && hasMore.value) {
-        fetchCustomersById(  getOffersByIdModel.value?.offerDetailList?.first.id.toString()??'');
+        fetchCustomersById(
+          getOffersByIdModel.value?.offerDetailList?.first.id.toString() ?? '',
+        );
       }
     }
   }
@@ -90,9 +98,6 @@ class RewardController extends GetxController {
     super.onClose();
   }
 
-
-
-
   Rxn<GetOfferResponseModel> offerResponseModel = Rxn();
 
   Future<GetOfferResponseModel?> getAllOffers() async {
@@ -117,51 +122,21 @@ class RewardController extends GetxController {
     return null;
   }
 
-/*
-  Future<GetRewardedCustomersModel?> getRewardedCustomersAll() async {
-    try {
-      //showLoader();
-      getRewardedCustomersModel.value =
-          await Repository().GetRewardedCustomersRepo();
-      //hideLoader();
-      return getRewardedCustomersModel.value;
-    } catch (e) {
-      print("Error fetching Terms And Condition: $e");
-      return null;
-    }
-  }
-*/
-
-/*  Future<GetRewardedCustomersModel?> getRewardedCustomersById(
-    int offerId,
-  ) async {
-    try {
-      getRewardedCustomersModel.value = await Repository()
-          .GetRewardedCustomersByIdRepo(offerId);
-      return getRewardedCustomersModel.value;
-    } catch (e) {
-      print("Error fetching Terms And Condition: $e");
-      return null;
-    }
-    */
-
-
-
   Future<GetOfferCategoriesModel?> getOfferCategories() async {
     try {
-
-      getOfferCategoriesModel.value = await Repository().getOfferCategoriesRepo();
+      getOfferCategoriesModel.value =
+          await Repository().getOfferCategoriesRepo();
       return getOfferCategoriesModel.value;
     } catch (error) {
       print("Error fetching Offers Categories: $error");
     }
     return null;
   }
-  RxBool isAscending = true.obs;
-  RxString sortByText = "Sort by Expiry".obs;
+
+
 
   void toggleSortOrder() {
-    if (sortByText.value == "Sort by Expiry") {
+    if (sortByText.value == StringConstant.kSortByExpiry.tr) {
       isAscending.value = true;
     } else {
       isAscending.value = !isAscending.value;
@@ -177,7 +152,9 @@ class RewardController extends GetxController {
     });
 
     sortByText.value =
-        isAscending.value ? "Ascending order" : "Descending order";
+        isAscending.value
+            ? StringConstant.kAscendingOrder.tr
+            : StringConstant.kDescendingOrder.tr;
 
     offerResponseModel.update((val) {
       val?.data?.offers = offers;
@@ -186,7 +163,7 @@ class RewardController extends GetxController {
 
   String timeUntilExpiry(String? expiryDate) {
     if (expiryDate == null || expiryDate.isEmpty) {
-      return "No Expiry";
+      return StringConstant.kNoExpiry.tr;
     }
 
     try {
@@ -195,22 +172,22 @@ class RewardController extends GetxController {
       Duration difference = expiry.difference(now);
 
       if (difference.isNegative) {
-        return "Expired";
+        return StringConstant.kExpired.tr;
       } else if (difference.inDays > 365) {
-        return "${(difference.inDays / 365).floor()} years";
+        return "${(difference.inDays / 365).floor()} ${StringConstant.kYears.tr}";
       } else if (difference.inDays > 30) {
-        return "${(difference.inDays / 30).floor()} months";
+        return "${(difference.inDays / 30).floor()} ${StringConstant.kMonths.tr}";
       } else if (difference.inDays > 0) {
-        return "${difference.inDays} days";
+        return "${difference.inDays} ${StringConstant.kDays.tr}";
       } else if (difference.inHours > 0) {
-        return "${difference.inHours} hours";
+        return "${difference.inHours} ${StringConstant.kHours.tr}";
       } else if (difference.inMinutes > 0) {
-        return "${difference.inMinutes} minutes";
+        return "${difference.inMinutes} ${StringConstant.kMinutes.tr}";
       } else {
-        return "${difference.inSeconds} seconds";
+        return "${difference.inSeconds} ${StringConstant.kSeconds.tr}";
       }
     } catch (e) {
-      return "Invalid date";
+      return StringConstant.kInvalidDate.tr;
     }
   }
 }

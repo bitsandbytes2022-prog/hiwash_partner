@@ -16,10 +16,10 @@ import '../auth_controller/auth_controller.dart';
 class ForgotPasswordScreen extends StatelessWidget {
   ForgotPasswordScreen({super.key});
 
-
-  AuthController controller =   Get.isRegistered<AuthController>()
-      ? Get.find<AuthController>()
-      : Get.put(AuthController());
+  AuthController controller =
+      Get.isRegistered<AuthController>()
+          ? Get.find<AuthController>()
+          : Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -69,48 +69,28 @@ class ForgotPasswordScreen extends StatelessWidget {
                   text: "kRecoverPassword".tr,
                   onTap: () async {
                     if (formKey.currentState?.validate() ?? false) {
-                      String phoneNumber = controller.loginPhoneController.text.trim();
-                 await     controller.sendOtp(phoneNumber).then((value) {
-                        if (value != null) {
-                          Get.toNamed(
-                            RouteStrings.otpScreen,
-                            arguments: phoneNumber,
-                          );
-                          controller.loginPhoneController.clear();
-                        }
-                      }).catchError((error) {
-                        print("Error during OTP sending: $error");
-                      });
+                      String phoneNumber =
+                          controller.loginPhoneController.text.trim();
+                      await controller
+                          .sendOtp(phoneNumber)
+                          .then((value) {
+                            if (value != null) {
+                              Get.toNamed(
+                                RouteStrings.otpScreen,
+                                arguments: phoneNumber,
+                              );
+                              controller.loginPhoneController.clear();
+                            }
+                          })
+                          .catchError((error) {
+                            print("Error during OTP sending: $error");
+                          });
                     }
                   },
                 );
               }),
-              /*    Obx(() {
-               return HiWashButton(
-                  isLoading: controller.isLoading.value,
-                  text: "kLogIn".tr,
-                  onTap: () {
-                    if (formKey.currentState?.validate() ?? false) {
-                      String phoneNumber = controller.loginPhoneController.text.trim();
-                      controller.sendOtp(phoneNumber).then((value) {
-                        if (value != null) {
-                          Get.toNamed(
-                            RouteStrings.loginOtpScreen,
-                            arguments: phoneNumber,
-                          );
-                          controller.loginPhoneController.clear();
-                        }
-                      });
-                    }
-                  },
-                );
-              }),*/
 
               20.heightSizeBox,
-
-
-
-
             ],
           ),
         ),

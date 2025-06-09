@@ -3,9 +3,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get_utils/get_utils.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hiwash_partner/featuers/auth/auth_controller/auth_controller.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/network_manager/utils/print_value.dart';
+import 'package:hiwash_partner/widgets/components/app_snack_bar.dart';
 
 import '../route/route_strings.dart';
 
@@ -18,7 +21,6 @@ Dio getDio() {
         String apiEndPoint = options.path.split('/').last;
         printValue(tag: 'API URL:', '${options.uri}');
         printValue(tag: 'HEADER:$apiEndPoint-->', options.headers);
-       // printValue(tag: 'METHOD:$apiEndPoint-->', options.data);
 
         try {
           printValue(
@@ -43,8 +45,7 @@ Dio getDio() {
         return handler.next(response);
       },
 
-
-       onError: (DioException e, handler) async {
+      onError: (DioException e, handler) async {
         printValue(
           tag: 'STATUS CODE:${e.response?.statusCode}--onError STATUS CODE--->',
           "${e.response?.statusCode ?? ""}",
@@ -53,92 +54,34 @@ Dio getDio() {
           tag: 'ERROR DATA :--onError ERROR DATA--->',
           e.response?.data ?? "",
         );
-   if (e.response?.statusCode == 400) {
-          Get.snackbar(
-            "Error",
-            e.response?.data["error"]["message"] ??
-                "Something went wrong".toString(),
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
+        if (e.response?.statusCode == 400) {
+          appSnackBar(
+            message:
+                e.response?.data["error"]["message"] ??
+                StringConstant.kSomethingWentWrong.tr.toString(),
           );
-        }
-       else if (e.response?.statusCode == 401) {
-       /*   Get.snackbar(
-            "Error",
-            e.response?.data["error"]["message"] ??
-                "Something went wrong".toString(),
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
-          );*/
-     AuthController   authController=Get.find();
+        } else if (e.response?.statusCode == 401) {
+          /*   AuthController   authController=Get.find();
      print("Refresh Token api");
      authController.refreshToken();
-         // Get.offAllNamed(RouteStrings.welcomeScreen);
+         Get.offAllNamed(RouteStrings.welcomeScreen);*/
+          Get.offAllNamed(RouteStrings.welcomeScreen);
         } else if (e.response?.statusCode == 404) {
-          Get.snackbar(
-            "Error 404",
-            e.response?.data["error"]["message"] ??
-                "Something went wrong".toString(),
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
+          appSnackBar(
+            message:
+                e.response?.data["error"]["message"] ??
+                StringConstant.kSomethingWentWrong.tr.toString(),
           );
         } else if (e.response?.statusCode == 500) {
-          //print("object${e.response?.data.toString()}");
-          Get.snackbar(
-            "Error",
-            e.response?.data["error"]["message"] ??
-                "Something went wrong".toString(),
-            colorText: Colors.white,
-            backgroundColor: Colors.red,
+          appSnackBar(
+            message:
+                e.response?.data["error"]["message"] ??
+                StringConstant.kSomethingWentWrong.tr.toString(),
           );
         }
 
         return handler.next(e);
       },
-
-
-
-
-
-
-
-      /* onError: (DioException e, handler) async {
-          final statusCode = e.response?.statusCode;
-          final data = e.response?.data;
-
-          printValue(
-            tag: 'STATUS CODE:${statusCode}--onError STATUS CODE--->',
-            "$statusCode",
-          );
-          printValue(
-            tag: 'ERROR DATA :--onError ERROR DATA--->',
-            data ?? "",
-          );
-
-          String errorMessage = "Something went wrong";
-
-          if (data != null) {
-            if (data is Map<String, dynamic> && data.containsKey('message')) {
-              errorMessage = data['message'];
-            } else if (data is String) {
-              errorMessage = data;
-            }
-          }
-
-          if (statusCode == 400 || statusCode == 401 || statusCode == 404 || statusCode == 500) {
-            Get.snackbar(
-              "Error",
-              errorMessage,
-              colorText: Colors.white,
-              backgroundColor: Colors.red,
-            );
-            if (statusCode == 401) {
-              Get.offAllNamed(RouteStrings.welcomeScreen);
-            }
-          }
-
-          return handler.next(e); // continue with error
-        }*/
     ),
   );
   return dio;

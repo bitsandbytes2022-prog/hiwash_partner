@@ -11,7 +11,7 @@ class DashboardController extends GetxController {
   Rxn<ApiResponse> apiResponse = Rxn<ApiResponse>();
   int userRating = 0;
   final TextEditingController commentController = TextEditingController();
-Rxn<GetPartnerModel> getPartnerModel=Rxn();
+  Rxn<GetPartnerModel> getPartnerModel = Rxn();
   final String? userId = LocalStorage().getUserId();
 
   @override
@@ -30,12 +30,9 @@ Rxn<GetPartnerModel> getPartnerModel=Rxn();
     }
   }
 
-
   Future<GetPartnerModel?> getPartnerDataById(int id) async {
-    // loading = true;\
     try {
-       getPartnerModel.value= await Repository().getPartnerData(id);
-      // loading = false;
+      getPartnerModel.value = await Repository().getPartnerData(id);
 
       if (getPartnerModel.value?.data != null) {
         int? customerId = getPartnerModel.value?.data!.first.id;
@@ -44,36 +41,8 @@ Rxn<GetPartnerModel> getPartnerModel=Rxn();
 
       return getPartnerModel.value;
     } catch (error) {
-      // loading = false;
       print("Error fetching partner data: $error");
       return null;
     }
   }
-
-/*
-  Future<ApiResponse?> getRating(
-    String rating,
-    String workerId,
-    String locationId,
-    String comment,
-  ) async {
-    Map params = {
-      "rating": rating,
-      "workerId": workerId,
-      "locationId": locationId,
-      "comment": comment,
-    };
-    try {
-      print("Rating body--->: $params");
-      //  loading.value = true;
-      apiResponse.value = await Repository().rating(params);
-      return apiResponse.value;
-    } catch (e) {
-      print("Error in controller: $e");
-      return null;
-    } finally {
-      // loading.value = false;
-    }
-
-  }*/
 }

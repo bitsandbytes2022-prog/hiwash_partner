@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
+import 'package:hiwash_partner/widgets/components/app_snack_bar.dart';
 import 'package:hiwash_partner/widgets/components/auth_bg.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 import 'package:pinput/pinput.dart';
@@ -11,14 +13,13 @@ import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/hi_wash_button.dart';
 import '../auth_controller/auth_controller.dart';
 
-
 class OtpScreen extends StatelessWidget {
   OtpScreen({super.key});
 
   final AuthController controller =
-  Get.isRegistered<AuthController>()
-      ? Get.find<AuthController>()
-      : Get.put(AuthController());
+      Get.isRegistered<AuthController>()
+          ? Get.find<AuthController>()
+          : Get.put(AuthController());
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -79,7 +80,7 @@ class OtpScreen extends StatelessWidget {
                 onCompleted: (pin) => controller.enteredOtp.value = pin,
                 validator: (value) {
                   if (value == null || value.length != 4) {
-                    return 'Enter valid OTP';
+                    return StringConstant.kEnterValidOTP.tr;
                   }
                   return null;
                 },
@@ -103,12 +104,13 @@ class OtpScreen extends StatelessWidget {
               final isActive = seconds == 0;
 
               return GestureDetector(
-                onTap: isActive
-                    ? () {
-                  controller.sendOtp(phoneNumber);
-                  controller.resetTimer();
-                }
-                    : null,
+                onTap:
+                    isActive
+                        ? () {
+                          controller.sendOtp(phoneNumber);
+                          controller.resetTimer();
+                        }
+                        : null,
                 child: Text(
                   "resendCode".tr,
                   style: w400_12p(
@@ -119,41 +121,34 @@ class OtpScreen extends StatelessWidget {
             }),
             26.heightSizeBox,
             Obx(
-                    () => HiWashButton(
-                  isLoading: controller.isLoading.value,
-                  text: "kVerify".tr,
-                  onTap: () {
-                    if (formKey.currentState!.validate()) {
-                      final enteredOtp = controller.enteredOtp.value.trim();
-                      final serverOtp = controller.sendOtpModel?.data?.otp?.toString();
+              () => HiWashButton(
+                isLoading: controller.isLoading.value,
+                text: "kVerify".tr,
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    final enteredOtp = controller.enteredOtp.value.trim();
+                    final serverOtp =
+                        controller.sendOtpModel?.value.data?.otp?.toString();
 
-                      print("Entered OTP: $enteredOtp (${enteredOtp.runtimeType})");
-                      print("Server OTP: $serverOtp (${serverOtp.runtimeType})");
+                    print(
+                      "Entered OTP: $enteredOtp (${enteredOtp.runtimeType})",
+                    );
+                    print("Server OTP: $serverOtp (${serverOtp.runtimeType})");
 
-                      if (enteredOtp == serverOtp) {
-                        Get.offNamed(
-                            RouteStrings.resetPasswordScreen,arguments: phoneNumber
-
-                        );
-                      } else {
-                        Get.snackbar(
-                          "Invalid OTP",
-                          "Please enter the correct OTP",
-                          backgroundColor: Colors.red.withOpacity(0.9),
-                          colorText: Colors.white,
-                          snackPosition: SnackPosition.TOP,
-                          margin: const EdgeInsets.all(16),
-                          borderRadius: 10,
-                        );
-                      }
+                    if (enteredOtp == serverOtp) {
+                      Get.offNamed(
+                        RouteStrings.resetPasswordScreen,
+                        arguments: phoneNumber,
+                      );
+                    } else {
+                      appSnackBar(
+                        message: StringConstant.kPleaseEnterTheCorrectOTP.tr,
+                      );
                     }
-                  },
-                )
-
-
+                  }
+                },
+              ),
             ),
-
-
 
             30.heightSizeBox,
           ],
@@ -162,5 +157,3 @@ class OtpScreen extends StatelessWidget {
     );
   }
 }
-
-

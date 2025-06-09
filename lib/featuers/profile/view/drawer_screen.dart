@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hiwash_partner/featuers/profile/view/widget/custome_switch.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
@@ -13,7 +14,7 @@ import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
 import '../../../widgets/components/doted_horizontal_line.dart';
-import '../../../widgets/components/doted_line.dart';
+import '../../../widgets/components/dashed_line_widget.dart';
 import '../../../widgets/components/hi_wash_text_field.dart';
 import '../../../widgets/components/image_view.dart';
 
@@ -129,12 +130,12 @@ class DrawerScreen extends StatelessWidget {
         /// **Drawer Options**
         drawerRowWidget(
           onTap: () => Get.to(MyAccountScreen()),
-          title: 'My Account',
+          title: StringConstant.kMyAccount.tr,
           image: Assets.iconsIcAccount,
         ),
 
         Obx(() => drawerRowForTheme(
-          title: 'Theme',
+          title: StringConstant.kTheme.tr,
           image: Assets.iconsIcTheme,
           switchValue: drawerController.isSwitchOn.value,
           onSwitchChanged: (bool value) {
@@ -147,17 +148,17 @@ class DrawerScreen extends StatelessWidget {
         drawerRowWidget(
           padding: EdgeInsets.only(left: 15,right: 15,top: 15),
           onTap: () => Get.toNamed(RouteStrings.languageScreen),
-          title: 'Language',
+          title: StringConstant.kLanguage.tr,
           image: Assets.iconsIcLanguage,
         ),
         drawerRowWidget(
           onTap: () => Get.toNamed(RouteStrings.privacySettingScreen),
-          title: 'Privacy Settings',
+          title: StringConstant.kPrivacySettings.tr,
           image: Assets.iconsIcPrivacy,
         ),
         drawerRowWidget(
           onTap: () => Get.to(TermsAndConditionScreen()),
-          title: 'Terms and Condition',
+          title: StringConstant.kTermsAndConditions,
           image: Assets.iconsIcTermscondition,
         ),
         Spacer(),
@@ -178,7 +179,7 @@ class DrawerScreen extends StatelessWidget {
               children: [
                 ImageView(path: Assets.iconsIcLogout, height: 20, width: 20),
                 5.widthSizeBox,
-                Text("Logout", style: w500_14a(color: AppColor.c142293)),
+                Text(StringConstant.kLogout.tr, style: w500_14a(color: AppColor.c142293)),
               ],
             ),
           ),

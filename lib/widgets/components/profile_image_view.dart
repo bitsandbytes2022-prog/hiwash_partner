@@ -70,12 +70,6 @@ class ProfileImageView extends StatelessWidget {
             ),
           ),
 
-          /*CircleAvatar(
-              radius: radius,
-              backgroundImage: imagePath != null && imagePath!.isNotEmpty
-                  ? NetworkImage(imagePath!)
-                  : AssetImage(Assets.imagesDemoProfile),
-            )*/
         ),
         if (isVisibleStack == true)
           Container(

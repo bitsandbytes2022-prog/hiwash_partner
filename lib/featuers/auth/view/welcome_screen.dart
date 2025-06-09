@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -50,45 +51,25 @@ class WelcomeScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Caltex Engine Oil",
+                                      StringConstant.kCaltexEngineOil.tr,
                                       style: w700_22a(color: AppColor.c2C2A2A),
                                     ),
                                     15.heightSizeBox,
 
                                     Text(
-                                      "Unlock Exclusive Perks!",
+                                      StringConstant.kUnlockExclusivePerks.tr,
                                       style: w500_16p(color: AppColor.c2C2A2A),
                                     ),
                                     Text(
-                                      "Enjoy more earnings, customer\nrewards, and premium support as\nour valued partner!",
+                                      StringConstant
+                                          .kEnjoyMoreEarningsCustomer
+                                          .tr,
                                       textAlign: TextAlign.center,
                                       style: w400_16p(color: AppColor.c455A64),
                                     ),
                                   ],
                                 );
-                              } /*else if (index == 1) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Wash & Win!",
-                                      style: w700_22a(color: AppColor.c2C2A2A),
-                                    ),
-                                    15.heightSizeBox,
-                                    Text(
-                                      "Get your car washed weekly at 100+\nlocations with exclusive offers.",
-                                      textAlign: TextAlign.center,
-                                      style: w400_16p(color: AppColor.c455A64),
-                                    ),
-                                    Text(
-                                      "Missed washes still deducted.",
-                                      textAlign: TextAlign.center,
-                                      style: w400_16p(color: AppColor.c2C2A2A),
-                                    ),
-                                  ],
-                                );
-                              }*/ else {
+                              } else {
                                 return Container();
                               }
                             },
@@ -132,4 +113,5 @@ class WelcomeScreen extends StatelessWidget {
         ],
       ),
     );
-  }}
+  }
+}

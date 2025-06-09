@@ -1,11 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hiwash_partner/widgets/components/app_home_bg.dart';
-import 'package:hiwash_partner/widgets/components/countdown_else_full_date.dart';
-import 'package:hiwash_partner/widgets/components/hi_wash_button.dart';
-import 'package:hiwash_partner/widgets/components/hi_wash_text_field.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 
 import 'package:hiwash_partner/widgets/components/image_view.dart'
     show ImageView;
@@ -15,14 +11,12 @@ import '../../../generated/assets.dart';
 import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
 import '../../../styling/app_font_poppins.dart';
-import '../../../widgets/components/app_dialog.dart';
 import '../../../widgets/components/countdown_or_date_timer.dart';
 import '../../../widgets/components/custom_bottomsheet.dart';
 import '../../../widgets/components/data_formet.dart';
 import '../../../widgets/components/date_time_widget.dart';
-import '../../../widgets/components/doted_line.dart';
-import '../../../widgets/components/doted_vertical_line.dart';
-import '../../../widgets/components/is_select_button.dart';
+import '../../../widgets/components/dashed_line_widget.dart';
+
 import '../../../widgets/components/loader.dart';
 import '../../../widgets/components/offers_grid_container.dart';
 import '../../../widgets/components/profile_image_view.dart';
@@ -80,9 +74,9 @@ class RewardScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, bottom: 9),
+                        padding: EdgeInsets.only(left: 10, bottom: 9),
                         child: Text(
-                          "Total Reward",
+                          StringConstant.kTotalReward.tr,
                           style: w500_12p(
                             color: AppColor.white.withOpacity(0.7),
                           ),
@@ -118,7 +112,7 @@ class RewardScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(right: 15, bottom: 9),
                         child: Text(
-                          "Rewarded\nCustomers",
+                          StringConstant.kRewardedCustomers.tr,
                           style: w500_12p(
                             color: AppColor.white.withOpacity(0.7),
                           ),
@@ -176,14 +170,14 @@ class RewardScreen extends StatelessWidget {
 
                                 final categoryName =
                                     selectedIndex == 0
-                                        ? "All offers"
+                                        ? StringConstant.kAllOffers.tr
                                         : (selectedIndex > 0 &&
                                             selectedIndex <
                                                 extendedCategories.length)
                                         ? extendedCategories[selectedIndex]
                                                 ?.name ??
-                                            'Unknown'
-                                        : "All offers";
+                                            StringConstant.kUnknown.tr
+                                        : StringConstant.kAllOffers.tr;
 
                                 return Text(
                                   categoryName,
@@ -246,24 +240,36 @@ class RewardScreen extends StatelessWidget {
                 ),
                 19.heightSizeBox,
                 Obx(() {
-                  final List<Offers> allOffers = rewardController.offerResponseModel.value?.data?.offers ?? [];
-                  final categories = rewardController.getOfferCategoriesModel.value?.offerCategory;
-                  final selectedCategoryIndex = rewardController.selectedCategoryIndex.value;
+                  final List<Offers> allOffers =
+                      rewardController.offerResponseModel.value?.data?.offers ??
+                      [];
+                  final categories =
+                      rewardController
+                          .getOfferCategoriesModel
+                          .value
+                          ?.offerCategory;
+                  final selectedCategoryIndex =
+                      rewardController.selectedCategoryIndex.value;
 
                   final extendedCategories = [null, ...?categories];
 
-                  if (selectedCategoryIndex == 0 || selectedCategoryIndex >= extendedCategories.length) {
+                  if (selectedCategoryIndex == 0 ||
+                      selectedCategoryIndex >= extendedCategories.length) {
                     return buildOffersGrid(allOffers);
                   }
-                  final selectedCategoryName = extendedCategories[selectedCategoryIndex]?.name;
+                  final selectedCategoryName =
+                      extendedCategories[selectedCategoryIndex]?.name;
 
-                  final filteredOffers = (selectedCategoryName == null)
-                      ? allOffers
-                      : allOffers
-                      .where((offer) =>
-                  offer.categoryName?.toLowerCase().trim() ==
-                      selectedCategoryName.toLowerCase().trim())
-                      .toList();
+                  final filteredOffers =
+                      (selectedCategoryName == null)
+                          ? allOffers
+                          : allOffers
+                              .where(
+                                (offer) =>
+                                    offer.categoryName?.toLowerCase().trim() ==
+                                    selectedCategoryName.toLowerCase().trim(),
+                              )
+                              .toList();
                   if (filteredOffers.isEmpty) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 30),
@@ -321,7 +327,9 @@ class RewardScreen extends StatelessWidget {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 8),
-                                  child: Text("Ascending order"),
+                                  child: Text(
+                                    StringConstant.kAscendingOrder.tr,
+                                  ),
                                 ),
                               ),
 
@@ -334,7 +342,9 @@ class RewardScreen extends StatelessWidget {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 8),
-                                  child: Text("Descending order"),
+                                  child: Text(
+                                    StringConstant.kDescendingOrder.tr,
+                                  ),
                                 ),
                               ),
                             ],
@@ -374,23 +384,27 @@ class RewardScreen extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  rewardController.selectedCategoryIndex.value = 0;
+                                  rewardController.selectedCategoryIndex.value =
+                                      0;
                                   rewardController.isVisibleAllOffer.value =
                                       false;
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 8),
                                   child: Text(
-                                    "All offers",
+                                    StringConstant.kAllOffers.tr,
                                     style: w400_14p(color: AppColor.c2C2A2A),
                                   ),
                                 ),
                               ),
-                              ...(
-                                  rewardController
+                              ...(rewardController
                                           .getOfferCategoriesModel
                                           .value
-                                          ?.offerCategory ?? []).asMap().entries.map(
+                                          ?.offerCategory ??
+                                      [])
+                                  .asMap()
+                                  .entries
+                                  .map(
                                     (entry) => GestureDetector(
                                       onTap: () {
                                         rewardController
@@ -533,15 +547,7 @@ class RewardScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             DateTimeWidget(title: rewardDetail.businessName),
-                         /*   13.heightSizeBox,
-                            Text(
-                              rewardDetail.title ?? "",
-                              style: GoogleFonts.rumRaisin(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 24,
-                                color: AppColor.white,
-                              ),
-                            ),*/
+
                           ],
                         ),
                       ),
@@ -550,7 +556,7 @@ class RewardScreen extends StatelessWidget {
                 ),
                 // DashedLineWidget(),
                 SizedBox(height: 15),
-                Padding (
+                Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
@@ -615,7 +621,7 @@ class RewardScreen extends StatelessWidget {
                                               : [],
                                     ),
                                     child: Text(
-                                      "Detail",
+                                      StringConstant.kDetail.tr,
                                       style: w600_12a(
                                         color:
                                             rewardController.isSelected.value ==
@@ -632,10 +638,9 @@ class RewardScreen extends StatelessWidget {
                                     rewardController.isSelected.value = 2;
                                     showLoader();
                                     await rewardController.fetchCustomersById(
-                                          rewardDetail.id.toString(),
-                                        );
+                                      rewardDetail.id.toString(),
+                                    );
                                     hideLoader();
-                                    print("kwegyhw${rewardDetail.id}");
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -661,7 +666,7 @@ class RewardScreen extends StatelessWidget {
                                               : [],
                                     ),
                                     child: Text(
-                                      "Rewarded Customers",
+                                      StringConstant.kRewardedCustomers.tr,
                                       style: w600_12a(
                                         color:
                                             rewardController.isSelected.value ==
@@ -682,18 +687,21 @@ class RewardScreen extends StatelessWidget {
                         Text(rewardDetail.description ?? ''),
                       if (rewardController.isSelected.value == 2)
                         Obx(() {
-                         final customers =
-                              rewardController.allCustomers;
+                          final customers = rewardController.allCustomers;
 
-
-                          if (customers.isEmpty && rewardController.isLoading.value) {
-                            return const Center(child: CircularProgressIndicator());
+                          if (customers.isEmpty &&
+                              rewardController.isLoading.value) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
                           }
 
                           if (customers.isEmpty) {
                             return Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text("No rewarded customers found."),
+                              padding: EdgeInsets.all(16.0),
+                              child: Text(
+                                StringConstant.kNoRewardedCustomerFound.tr,
+                              ),
                             );
                           }
 
@@ -701,14 +709,17 @@ class RewardScreen extends StatelessWidget {
                             controller: rewardController.scrollController,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: customers.length + (rewardController.hasMore.value ? 1 : 0),
-                            separatorBuilder: (context, index) => Column(
-                              children: [
-                                10.heightSizeBox,
-                                DashedLineWidget(),
-                                10.heightSizeBox,
-                              ],
-                            ),
+                            itemCount:
+                                customers.length +
+                                (rewardController.hasMore.value ? 1 : 0),
+                            separatorBuilder:
+                                (context, index) => Column(
+                                  children: [
+                                    10.heightSizeBox,
+                                    DashedLineWidget(),
+                                    10.heightSizeBox,
+                                  ],
+                                ),
                             itemBuilder: (context, index) {
                               if (index < customers.length) {
                                 final customer = customers[index];
@@ -724,81 +735,33 @@ class RewardScreen extends StatelessWidget {
                                     Expanded(
                                       child: Text(
                                         customer.customerName ?? '',
-                                        style: w600_12a(color: AppColor.c2C2A2A),
+                                        style: w600_12a(
+                                          color: AppColor.c2C2A2A,
+                                        ),
                                       ),
                                     ),
                                     20.widthSizeBox,
                                     Text(
-                                      formatServerDate(customer.redeemedAt ?? ''),
+                                      formatServerDate(
+                                        customer.redeemedAt ?? '',
+                                      ),
                                       style: w400_10a(),
                                     ),
                                   ],
                                 );
                               } else {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  child: Center(child: CircularProgressIndicator()),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 );
                               }
                             },
                           );
                         }),
-
-
-                      /*
-                      if (rewardController.isSelected.value == 2)
-                        Obx(() {
-                          final customers =
-                              rewardController
-                                  .getRewardedCustomersModel
-                                  .value
-                                  ?.getRewardedCustomersData ??
-                              [];
-                          if (customers.isEmpty) {
-                            return Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text("No rewarded customers found."),
-                            );
-                          }
-                          return ListView.separated(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: customers.length,
-                            separatorBuilder:
-                                (context, index) => Column(
-                                  children: [
-                                    10.heightSizeBox,
-                                    DashedLineWidget(),
-                                    10.heightSizeBox,
-                                  ],
-                                ),
-                            itemBuilder: (context, index) {
-                              var customer = customers[index];
-                              return Row(
-                                children: [
-                                  ProfileImageView(
-                                    radiusStack: 4,
-                                    radius: 17,
-                                    isVisibleStack: false,
-                                    imagePath: customer.profilePicUrl ?? '',
-                                  ),
-                                  9.widthSizeBox,
-                                  Expanded(
-                                    child: Text(
-                                      customer.customerName ?? '',
-                                      style: w600_12a(color: AppColor.c2C2A2A),
-                                    ),
-                                  ),
-                                  20.widthSizeBox,
-                                  Text(
-                                    formatServerDate(customer.redeemedAt ?? ''),
-                                    style: w400_10a(),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }),*/
                     ],
                   ),
                 ),

@@ -6,13 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiwash_partner/featuers/auth/model/login_model.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
+import 'package:hiwash_partner/widgets/components/app_snack_bar.dart';
 
 import '../../../generated/assets.dart';
 import '../../../network_manager/local_storage.dart';
 import '../../../network_manager/repository.dart';
 import '../../../route/route_strings.dart';
-import '../../../styling/app_color.dart';
-import '../model/get_token_model.dart';
 import '../model/send_otp_model.dart';
 import '../model/sign_up_model.dart';
 
@@ -20,14 +20,47 @@ class AuthController extends GetxController {
   var isLoggedIn = false.obs;
   var isLoading = false.obs;
   var isPasswordVisible = false.obs;
+
+  LoginModel? loginModel;
+  Rx<SendOtpModel> sendOtpModel = SendOtpModel().obs;
+  SignUpModel? signUpModel;
+
+  /// login controller
+  TextEditingController loginPhoneController = TextEditingController(
+    text: kDebugMode ? "6212345678901" : "",
+  );
+
+  TextEditingController emailController = TextEditingController(
+    text: kDebugMode ? "partner1@gmail.com" : "",
+  );
+  TextEditingController passwordController = TextEditingController(
+    text: kDebugMode ? "Hiwash@54321" : "",
+  );
+  TextEditingController phoneRestController = TextEditingController();
+  TextEditingController passwordRestController = TextEditingController();
+
+  bool obscurePassword = true;
+  bool obscureConfirmPassword = true;
+  var enteredOtp = ''.obs;
+  var secondsRemaining = 30.obs;
+  Timer? _timer;
+
+
+  /// Welcome screen
+  final PageController pageController = PageController();
+
+  var currentPage = 0.obs;
+
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
 
   var isPasswordVisibleLogin = false.obs;
+
   void togglePasswordVisibilityLogin() {
     isPasswordVisibleLogin.value = !isPasswordVisibleLogin.value;
   }
+
   @override
   void onInit() {
     pageController.addListener(() {
@@ -42,9 +75,11 @@ class AuthController extends GetxController {
     _timer?.cancel();
     super.onClose();
   }
+
   void resetTimer() {
     startTimer();
   }
+
   void checkLoginStatus() {
     String? token = LocalStorage().getToken();
     if (token != null && token.isNotEmpty) {
@@ -56,65 +91,39 @@ class AuthController extends GetxController {
     }
   }
 
-  LoginModel? loginModel;
-  SendOtpModel? sendOtpModel;
-  SignUpModel? signUpModel;
-
-  /// login controller
-  TextEditingController loginPhoneController = TextEditingController(
-    text:kDebugMode? "6212345678901":"",
-  );
-
-  TextEditingController emailController = TextEditingController(
-    text:kDebugMode? "partner1@gmail.com":"",
-  );
-  TextEditingController passwordController = TextEditingController(
-    text:kDebugMode? "Hiwash@54321":"",
-  );
-  TextEditingController phoneRestController = TextEditingController();
-  TextEditingController passwordRestController = TextEditingController();
-
-  bool obscurePassword = true;
-  bool obscureConfirmPassword = true;
-
-  /// Welcome screen
-  final PageController pageController = PageController();
-
-  var currentPage = 0.obs;
-
   void onPageChanged(int index) {
     currentPage.value = index;
   }
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return "E-mail is required";
+      return StringConstant.kEMailIsRequired.tr;
     } else if (!RegExp(
       r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$',
     ).hasMatch(value)) {
-      return "Please Enter A Valid Email";
+      return StringConstant.kPleaseEnterAValidEmail.tr;
     }
     return null;
   }
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return StringConstant.kPasswordIsRequired.tr;
     }
     if (value.length < 8) {
-      return 'Password must be at least 8 characters long';
+      return StringConstant.kPasswordMustBeAtLeast.tr;
     }
     if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'Password must contain at least one uppercase letter';
+      return StringConstant.kPasswordMustContainAtLeastOneUpperCaseLetter.tr;
     }
     if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return 'Password must contain at least one lowercase letter';
+      return StringConstant.kPasswordMustContainAtLeastOneLowerCaseLetter.tr;
     }
     if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Password must contain at least one digit';
+      return StringConstant.kPasswordMustContainAtLeastOneDigit.tr;
     }
     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      return 'Password must contain at least one special character';
+      return StringConstant.PasswordMustContainAtLeastOneSpecialCharacter.tr;
     }
     return null;
   }
@@ -123,17 +132,13 @@ class AuthController extends GetxController {
     if (value != null && value.isNotEmpty) {
       value = value.trim();
       if (!RegExp(r'^\d{8,15}$').hasMatch(value)) {
-        return "Please Enter Valid Phone Number";
+        return StringConstant.kPleaseEnterValidPhoneNumber.tr;
       }
     } else {
-      return "Phone number cannot be empty";
+      return StringConstant.kPhoneNumberCannotBeEmpty.tr;
     }
     return null;
   }
-
-  var enteredOtp = ''.obs;
-  var secondsRemaining = 30.obs;
-  Timer? _timer;
 
   void startTimer() {
     secondsRemaining.value = 30;
@@ -155,17 +160,17 @@ class AuthController extends GetxController {
     };
     try {
       isLoading.value = true;
-      sendOtpModel = await Repository().sendOtpRepo(requestBody);
+      sendOtpModel.value = await Repository().sendOtpRepo(requestBody);
       if (sendOtpModel != null) {
-        Get.snackbar(
-          'Success',
-          "OTP: ${sendOtpModel?.data?.otp}",
-          snackPosition: SnackPosition.TOP,
+        appSnackBar(
+          title: StringConstant.kSuccess,
+          message:
+              "${StringConstant.kTestOTP.tr} ${sendOtpModel.value.data?.otp}",
           backgroundColor: Colors.green,
-          colorText: AppColor.white,
-        );}
+        );
+      }
       print("Value received in controller sendOtp: $sendOtpModel");
-      return sendOtpModel;
+      return sendOtpModel.value;
     } catch (e) {
       print("Error in controller while sending OTP: $e");
       return null;
@@ -180,12 +185,11 @@ class AuthController extends GetxController {
     debugPrint("fcmTokenSet------> $token");
   }
 
-
   Future<LoginModel?> login(String email, String password) async {
-    Map<String, dynamic> requestBody = {"email": email, "password": password,
-      "fcmToken":LocalStorage().getFCMToken()
-
-
+    Map<String, dynamic> requestBody = {
+      "email": email,
+      "password": password,
+      "fcmToken": LocalStorage().getFCMToken(),
     };
     isLoading.value = true;
     try {
@@ -206,7 +210,6 @@ class AuthController extends GetxController {
     }
   }
 
-
   Future<LoginModel?> refreshToken() async {
     final storedRefreshToken = LocalStorage().getRefreshToken();
 
@@ -216,9 +219,7 @@ class AuthController extends GetxController {
       return null;
     }
 
-    Map<String, dynamic> requestBody = {
-      "refreshToken": storedRefreshToken,
-    };
+    Map<String, dynamic> requestBody = {"refreshToken": storedRefreshToken};
 
     print("Calling refreshToken API");
     isLoading.value = true;
@@ -231,7 +232,8 @@ class AuthController extends GetxController {
         await LocalStorage().saveToken(response.data!.token!);
       }
 
-      if (response.data?.refreshToken != null && response.data!.refreshToken!.isNotEmpty) {
+      if (response.data?.refreshToken != null &&
+          response.data!.refreshToken!.isNotEmpty) {
         await LocalStorage().saveRefreshToken(response.data!.refreshToken!);
       }
 

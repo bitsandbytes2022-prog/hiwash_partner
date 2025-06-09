@@ -1,11 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/styling/app_color.dart';
 import 'package:hiwash_partner/styling/app_font_anybody.dart';
 import 'package:hiwash_partner/widgets/components/data_formet.dart';
-import 'package:hiwash_partner/widgets/components/doted_line.dart';
+import 'package:hiwash_partner/widgets/components/dashed_line_widget.dart';
 import 'package:hiwash_partner/widgets/components/profile_image_view.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
@@ -121,8 +124,8 @@ class _RewardedCustomersScreenState extends State<RewardedCustomersScreen> {
             )
                 : Center(
               child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text("No rewards available",style: TextStyle(color: Colors.white),),
+                padding:  EdgeInsets.all(16),
+                child: Text(StringConstant.kNoAewardsAvailable.tr,style: TextStyle(color: Colors.white),),
               ),
             );
           }),
