@@ -5,14 +5,15 @@ class Languages extends Translations {
   // TODO: implement keys
   Map<String, Map<String, String>> get keys => {
     'en_US': {
-      "kHiwashPartner":"Hiwash partner",
+      "kHiwashPartner": "Hiwash partner",
       "kWelcomeToThe": "Welcome to the",
       "kHiWASH": "HI WASH",
       "kWeComeToYouTo": "We come to you to\nwash your car...!!",
-      "kDriveMoreBusinessWith":"Drive More Business with Us!",
-      "kCaltexEngineOil":"Caltex Engine Oil",
-      "kUnlockExclusivePerks":"Unlock Exclusive Perks!",
-      "kEnjoyMoreEarningsCustomer":"Enjoy more earnings, customer\nrewards, and premium support as\nour valued partner!",
+      "kDriveMoreBusinessWith": "Drive More Business with Us!",
+      "kCaltexEngineOil": "Caltex Engine Oil",
+      "kUnlockExclusivePerks": "Unlock Exclusive Perks!",
+      "kEnjoyMoreEarningsCustomer":
+          "Enjoy more earnings, customer\nrewards, and premium support as\nour valued partner!",
 
       ///  welcome screen
       "kEcoCleanWalletGreen": "Eco Clean, Wallet Green!",
@@ -51,23 +52,22 @@ class Languages extends Translations {
       'kPasswordIsRequired': 'Password is required',
       "kPasswordMustBeAtLeast": 'Password must be at least 8 characters long',
       "kPasswordMustContainAtLeastOneUpperCaseLetter":
-      'Password must contain at least one uppercase letter',
+          'Password must contain at least one uppercase letter',
       "kPasswordMustContainAtLeastOneLowerCaseLetter":
-      'Password must contain at least one lowercase letter',
+          'Password must contain at least one lowercase letter',
       "kPasswordMustContainAtLeastOneDigit":
-      'Password must contain at least one digit',
+          'Password must contain at least one digit',
       "PasswordMustContainAtLeastOneSpecialCharacter":
-      'Password must contain at least one special character',
+          'Password must contain at least one special character',
       "kNameIsRequired": "Name is required",
       "kNameMustBeAtLeast": "Name must be at least 3 characters",
       "kNameMustOnlyContainAlphabetsAndSpaces":
-      "Name must only contain alphabets and spaces",
+          "Name must only contain alphabets and spaces",
       "kPleaseEnterYourPhoneNumber": "Please Enter Phone Number",
       "kConfirmPassword": "Confirm password is required",
       "kTestOTP": "TEST OTP: ",
-      "kPleaseEnterAValidEmail":"Please Enter A Valid Email",
-      "kPleaseEnterValidPhoneNumber":"Please Enter Valid Phone Number",
-
+      "kPleaseEnterAValidEmail": "Please Enter A Valid Email",
+      "kPleaseEnterValidPhoneNumber": "Please Enter Valid Phone Number",
 
       /// SIgn up screen
       "kHello": "Hello,",
@@ -95,7 +95,7 @@ class Languages extends Translations {
       "kDidGetOTPCode": "Didn't get OTP Code ?",
       "resendCode": "RESEND CODE",
       "kVerify": "Verify",
-      'kEnterValidOTP':'Enter valid OTP',
+      'kEnterValidOTP': 'Enter valid OTP',
 
       /// Reset password screen
       "kReset": "Reset",
@@ -103,7 +103,6 @@ class Languages extends Translations {
       "kYourNewPasswordMust":
           "Your New Password Must be different\nfrom Previously used password",
       "kSave": "Save",
-
 
       "KResendCode": "RESEND CODE",
       "kInvalidOTP": "Invalid OTP",
@@ -129,15 +128,12 @@ class Languages extends Translations {
       "kSecond": "second",
       "kInvalidDate": "Invalid date",
       "kTotalReward": "Total Reward",
-  "kRewardedCustomers": "Rewarded\nCustomers",
-      "kAllOffers":"All offers",
-      "kUnknown":"Unknown",
-      "kDetail":"Detail",
-     "kNoRewardedCustomerFound" :"No rewarded customers found.",
-      "kNoAewardsAvailable" :"No rewards available",
-
-
-
+      "kRewardedCustomers": "Rewarded\nCustomers",
+      "kAllOffers": "All offers",
+      "kUnknown": "Unknown",
+      "kDetail": "Detail",
+      "kNoRewardedCustomerFound": "No rewarded customers found.",
+      "kNoAewardsAvailable": "No rewards available",
 
       /// subscription screen
       "kFullAccessSubscription": "Full access subscription",
@@ -187,8 +183,8 @@ class Languages extends Translations {
       "kYes": "Yes",
       "kToday": "Today",
       "kWashLog": "Wash Log",
-      "kYourExclusiveReward"
-:"Your Exclusive Reward",
+      "kYourExclusiveReward": "Your Exclusive Reward",
+
       /// Notification screen
       "kProvisionalPermissionGranted": "Provisional Permission Granted",
       "kYouWillReceive":
@@ -246,19 +242,20 @@ class Languages extends Translations {
       "kRewardID": "Reward ID:",
       "kRewardScreen": "Reward Screen",
       "kPleaseCaptureAnImage": "Please capture an image.",
-      "kInternetIsNotAvailable":"Internet is not available",
-      "kSomethingWentWrongTryAgain.":"Something went wrong try again.",
-      "kFailedToDecodeQRCode.":"Failed to decode QR code.",
-      "kFailedToValidateOffer":"Failed to validate offer.",
+      "kInternetIsNotAvailable": "Internet is not available",
+      "kSomethingWentWrongTryAgain.": "Something went wrong try again.",
+      "kFailedToDecodeQRCode.": "Failed to decode QR code.",
+      "kFailedToValidateOffer": "Failed to validate offer.",
       "kApproveRewardSharing": "Approve Reward Sharing",
-      "kCUSTOMER":"CUSTOMER",
-      "kDecline":"Decline",
-      "kRewardHasBeenSuccessfullyShared":"Reward Has Been\nSuccessfully Shared!",
+      "kCUSTOMER": "CUSTOMER",
+      "kDecline": "Decline",
+      "kRewardHasBeenSuccessfullyShared":
+          "Reward Has Been\nSuccessfully Shared!",
 
       "kApprove": "Approve",
-      "kOfferID":"Offer ID: ",
+      "kOfferID": "Offer ID: ",
 
-  ///Today Screen
+      ///Today Screen
       "kReward": "Reward",
       "kScanOffer": "Scan Offer",
       "kCaptureCarNumber": "Capture Car Number Plate\nAnd Verify",
@@ -287,15 +284,289 @@ class Languages extends Translations {
       "kScanToUnlockWeekly":
           "Scan to unlock weekly washes,\nexclusive offers, and amazing deals!",
       "kYourPaymentIsComplete": "Your payment is complete, and your\n",
-
-      "kError":"Error"
     },
 
-    'hi_IN': {
-      "kEcoCleanWalletGreen": "इको क्लीन, वॉलेट ग्रीन!",
+    'ar_SA': {
+      "kHiwashPartner": "شريك هيواش",
+      "kWelcomeToThe": "مرحباً بك في",
+      "kHiWASH": "هاي واش",
+      "kWeComeToYouTo": "نأتي إليك لنغسل\nسيارتك...!!",
+      "kDriveMoreBusinessWith": "حقق المزيد من الأعمال معنا!",
+      "kCaltexEngineOil": "زيت محرك كالتكس",
+      "kUnlockExclusivePerks": "اكتشف المزايا الحصرية!",
+      "kEnjoyMoreEarningsCustomer":
+      "استمتع بأرباح أكثر ومكافآت\nالعملاء والدعم المتميز\nكشريكنا المميز!",
+
+      ///  welcome screen
+      "kEcoCleanWalletGreen": "تنظيف صديق للبيئة، محفظة خضراء!",
       "kExclusiveDealsWithEvery":
-          "हर शाइन फ्री कूपन, BOGO ऑफर, छूट और विशेष सुविधाओं के साथ विशेष सौदे!",
-      " kGetStarted": "शुरू हो जाओ",
+      "عروض حصرية مع كل لمعة\nكوبونات مجانية وعروض اشتري واحد واحصل على الثاني مجاناً وخصومات ومزايا خاصة!",
+      "kGetStarted": "ابدأ الآن",
+      "kSkip": "تخطي",
+      "kTermsAndConditions": "الشروط والأحكام",
+      "kWashWin": "اغسل واربح!",
+      "kGetYourCarWashed":
+      "اغسل سيارتك أسبوعياً في أكثر من 100 موقع مع عروض حصرية. الغسلات المفقودة ستُخصم أيضاً.",
+      "kEliteCarWash": "خدمة غسيل سيارات متميزة",
+      "kEarnMoreGetRewardsAndEnjoyExclusiveWorkerBenefits":
+      "اكسب أكثر، احصل على مكافآت،\nواستمتع بمزايا العمال الحصرية!",
+
+      "kTermsAndCondition": "الشروط والأحكام",
+      "kMissedWashesStillDeducted": "الغسلات المفقودة ستُخصم أيضاً.",
+      "kLetMakeEvery": "دعنا نجعل كل سيارة تلمع!",
+
+      ///  Login screen
+      "kLogin": "تسجيل الدخول!",
+      "kWelcomeBack": "مرحباً بعودتك،",
+      "kEmail": "البريد الإلكتروني",
+      "kPassword": "كلمة المرور",
+      "kForgotPassword": "نسيت كلمة المرور؟",
+      "kLogIn": "تسجيل الدخول",
+      "kDontAaveAccount": "ليس لديك حساب؟ ",
+      "SIGNUP": "سجل الآن",
+      "kOR": "أو",
+
+      "kPLeaseEnterValid": "يرجى إدخال بريد إلكتروني صحيح",
+      "kPhoneNumberCannotBeEmpty": "رقم الهاتف لا يمكن أن يكون فارغاً",
+      "kHaveAnAccount": "لديك حساب؟ ",
+      "LOGIN": "تسجيل الدخول",
+      "kEMailIsRequired": "البريد الإلكتروني مطلوب",
+      "kPasswordIsRequired": "كلمة المرور مطلوبة",
+      "kPasswordMustBeAtLeast": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+      "kPasswordMustContainAtLeastOneUpperCaseLetter":
+      "كلمة المرور يجب أن تحتوي على حرف كبير واحد على الأقل",
+      "kPasswordMustContainAtLeastOneLowerCaseLetter":
+      "كلمة المرور يجب أن تحتوي على حرف صغير واحد على الأقل",
+      "kPasswordMustContainAtLeastOneDigit":
+      "كلمة المرور يجب أن تحتوي على رقم واحد على الأقل",
+      "PasswordMustContainAtLeastOneSpecialCharacter":
+      "كلمة المرور يجب أن تحتوي على رمز خاص واحد على الأقل",
+      "kNameIsRequired": "الاسم مطلوب",
+      "kNameMustBeAtLeast": "الاسم يجب أن يكون 3 أحرف على الأقل",
+      "kNameMustOnlyContainAlphabetsAndSpaces":
+      "الاسم يجب أن يحتوي على أحرف ومسافات فقط",
+      "kPleaseEnterYourPhoneNumber": "يرجى إدخال رقم الهاتف",
+      "kConfirmPassword": "تأكيد كلمة المرور مطلوب",
+      "kTestOTP": "رمز التحقق التجريبي: ",
+      "kPleaseEnterAValidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+      "kPleaseEnterValidPhoneNumber": "يرجى إدخال رقم هاتف صحيح",
+
+      /// Sign up screen
+      "kHello": "مرحباً،",
+      "kSignUp": "إنشاء حساب!",
+      "kName": "الاسم",
+      "kPhone": "الهاتف",
+      "signUp": "إنشاء حساب",
+      "kEnterYourFullName": "أدخل اسمك الكامل",
+      "kEnterYourEmail": "أدخل بريدك الإلكتروني",
+      "kEnterPhoneNumber": "أدخل رقم الهاتف",
+
+      /// forgot password screen
+      "kForgot": "نسيت",
+      "kEnterRegisteredPhone": "أدخل الهاتف المسجل",
+      "kEnterThePhoneNumber":
+      "أدخل رقم الهاتف المرتبط\nبحسابك",
+      "kEnterYourPhoneNumber": "أدخل رقم هاتفك",
+      "kRecoverPassword": "استرداد كلمة المرور",
+
+      /// otp screen
+      "kAuthentication": "التحقق",
+      "kOTP": "رمز التحقق",
+      "kVerifyPhone": "تحقق من الهاتف",
+      "kCodeHasBeenSentTo": "تم إرسال الرمز إلى ",
+      "kDidGetOTPCode": "لم تحصل على رمز التحقق؟",
+      "resendCode": "إعادة إرسال الرمز",
+      "kVerify": "تحقق",
+      "kEnterValidOTP": "أدخل رمز تحقق صحيح",
+
+      /// Reset password screen
+      "kReset": "إعادة تعيين",
+      "kCreateNewPassword": "إنشاء كلمة مرور جديدة",
+      "kYourNewPasswordMust":
+      "كلمة المرور الجديدة يجب أن تكون\nمختلفة عن المستخدمة سابقاً",
+      "kSave": "حفظ",
+
+      "KResendCode": "إعادة إرسال الرمز",
+      "kInvalidOTP": "رمز تحقق غير صحيح",
+      "kError": "خطأ",
+      "kSomethingWentWrong": "حدث خطأ ما",
+      "kPleaseEnterTheCorrectOTP": "يرجى إدخال رمز التحقق الصحيح",
+      "kSuccess": "نجح",
+
+      ///Reward screen
+      "kSortByExpiry": "ترتيب حسب انتهاء الصلاحية",
+      "kAscendingOrder": "ترتيب تصاعدي",
+      "kDescendingOrder": "ترتيب تنازلي",
+      "kNoExpiry": "بلا انتهاء صلاحية",
+      "kExpired": "منتهي الصلاحية",
+      "kYears": "سنوات",
+      "kMonths": "شهور",
+      "kDays": "أيام",
+      "kHours": "ساعات",
+      "kHour": "ساعة",
+      "kMinutes": "دقائق",
+      "kMinute": "دقيقة",
+      "kSeconds": "ثواني",
+      "kSecond": "ثانية",
+      "kInvalidDate": "تاريخ غير صحيح",
+      "kTotalReward": "إجمالي المكافآت",
+      "kRewardedCustomers": "العملاء\nالمكافأون",
+      "kAllOffers": "جميع العروض",
+      "kUnknown": "غير معروف",
+      "kDetail": "التفاصيل",
+      "kNoRewardedCustomerFound": "لم يتم العثور على عملاء مكافأين.",
+      "kNoAewardsAvailable": "لا توجد مكافآت متاحة",
+
+      /// subscription screen
+      "kFullAccessSubscription": "اشتراك الوصول الكامل",
+      "kChooseAPlan": "اختر خطة",
+      "kGetBenefitsAcrossAll": "احصل على مزايا في جميع الخطط.\nالخيار لك",
+      "kSubscribe": "اشترك",
+      "kCarRegistrationNumber": "رقم تسجيل السيارة مطلوب لـ",
+      "kUnlimitedWashesPlan": "خطة الغسيل اللامحدود",
+      "kEnterCarNumber": "أدخل رقم السيارة",
+      "WashYourCarOnce":
+      "اغسل سيارتك مرة في الأسبوع. إذا لم يتم غسل السيارة خلال الأسبوع، فلن يتم التعويض وسيتم الخصم.",
+
+      /// wash status screen
+      "kCompleteWash": "غسيل مكتمل",
+      "kTotalWashes": "إجمالي الغسلات",
+      "kWash": "غسيل",
+      "kLocations": "المواقع",
+      "kRemaining": "المتبقي",
+      "kYourCurrentLocation": "موقعك الحالي",
+
+      /// faq screen
+      "kFAQ": "الأسئلة الشائعة",
+      "kSearch": "بحث...",
+      "kNoFAQsFound": "لم يتم العثور على أسئلة شائعة",
+
+      /// Second Drawer
+      "kGetHelp": "احصل على مساعدة؟",
+      "kCouldNotLaunch": "لا يمكن التشغيل",
+      "kChatWithSupport": "تحدث مع الدعم",
+      "kHelpDeskTicket": "تذكرة مكتب المساعدة",
+      "kStepByStep": "دليل خطوة بخطوة",
+
+      /// step by step screen
+      "kNoTitle": "لا يوجد عنوان",
+      "kNoDescription": "لا يوجد وصف",
+      "kStepByStepGuideDetail": "دليل خطوة بخطوة - التفاصيل",
+      "kStepByStepGuide": "دليل خطوة بخطوة",
+
+      /// Dashboard screen
+      "kOffersForYou": "عروض لك",
+      "kNotification": "الإشعارات",
+      "kRedeemWash": "استبدل الغسيل!",
+      "kScanYourQR": "امسح رمز الاستجابة السريعة\nللاستمتاع بالغسيل.",
+      "kConfirmExit": "تأكيد الخروج",
+      "kDoYouReally": "هل تريد فعلاً إغلاق التطبيق؟",
+      "kNo": "لا",
+      "kYes": "نعم",
+      "kToday": "اليوم",
+      "kWashLog": "سجل الغسيل",
+      "kYourExclusiveReward": "مكافأتك الحصرية",
+
+      /// Notification screen
+      "kProvisionalPermissionGranted": "تم منح إذن مؤقت",
+      "kYouWillReceive":
+      "ستتلقى إشعارات، لكنها قد تكون محدودة.",
+      "kNotificationPermissionDenied": "تم رفض إذن الإشعارات",
+      "kPleaseAllow": "يرجى السماح بالإشعارات لتلقي التحديثات.",
+      "kFailedToRequest": "فشل في طلب إذن الإشعارات.",
+      "kNotificationClicked": "تم النقر على الإشعار",
+      "kNoRouteFound": "لم يتم العثور على مسار في الإشعار.",
+      "kNoNotificationFound": "لم يتم العثور على إشعارات",
+      "kYour": "الخاص بك ",
+      "kPackHasBeenOverdueSince": " الباقة\n متأخرة منذ",
+      "UserGrantedPermission": "منح المستخدم الإذن",
+
+      /// Profile Screen
+      "kProfileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح",
+      "kPackExpiringIn": " الباقة\nتنتهي في ",
+      "kMyAccount": "حسابي",
+      "kSubscriptionPlan": "خطة الاشتراك",
+      "kTheme": "النمط",
+      "kLanguage": "اللغة",
+      "kPrivacySettings": "إعدادات الخصوصية",
+      "kLogout": "تسجيل الخروج",
+      "kArabic": "العربية",
+      "kEnglish": "الإنجليزية",
+      "kSelectImageSource": "اختر مصدر الصورة",
+      "kCamera": "الكاميرا",
+      "kGallery": "المعرض",
+      "kPleaseEnterYourName": "يرجى إدخال اسمك",
+      "kPleaseEnterYourEmail": "يرجى إدخال بريدك الإلكتروني",
+      "kPleaseEnterYourPhone": "يرجى إدخال هاتفك",
+      "kCarNumber": "رقم السيارة",
+      "kPackName": "اسم الباقة ",
+
+      "kRemainingWash": "الغسلات المتبقية",
+
+      "kExpiryDate": "تاريخ انتهاء الصلاحية ",
+      "kUpgradeYourPlanNow": "قم بترقية خطتك الآن",
+      "kNoPlansAvailable": "لا توجد خطط متاحة",
+      "kYouCanRenewYourSubscriptionOnlyWithin7DaysOfExpiry":
+      "يمكنك تجديد اشتراكك فقط خلال 7 أيام من انتهاء الصلاحية.",
+      "kRenewNow": "جدد الآن",
+      "kYear": "/ سنة",
+      "kRenewalNotAvailable": "التجديد غير متاح",
+      "kNoPlanSelected.": "لم يتم اختيار خطة.",
+      "kEmployeeIDNO: ": "رقم هوية الموظف: ",
+      "kAddress": "العنوان",
+      "kPermissionDenied": "تم رفض الإذن",
+      "kCameraPermissionRequired":
+      "إذن الكاميرا مطلوب لمسح رموز الاستجابة السريعة.",
+
+      /// QR screen
+      "kClear": "مسح",
+      "kScanAQRCode": "امسح رمز الاستجابة السريعة",
+      "kCustomerID:": "معرف العميل: ",
+      "kRewardID": "معرف المكافأة:",
+      "kRewardScreen": "شاشة المكافآت",
+      "kPleaseCaptureAnImage": "يرجى التقاط صورة.",
+      "kInternetIsNotAvailable": "الإنترنت غير متاح",
+      "kSomethingWentWrongTryAgain.": "حدث خطأ، حاول مرة أخرى.",
+      "kFailedToDecodeQRCode.": "فشل في فك تشفير رمز الاستجابة السريعة.",
+      "kFailedToValidateOffer": "فشل في التحقق من العرض.",
+      "kApproveRewardSharing": "موافقة على مشاركة المكافأة",
+      "kCUSTOMER": "العميل",
+      "kDecline": "رفض",
+      "kRewardHasBeenSuccessfullyShared":
+      "تم مشاركة المكافأة\nبنجاح!",
+
+      "kApprove": "موافقة",
+      "kOfferID": "معرف العرض: ",
+
+      ///Today Screen
+      "kReward": "مكافأة",
+      "kScanOffer": "امسح العرض",
+      "kCaptureCarNumber": "التقط رقم لوحة السيارة\nوتحقق",
+      "kSwipeToCompleteWash": "اسحب لإكمال الغسيل ",
+      "kErrorCompletingWash": "خطأ في إكمال الغسيل:",
+      "kWashComplete": "اكتمل الغسيل!",
+      "kShareYourFeedback": "شارك رأيك وقيم العميل.",
+      "kEnterYourCommentHere": "أدخل تعليقك هنا...",
+      "kSubmit": "إرسال",
+      "kTodayWashes": "غسلات اليوم",
+      "kComplete": "مكتمل",
+
+      /// app component
+      "kRemainingWashes": "الغسلات المتبقية: ",
+      "kDateIsNotFound": "البيانات غير موجودة",
+      "kOfferDetails": "تفاصيل العرض",
+      "kHowToRedeem": "كيفية الاستبدال",
+      "kReportAnIssue": "الإبلاغ عن مشكلة",
+      "kYourRewardHasBeen": "تم استبدال مكافأتك\nبنجاح!",
+      "kDay": "يوم",
+      "kHRS": "ساعات",
+      "kMINS": "دقائق",
+      "kQrNotGenerated": "لم يتم إنشاء\nرمز الاستجابة السريعة",
+      "kSuccesss": "نجح!",
+      "kPlanIsNowActivated": " الخطة مفعلة الآن.",
+      "kScanToUnlockWeekly":
+      "امسح لفتح الغسلات الأسبوعية\nوالعروض الحصرية والصفقات المذهلة!",
+      "kYourPaymentIsComplete": "تم إكمال الدفع، و\n",
     },
   };
 }

@@ -48,7 +48,6 @@ class AuthController extends GetxController {
 
   /// Welcome screen
   final PageController pageController = PageController();
-
   var currentPage = 0.obs;
 
   void togglePasswordVisibility() {
