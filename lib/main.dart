@@ -40,13 +40,18 @@ class MyApp extends StatelessWidget {
     final String? localeCode = LocalStorage().getSavedLocale();
 
     Locale initialLocale;
-    if (localeCode == 'ar') {
-      initialLocale = const Locale('ar', 'SA');
-    } else if (localeCode == 'en') {
-      initialLocale = const Locale('en', 'US');
+    if (localeCode != null) {
+      if (localeCode == 'ar') {
+        initialLocale = const Locale('ar', 'SA');
+      } else if (localeCode == 'en') {
+        initialLocale = const Locale('en', 'US');
+      } else {
+        initialLocale = Get.deviceLocale ?? const Locale('en', 'US');
+      }
     } else {
       initialLocale = Get.deviceLocale ?? const Locale('en', 'US');
     }
+
     return ScreenUtilInit(
       minTextAdapt: true,
       splitScreenMode: true,

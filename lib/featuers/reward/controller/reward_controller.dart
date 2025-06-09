@@ -136,7 +136,7 @@ class RewardController extends GetxController {
 
 
   void toggleSortOrder() {
-    if (sortByText.value == StringConstant.kSortByExpiry.tr) {
+    if (sortByText.value == "Sort by Expiry") {
       isAscending.value = true;
     } else {
       isAscending.value = !isAscending.value;

@@ -158,7 +158,7 @@ class DrawerScreen extends StatelessWidget {
         ),
         drawerRowWidget(
           onTap: () => Get.to(TermsAndConditionScreen()),
-          title: StringConstant.kTermsAndConditions,
+          title: StringConstant.kTermsAndConditions.tr,
           image: Assets.iconsIcTermscondition,
         ),
         Spacer(),

@@ -188,7 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _currentIndex == 0
                     ? EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 30)
                     : EdgeInsets.only(left: 16, right: 16, top: 40),
-            headingText: _headings[_currentIndex],
+            headingText: _headings[_currentIndex].tr,
             padding:
                 _currentIndex == 2
                     ? EdgeInsets.zero

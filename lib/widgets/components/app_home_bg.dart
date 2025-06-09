@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:hiwash_partner/featuers/profile/view/chat_screen.dart';
@@ -90,7 +91,7 @@ class AppHomeBg extends StatelessWidget {
                             ),
                         centerHeading ??
                             Text(
-                              headingText ?? '',
+                              headingText?.tr ?? '',
                               style: w700_16a(color: AppColor.white),
                             ),
                         iconRight ??
