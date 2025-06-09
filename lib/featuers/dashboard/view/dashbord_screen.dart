@@ -43,11 +43,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     NotificationScreen(),
   ];
 
-  final List<String> _headings = [
+  List<String> get _headings => [
     StringConstant.kYourExclusiveReward.tr,
     StringConstant.kRewardedCustomers.tr,
     StringConstant.kNotification.tr,
   ];
+
 
   void _onItemTapped(int index) {
     if (index == 3) {

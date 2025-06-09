@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hiwash_partner/featuers/profile/view/widget/custome_switch.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
+import 'package:hiwash_partner/network_manager/local_storage.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import '../../../generated/assets.dart';
@@ -164,8 +165,12 @@ class DrawerScreen extends StatelessWidget {
         Spacer(),
         //  60.heightSizeBox,
         GestureDetector(
-          onTap: () {
-            authController.logout();
+          onTap: () async {
+            await LocalStorage().removeToken();
+            final deviceLocale = Get.deviceLocale ?? const Locale('en', 'US');
+            Get.updateLocale(deviceLocale);
+            Get.offAllNamed(RouteStrings.welcomeScreen);
+
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 31, vertical: 10),

@@ -61,11 +61,12 @@ Dio getDio() {
                 StringConstant.kSomethingWentWrong.tr.toString(),
           );
         } else if (e.response?.statusCode == 401) {
+          /// Todo need to discussion
           /*   AuthController   authController=Get.find();
      print("Refresh Token api");
      authController.refreshToken();
          Get.offAllNamed(RouteStrings.welcomeScreen);*/
-          Get.offAllNamed(RouteStrings.welcomeScreen);
+         // Get.offAllNamed(RouteStrings.welcomeScreen);
         } else if (e.response?.statusCode == 404) {
           appSnackBar(
             message:
