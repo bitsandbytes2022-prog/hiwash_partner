@@ -129,6 +129,7 @@ class Languages extends Translations {
       "kInvalidDate": "Invalid date",
       "kTotalReward": "Total Reward",
       "kRewardedCustomers": "Rewarded\nCustomers",
+      "rewardedCustomers": "Rewarded Customers",
       "kAllOffers": "All offers",
       "kUnknown": "Unknown",
       "kDetail": "Detail",

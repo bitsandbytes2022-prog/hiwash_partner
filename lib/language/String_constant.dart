@@ -121,6 +121,7 @@ class StringConstant {
   static const kNo = "kNo";
   static const kYes = "kYes";
   static const kRewardedCustomers = "kRewardedCustomers";
+  static const rewardedCustomers = "rewardedCustomers";
   static const kToday = "kToday";
   static const kWashLog = "kWashLog";
   static const kYourExclusiveReward = "kYourExclusiveReward";

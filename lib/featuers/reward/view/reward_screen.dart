@@ -110,7 +110,7 @@ class RewardScreen extends StatelessWidget {
                         );
                       }),
                       Padding(
-                        padding: const EdgeInsets.only(right: 15, bottom: 9),
+                        padding:  EdgeInsets.only(right: 15, bottom: 9),
                         child: Text(
                           StringConstant.kRewardedCustomers.tr,
                           style: w500_12p(
@@ -581,6 +581,7 @@ class RewardScreen extends StatelessWidget {
                         () => Align(
                           alignment: Alignment.center,
                           child: Container(
+                            width: Get.width,
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               color: AppColor.cF6F7FF,
@@ -592,87 +593,96 @@ class RewardScreen extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    rewardController.isSelected.value = 1;
-                                    rewardController.update();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 9,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          rewardController.isSelected.value == 1
-                                              ? AppColor.c142293
-                                              : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(30),
-                                      boxShadow:
-                                          rewardController.isSelected.value == 1
-                                              ? [
-                                                BoxShadow(
-                                                  color: AppColor.c142293
-                                                      .withOpacity(0.25),
-                                                  blurRadius: 10,
-                                                  offset: Offset(0, 5),
-                                                ),
-                                              ]
-                                              : [],
-                                    ),
-                                    child: Text(
-                                      StringConstant.kDetail.tr,
-                                      style: w600_12a(
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      rewardController.isSelected.value = 1;
+                                      rewardController.update();
+                                    },
+                                    child: Container(
+
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 9,
+                                      ),
+                                      decoration: BoxDecoration(
                                         color:
-                                            rewardController.isSelected.value ==
-                                                    1
-                                                ? AppColor.white
-                                                : AppColor.c455A64,
+                                            rewardController.isSelected.value == 1
+                                                ? AppColor.c142293
+                                                : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(30),
+                                        boxShadow:
+                                            rewardController.isSelected.value == 1
+                                                ? [
+                                                  BoxShadow(
+                                                    color: AppColor.c142293
+                                                        .withOpacity(0.25),
+                                                    blurRadius: 10,
+                                                    offset: Offset(0, 5),
+                                                  ),
+                                                ]
+                                                : [],
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          StringConstant.kDetail.tr,
+                                          style: w600_12a(
+                                            color:
+                                                rewardController.isSelected.value ==
+                                                        1
+                                                    ? AppColor.white
+                                                    : AppColor.c455A64,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(width: 25),
-                                GestureDetector(
-                                  onTap: () async {
-                                    rewardController.isSelected.value = 2;
-                                    showLoader();
-                                    await rewardController.fetchCustomersById(
-                                      rewardDetail.id.toString(),
-                                    );
-                                    hideLoader();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 9,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          rewardController.isSelected.value == 2
-                                              ? AppColor.c142293
-                                              : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(30),
-                                      boxShadow:
-                                          rewardController.isSelected.value == 2
-                                              ? [
-                                                BoxShadow(
-                                                  color: AppColor.c142293
-                                                      .withOpacity(0.25),
-                                                  blurRadius: 10,
-                                                  offset: Offset(0, 5),
-                                                ),
-                                              ]
-                                              : [],
-                                    ),
-                                    child: Text(
-                                      StringConstant.kRewardedCustomers.tr,
-                                      style: w600_12a(
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      rewardController.isSelected.value = 2;
+                                      showLoader();
+                                      await rewardController.fetchCustomersById(
+                                        rewardDetail.id.toString(),
+                                      );
+                                      hideLoader();
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 9,
+                                      ),
+                                      decoration: BoxDecoration(
                                         color:
-                                            rewardController.isSelected.value ==
-                                                    2
-                                                ? AppColor.white
-                                                : AppColor.c455A64,
+                                            rewardController.isSelected.value == 2
+                                                ? AppColor.c142293
+                                                : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(30),
+                                        boxShadow:
+                                            rewardController.isSelected.value == 2
+                                                ? [
+                                                  BoxShadow(
+                                                    color: AppColor.c142293
+                                                        .withOpacity(0.25),
+                                                    blurRadius: 10,
+                                                    offset: Offset(0, 5),
+                                                  ),
+                                                ]
+                                                : [],
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          StringConstant.rewardedCustomers.tr,
+                                          style: w600_12a(
+                                            color:
+                                                rewardController.isSelected.value ==
+                                                        2
+                                                    ? AppColor.white
+                                                    : AppColor.c455A64,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),

@@ -48,6 +48,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   RxString getOfferId = ''.obs;
   RxString internetStatus = ''.obs;
   RxBool hasScanned = false.obs;
+  RxBool isOfferValid = false.obs;
 
   ///Get customer id
   Rxn<GetCustomerData> getCustomerData = Rxn();
@@ -61,6 +62,9 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   final LocalStorage localStorage = LocalStorage();
 
   var isLoading = false.obs;
+
+  ///  Get offer id by id
+  Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
 
   @override
   void onInit() {
@@ -148,7 +152,19 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                     ? offerData!.offerDetailList!.first
                     : null;
 
-            if (customerData != null && offerDetails != null) {
+                  if (customerData != null && offerDetails != null) {
+
+              final validationResponse = await approvalStatus(
+                customerData.data!.customerDetails!.id.toString(),
+                offerDetails.id.toString(),
+              );
+
+              //isOfferValid.value = validationResponse != null && validationResponse['data'] == true;
+              isOfferValid.value = validationResponse != null &&
+                  validationResponse['success'] == true &&
+                  validationResponse['data'] == true;
+              print("isOfferValid value set to: ${isOfferValid.value}");
+
               Get.back();
               Future.delayed(Duration(milliseconds: 300));
               showDialog(
@@ -156,9 +172,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                 context: Get.context!,
                 builder: (context) {
                   return AppDialog(
-                    /*   onTap: () {
-                      Get.back();
-                    },*/
                     closeIconShow: false,
                     child: approveRewardDialog(customerData, offerDetails),
                     padding: EdgeInsets.zero,
@@ -199,9 +212,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       return null;
     }
   }
-
-  ///  Get offer id by id
-  Rxn<GetOffersByIdModel> getOffersByIdModel = Rxn();
 
   Future<GetOffersByIdModel?> getOffersById(int id) async {
     try {
@@ -257,6 +267,34 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
           message:
               response['message'] ?? StringConstant.kFailedToValidateOffer.tr,
         );
+      }
+
+      return response;
+    } catch (e) {
+      print("Error in controller while validating QR: $e");
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future approvalStatus(String customerId, String offerIdd) async {
+    Map<String, dynamic> requestBody = {
+      "customerId": customerId,
+      "offerId": offerIdd,
+    };
+
+    isLoading.value = true;
+
+    try {
+      var response = await Repository().approvalStatusRepo(requestBody);
+
+      print("Value received in controller approvalStatusRepo: $response");
+
+      if (response != null && response['success'] == true) {
+        print("Success----->");
+      } else {
+        print("Fail----->");
       }
 
       return response;
@@ -389,7 +427,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
             children: [
               DashedLineWidget(),
 
-              Row(
+             /* Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -495,7 +533,105 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                         );
                   }),
                 ],
-              ),
+              ),*/
+
+              Obx(() {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Decline button – Always visible
+                    GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 21, bottom: 21),
+                        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 13),
+                        decoration: BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(color: AppColor.cC31848),
+                        ),
+                        child: Text(
+                          StringConstant.kDecline.tr,
+                          style: w500_14a(color: AppColor.cC31848),
+                        ),
+                      ),
+                    ),
+
+                    // If offer is valid, then show Approve button next to Decline
+                    if (isOfferValid.value) ...[
+                      const SizedBox(width: 15),
+                      isLoading.value
+                          ? const Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: CircularProgressIndicator(),
+                      )
+                          : GestureDetector(
+                        onTap: () async {
+                          isLoading.value = true;
+                          Get.back();
+
+                          try {
+                            final response = await validateOfferQr(
+                              customerData.data!.customerDetails!.id.toString(),
+                              offerDetailList.id.toString(),
+                            );
+
+                            if (response != null) {
+                              await rewardController.fetchCustomersById(
+                                getOffersByIdModel.value?.offerDetailList?.first.id.toString() ?? '',
+                              );
+
+                              showDialog(
+                                barrierDismissible: false,
+                                context: Get.context!,
+                                builder: (context) {
+                                  return AppDialog(
+                                    onTap: () => Get.back(),
+                                    padding: EdgeInsets.zero,
+                                    child: successDialog(
+                                      customerDataSuccess: customerData,
+                                      offerDetailListSuccess: offerDetailList,
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          } catch (e) {
+                            appSnackBar(message: StringConstant.kSomethingWentWrongTryAgain.tr);
+                          } finally {
+                            isLoading.value = false;
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 21, bottom: 21),
+                          padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 13),
+                          decoration: BoxDecoration(
+                            color: AppColor.c1F9D70,
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColor.c1F9D70.withOpacity(0.30),
+                                spreadRadius: 0,
+                                blurRadius: 15,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            StringConstant.kApprove.tr,
+                            style: w500_14a(color: AppColor.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                );
+              }),
+
+
             ],
           ),
         ),

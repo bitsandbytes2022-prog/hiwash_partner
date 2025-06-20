@@ -31,6 +31,7 @@ static const uploadProfile="$baseUrl/partner/update-profile";
 static const rewardedCustomer ="$baseUrl/offer/rewarded-customers";
 static  getCustomerId(int id)=>"$baseUrl/customer/$id";
 static const validateOfferQr="$baseUrl/offer/validate-offer-qr";
+static const approvalStatus="$baseUrl/offer/approval-status";
 static const String notification = "$baseUrl/notification/0";
 
 

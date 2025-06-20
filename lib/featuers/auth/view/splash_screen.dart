@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     print("Token retrieved: $token");
 
     if (token != null && token.isNotEmpty) {
-      authController.refreshToken();
+     await authController.refreshToken();
       Get.offNamed(RouteStrings.dashboardScreen);
     } else {
       Get.offNamed(RouteStrings.welcomeScreen);

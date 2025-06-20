@@ -273,6 +273,19 @@ class Repository {
       print("validateOfferQr failed: $e");
     }
   }
+  Future<dynamic> approvalStatusRepo(Object requestBody) async {
+    try {
+      final response = await dioHelper.post(
+        url: ApiConstant.approvalStatus,
+        requestBody: requestBody,
+        isAuthRequired: true,
+      );
+      print("approvalStatus success: $response");
+      return response;
+    } catch (e) {
+      print("approvalStatus failed: $e");
+    }
+  }
   Future<NotificationModel> notificationRepo() async {
     print("{Notification------>${ApiConstant.notification}}");
     Map<String, dynamic> response = await dioHelper.get(

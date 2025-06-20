@@ -34,7 +34,7 @@ class AuthController extends GetxController {
     text: kDebugMode ? "partner1@gmail.com" : "",
   );
   TextEditingController passwordController = TextEditingController(
-    text: kDebugMode ? "Hiwash@54321" : "",
+    text: kDebugMode ? "Hiwash@12345" : "",
   );
   TextEditingController phoneRestController = TextEditingController();
   TextEditingController passwordRestController = TextEditingController();
