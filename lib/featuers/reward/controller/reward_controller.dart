@@ -28,7 +28,9 @@ class RewardController extends GetxController {
   final RxBool hasMore = true.obs;
   final ScrollController scrollController = ScrollController();
   RxBool isAscending = true.obs;
-  RxString  sortByText = StringConstant.kSortByExpiry.tr.obs;
+  RxString sortByText = StringConstant.kSortByExpiry.obs;
+
+  //RxString  sortByText = StringConstant.kSortByExpiry.tr.obs;
 
   @override
   void onInit() {
@@ -136,7 +138,7 @@ class RewardController extends GetxController {
 
 
   void toggleSortOrder() {
-    if (sortByText.value == "Sort by Expiry") {
+    if (sortByText.value.tr == StringConstant.kSortByExpiry) {
       isAscending.value = true;
     } else {
       isAscending.value = !isAscending.value;

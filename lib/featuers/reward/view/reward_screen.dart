@@ -217,12 +217,23 @@ class RewardScreen extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Obx(
+                            /*  Obx(
                                 () => Text(
-                                  rewardController.sortByText.value,
+                                  rewardController.sortByText.value.tr,
                                   style: w400_12p(color: AppColor.c2C2A2A),
                                 ),
+                              ),*/
+                              Obx(
+                                    () => Flexible(
+                                  child: Text(
+                                    rewardController.sortByText.value.tr,
+                                    //maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: w400_12p(color: AppColor.c2C2A2A),
+                                  ),
+                                ),
                               ),
+
 
                               Spacer(),
                               ImageView(
