@@ -21,7 +21,7 @@ class RewardController extends GetxController {
   var selectedCategoryIndex = 0.obs;
 
   RxInt currentPage = 1.obs;
-  final int pageSize = 10;
+  final int pageSize = 20;
   final RxList<GetRewardedCustomersData> allCustomers =
       <GetRewardedCustomersData>[].obs;
   final RxBool isLoading = false.obs;
@@ -101,9 +101,14 @@ class RewardController extends GetxController {
   }
 
   Rxn<GetOfferResponseModel> offerResponseModel = Rxn();
-
+  void clearCustomers() {
+    allCustomers.clear();
+    currentPage.value = 1;
+    hasMore.value = true;
+  }
   Future<GetOfferResponseModel?> getAllOffers() async {
     try {
+
       offerResponseModel.value = await Repository().getAllOffer();
 
       return offerResponseModel.value;

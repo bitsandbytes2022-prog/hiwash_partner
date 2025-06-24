@@ -127,7 +127,6 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
         if (scannedCode.isNotEmpty && scannedCode.split('.').length == 3) {
           try {
             Map<String, dynamic> decodedToken = JwtDecoder.decode(scannedCode);
-            print("ScanData----->${scanData.code}");
 
             String id = decodedToken['CustomerId'];
             String offerId = decodedToken['OfferId'];
