@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiwash_partner/featuers/dashboard/view/widget/second_drawer/second_drawer_controller/second_drawer_controller.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
+import 'package:hiwash_partner/widgets/components/app_snack_bar.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -61,11 +62,11 @@ class SecondDrawer extends StatelessWidget {
             title: StringConstant.kChatWithSupport.tr,
             image: Assets.iconsIcChat,
           ),
-          drawerRowWidget(
+        /*  drawerRowWidget(
             onTap: () => Get.toNamed(RouteStrings.helpDeskTicketScreen),
             title: StringConstant.kHelpDeskTicket.tr,
             image: Assets.iconsIcTicket,
-          ),
+          ),*/
           drawerRowWidget(
             onTap: () {
               //await controller.getFaq();
@@ -74,11 +75,7 @@ class SecondDrawer extends StatelessWidget {
             title: StringConstant.kFAQ.tr,
             image: Assets.iconsIcFaq,
           ),
-          /*   drawerRowWidget(
-            onTap: () => Get.toNamed(RouteStrings.faqScreen),
-            title: 'FAQ’s',
-            image: Assets.iconsIcFaq,
-          ),*/
+
           drawerRowWidget(
             onTap: () {
               Get.toNamed(RouteStrings.stepByStepGuideScreen);
@@ -97,26 +94,65 @@ class SecondDrawer extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ImageView(height: 23, width: 23, path: Assets.iconsPhone),
-                      Text("+974 7048 7070", style: w500_12a()),
-                    ],
+                  child: GestureDetector(
+                    onTap: () async {
+                      final Uri phoneUri = Uri(
+                        scheme: 'tel',
+                        path: '+97470487070',
+                      );
+
+                      if (await canLaunchUrl(phoneUri)) {
+                        await launchUrl(
+                          phoneUri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      } else {
+                        appSnackBar(
+                          message: StringConstant.kSomethingWentWrong.tr,
+                        );
+                      }
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ImageView(
+                          height: 23,
+                          width: 23,
+                          path: Assets.iconsPhone,
+                        ),
+                        Text("+974 7048 7070", style: w500_12a()),
+                      ],
+                    ),
                   ),
                 ),
                 DotedVerticalLine(),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ImageView(
-                        height: 23,
-                        width: 23,
-                        path: Assets.iconsIcAtSign,
-                      ),
-                      Text("info@hiwash.com", style: w500_12a()),
-                    ],
+                  child: GestureDetector(
+                    onTap: () async {
+                      final Uri emailUri = Uri(
+                        scheme: 'mailto',
+                        path: 'info@hiwash.com',
+                      );
+
+                      if (await canLaunchUrl(emailUri)) {
+                        await launchUrl(emailUri);
+                      } else {
+                        appSnackBar(
+                          message: StringConstant.kSomethingWentWrong.tr,
+                        );
+                      }
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ImageView(
+                          height: 23,
+                          width: 23,
+                          path: Assets.iconsIcAtSign,
+                        ),
+                        Text("info@hiwash.com", style: w500_12a()),
+                      ],
+                    ),
                   ),
                 ),
               ],
