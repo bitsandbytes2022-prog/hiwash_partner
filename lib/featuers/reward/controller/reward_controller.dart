@@ -30,7 +30,6 @@ class RewardController extends GetxController {
   RxBool isAscending = true.obs;
   RxString sortByText = StringConstant.kSortByExpiry.obs;
 
-  //RxString  sortByText = StringConstant.kSortByExpiry.tr.obs;
 
   @override
   void onInit() {
@@ -143,7 +142,7 @@ class RewardController extends GetxController {
 
 
   void toggleSortOrder() {
-    if (sortByText.value.tr == StringConstant.kSortByExpiry) {
+    if (sortByText.value.tr == StringConstant.kSortByExpiry.tr) {
       isAscending.value = true;
     } else {
       isAscending.value = !isAscending.value;
@@ -158,10 +157,9 @@ class RewardController extends GetxController {
           : bDate.compareTo(aDate);
     });
 
-    sortByText.value =
-        isAscending.value
-            ? StringConstant.kAscendingOrder.tr
-            : StringConstant.kDescendingOrder.tr;
+    sortByText.value = isAscending.value
+            ? StringConstant.kAscendingOrder
+            : StringConstant.kDescendingOrder;
 
     offerResponseModel.update((val) {
       val?.data?.offers = offers;

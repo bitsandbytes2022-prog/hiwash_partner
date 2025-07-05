@@ -116,7 +116,7 @@ class _RewardedCustomersScreenState extends State<RewardedCustomersScreen> {
                   return rewardedCustomerController.isLoading.value
                       ? Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Center(child: CircularProgressIndicator()),
+                    child: Center(child: CircularProgressIndicator(   strokeWidth: 2,       color: Colors.blue,)),
                   )
                       : SizedBox(); // No loader when finished
                 }

@@ -107,7 +107,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: SizedBox(
                         height: 16,
                         width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        child: CircularProgressIndicator(strokeWidth: 2,
+                        color: Colors.blue,
+
+                        ),
                       ),
                     ),
                 errorWidget:
@@ -156,7 +159,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: SizedBox(
                         height: 16,
                         width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        child: CircularProgressIndicator(strokeWidth: 2
+                        ,          color: Colors.blue,),
                       ),
                     ),
                 errorWidget:

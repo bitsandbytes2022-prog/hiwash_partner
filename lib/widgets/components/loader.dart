@@ -9,7 +9,10 @@ showLoader() {
       barrierDismissible: true,
       const AbsorbPointer(
           child: Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Colors.blue,
+          strokeWidth: 2,
+        ),
       )));
 }
 

@@ -8,6 +8,7 @@ import 'package:hiwash_partner/featuers/profile/view/widget/custome_switch.dart'
 import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/network_manager/local_storage.dart';
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../generated/assets.dart';
 import '../../../route/route_strings.dart';
@@ -106,7 +107,7 @@ class DrawerScreen extends StatelessWidget {
                     child: SizedBox(
                       height: 24,
                       width: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2),
+                      child: CircularProgressIndicator(strokeWidth: 2,          color: Colors.blue,),
                     ),
                   ),
                   errorWidget: (context, url, error) => Image.asset(
@@ -144,21 +145,38 @@ class DrawerScreen extends StatelessWidget {
           },
         )),
         drawerRowWidget(
-          padding: EdgeInsets.only(left: 15,right: 15,top: 15),
           onTap: () => Get.toNamed(RouteStrings.languageScreen),
           title: StringConstant.kLanguage.tr,
           image: Assets.iconsIcLanguage,
         ),
         drawerRowWidget(
-          onTap: () => Get.toNamed(RouteStrings.privacySettingScreen),
+          onTap: ()async{
+            String url="https://loyaltyapistaging.pipelinedns.com/api/content/privacypolicy.html";
+
+            if(! await launchUrl(Uri.parse(url))){
+
+              throw Exception('${StringConstant.kCouldNotLaunch.tr} $url');
+            };
+
+          },
           title: StringConstant.kPrivacySettings.tr,
           image: Assets.iconsIcPrivacy,
         ),
-        drawerRowWidget(
-          onTap: () => Get.to(TermsAndConditionScreen()),
-          title: StringConstant.kTermsAndConditions.tr,
+
+        drawerRowWidget (
+          onTap: ()async{
+            String url="https://loyaltyapistaging.pipelinedns.com/api/content/workerterms.html";
+
+            if(! await launchUrl(Uri.parse(url))){
+
+              throw Exception('${StringConstant.kCouldNotLaunch.tr} $url');
+            };
+
+          },
+          title: StringConstant.kTermsAndCondition.tr,
           image: Assets.iconsIcTermscondition,
         ),
+
         Spacer(),
         //  60.heightSizeBox,
         GestureDetector(
@@ -206,29 +224,38 @@ class DrawerScreen extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          Padding(
-            padding: padding??EdgeInsets.only(left: 18, right: 12),
-            child: Row(
-              children: [
-                ImageView(path: image, height: 20, width: 20),
-                10.widthSizeBox,
-                Text(title, style: w500_14a(color: AppColor.c2C2A2A)),
-                Spacer(),
-                ImageView(
-                  path: Assets.iconsBlackForwardArrow,
-                  height: 13,
-                  width: 13,
-                ),
-              ],
+          Container(
+            color: Colors.transparent,
+            child: Padding(
+              padding:padding?? EdgeInsets.only(
+                left: 18,
+                right: 12,
+                top: 15,
+                bottom: 15,
+              ),
+              child: Row(
+                children: [
+                  ImageView(path: image, height: 20, width: 20),
+                  10.widthSizeBox,
+                  Text(title, style: w500_14a(color: AppColor.c2C2A2A)),
+                  Spacer(),
+                  ImageView(
+                    path: Assets.iconsBlackForwardArrow,
+                    height: 13,
+                    width: 13,
+                  ),
+                ],
+              ),
             ),
           ),
-          18.heightSizeBox,
-          dashedLineWidget ? DashedLineWidget() : SizedBox(),
-          18.heightSizeBox,
+          dashedLineWidget ? DotedHorizontalLine() : SizedBox(),
+
         ],
       ),
     );
   }
+
+
   Widget drawerRowForTheme({
     required String title,
     required String image,
@@ -241,7 +268,7 @@ class DrawerScreen extends StatelessWidget {
         Container(
           color: Colors.transparent,
           child: Padding(
-            padding:  EdgeInsets.only(left: 15,right: 15,bottom: 15),
+            padding:  EdgeInsets.only(left: 15,right: 15,bottom: 15,top: 15),
             child: Row(
               children: [
                 ImageView(path: image, height: 20, width: 20),

@@ -333,7 +333,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
               6.heightSizeBox,
 
               Container(
-                height: 187,
+                height: 160,
                 margin: EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
@@ -359,13 +359,14 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                                 width: 30,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
+                                  color: Colors.blue,
                                 ),
                               ),
                             ),
                         errorWidget:
                             (context, url, error) => Image.asset(
                               Assets.imagesImOffer,
-                              height: 187,
+                              height: 160,
                               width: double.infinity,
                               fit: BoxFit.fitWidth,
                             ),
@@ -426,120 +427,11 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
             children: [
               DashedLineWidget(),
 
-             /* Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(top: 21, bottom: 21),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35,
-                        vertical: 13,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColor.white,
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(color: AppColor.cC31848),
-                      ),
-                      child: Text(
-                        StringConstant.kDecline.tr,
-                        style: w500_14a(color: AppColor.cC31848),
-                      ),
-                    ),
-                  ),
-                  15.widthSizeBox,
-
-                  Obx(() {
-                    return isLoading.value
-                        ? CircularProgressIndicator()
-                        : GestureDetector(
-                          onTap: () async {
-                            isLoading.value = true;
-                            Get.back();
-                            try {
-                              final response = await validateOfferQr(
-                                customerData.data!.customerDetails!.id
-                                    .toString(),
-                                offerDetailList.id.toString(),
-                              );
-
-                              if (response != null) {
-                                /// Toto add this line
-                                await rewardController.fetchCustomersById(
-                                  getOffersByIdModel
-                                          .value
-                                          ?.offerDetailList
-                                          ?.first
-                                          .id
-                                          .toString() ??
-                                      '',
-                                );
-                                //await rewardController.getRewardedCustomersById();
-                                showDialog(
-                                  barrierDismissible: false,
-                                  context: Get.context!,
-                                  builder: (context) {
-                                    return AppDialog(
-                                      onTap: () {
-                                        Get.back();
-                                      },
-                                      padding: EdgeInsets.zero,
-                                      child: successDialog(
-                                        customerDataSuccess: customerData,
-                                        offerDetailListSuccess: offerDetailList,
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                            } catch (e) {
-                              appSnackBar(
-                                message:
-                                    StringConstant
-                                        .kSomethingWentWrongTryAgain
-                                        .tr,
-                              );
-                            } finally {
-                              isLoading.value = false;
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 35,
-                              vertical: 13,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColor.c1F9D70,
-                              borderRadius: BorderRadius.circular(100),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColor.c1F9D70.withOpacity(0.30),
-                                  spreadRadius: 0,
-                                  blurRadius: 15,
-                                  offset: Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: Text(
-                              StringConstant.kApprove.tr,
-                              style: w500_14a(color: AppColor.white),
-                            ),
-                          ),
-                        );
-                  }),
-                ],
-              ),*/
-
               Obx(() {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Decline button – Always visible
                     GestureDetector(
                       onTap: () {
                         Get.back();
@@ -559,13 +451,15 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                       ),
                     ),
 
-                    // If offer is valid, then show Approve button next to Decline
                     if (isOfferValid.value) ...[
                       const SizedBox(width: 15),
                       isLoading.value
                           ? const Padding(
                         padding: EdgeInsets.only(left: 15),
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
                       )
                           : GestureDetector(
                         onTap: () async {

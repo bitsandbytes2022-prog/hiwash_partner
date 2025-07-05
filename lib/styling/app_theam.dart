@@ -39,7 +39,7 @@
           borderRadius: BorderRadius.circular(28),
         ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColor.c5C6B72.withOpacity(0.5)),
+          borderSide: BorderSide(color: AppColor.c5C6B72.withOpacity(1)),
           borderRadius: BorderRadius.circular(28),
         ),
       ),

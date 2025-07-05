@@ -70,12 +70,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget _buildLoadingIndicator() {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
-      child: Center(child: CircularProgressIndicator()),
+      child: Center(child: CircularProgressIndicator(  strokeWidth: 2,        color: Colors.blue,)),
     );
   }
 
   Widget _buildPaginationLoader() {
-    return Center(child: CircularProgressIndicator());
+    return Center(child: CircularProgressIndicator(    strokeWidth: 2,      color: Colors.blue,));
   }
 
   Widget _notificationContainer(NotificationData item, int index) {
@@ -89,7 +89,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         color:
             controller.selectedStates[index].value
                 ? AppColor.white
-                : AppColor.cF6F7FF,
+                : AppColor.white,
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

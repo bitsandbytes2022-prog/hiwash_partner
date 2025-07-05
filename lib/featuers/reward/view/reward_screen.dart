@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
+import 'package:hiwash_partner/widgets/components/app_dialog.dart';
 
 import 'package:hiwash_partner/widgets/components/image_view.dart'
     show ImageView;
@@ -27,6 +28,8 @@ class RewardScreen extends StatelessWidget {
   RewardScreen({super.key});
 
   final RewardController rewardController = Get.put(RewardController());
+  final GlobalKey<ScaffoldState> sortValue = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> filterValue = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +113,16 @@ class RewardScreen extends StatelessWidget {
                         );
                       }),
                       Padding(
-                        padding:  EdgeInsets.only(right: 15, bottom: 9),
-                        child: Text(
-                          StringConstant.kRewardedCustomers.tr,
-                          style: w500_12p(
-                            color: AppColor.white.withOpacity(0.7),
-                          ),
+                        padding: EdgeInsets.only(right: 15, bottom: 9),
+                        child: Builder(
+                          builder: (context) {
+                            return Text(
+                              StringConstant.kRewardedCustomers.tr,
+                              style: w500_12p(
+                                color: AppColor.white.withOpacity(0.7),
+                              ),
+                            );
+                          }
                         ),
                       ),
                     ],
@@ -138,8 +145,107 @@ class RewardScreen extends StatelessWidget {
                           rewardController.isVisibleAllOffer.value =
                               !rewardController.isVisibleAllOffer.value;
                           rewardController.getOfferCategories();
-                        },
+                          final RenderBox box =
+                          filterValue.currentContext!.findRenderObject() as RenderBox;
+                          final Offset position = box.localToGlobal(Offset.zero);
+
+                          Get.dialog(
+
+                              barrierColor: Colors.transparent,
+                              GestureDetector(
+                                onTap: () => Get.back(),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child:  Center(
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          top: position!.dy +20, // example offset
+                                          left: position!.dx,
+                                          child:Container(
+                                            alignment: Alignment.topLeft,
+                                            width: 160,
+                                            height: 180,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.deepPurple.withOpacity(0.3),
+                                                  blurRadius: 10,
+                                                  offset: Offset(0, 10),
+                                                ),
+                                              ],
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                              vertical: 15,
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    rewardController.selectedCategoryIndex.value =
+                                                    0;
+                                                    rewardController.isVisibleAllOffer.value =
+                                                    false;
+                                                    Get.back();
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                                    child: Text(
+                                                      StringConstant.kAllOffers.tr,
+                                                      style: w400_14p(color: AppColor.c2C2A2A),
+                                                    ),
+                                                  ),
+                                                ),
+                                                ...(rewardController
+                                                    .getOfferCategoriesModel
+                                                    .value
+                                                    ?.offerCategory ??
+                                                    [])
+                                                    .asMap()
+                                                    .entries
+                                                    .map(
+                                                      (entry) => GestureDetector(
+                                                    onTap: () {
+                                                      rewardController
+                                                          .selectedCategoryIndex
+                                                          .value = entry.key + 1;
+                                                      rewardController
+                                                          .isVisibleAllOffer
+                                                          .value = false;
+                                                      Get.back();
+                                                    },
+                                                    child: Container(
+                                                      padding: EdgeInsets.symmetric(
+                                                        vertical: 8,
+                                                      ),
+                                                      child: Text(
+                                                        entry.value.name ?? '',
+                                                        style: w400_14p(
+                                                          color: AppColor.c2C2A2A,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                                    .toList(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ));
+
+                          },
                         child: Container(
+                          key: filterValue,
                           padding: EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 15,
@@ -202,14 +308,97 @@ class RewardScreen extends StatelessWidget {
                         onTap: () {
                           rewardController.isVisible.value =
                               !rewardController.isVisible.value;
+                          final RenderBox box =
+                          sortValue.currentContext!.findRenderObject() as RenderBox;
+                          final Offset position = box.localToGlobal(Offset.zero);
+
+                    Get.dialog(
+
+                        barrierColor: Colors.transparent,
+                        GestureDetector(
+                      onTap: () => Get.back(),
+                      child: Material(
+                        color: Colors.transparent,
+                        child:  Center(
+                          child: Stack(
+                            children: [
+                              Positioned(
+                          top: position!.dy +20, // example offset
+                            left: position!.dx,
+                                child: Container(
+                                  alignment: Alignment.center,
+
+                                  width: 160,
+                                  height: 130,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.deepPurple.withOpacity(0.3),
+                                        blurRadius: 10,
+                                        offset: Offset(0, 10),
+                                      ),
+                                    ],
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 15,
+                                  ),
+                                  //   color: Colors.white,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          rewardController.toggleSortOrder();
+                                          rewardController.update();
+                                          rewardController.isVisible.value =
+                                          false;
+                                          Get.back();
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(vertical: 8),
+                                          child: Text(
+                                            StringConstant.kAscendingOrder.tr,
+                                          ),
+                                        ),
+                                      ),
+
+                                      GestureDetector(
+                                        onTap: () {
+                                          rewardController.toggleSortOrder();
+                                          rewardController.update();
+                                          rewardController.isVisible.value =
+                                          false;
+                                          Get.back();
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(vertical: 8),
+                                          child: Text(
+                                            StringConstant.kDescendingOrder.tr,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ));
+
                         },
                         child: Container(
+                          key: sortValue,
                           padding: EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 15,
                           ),
                           decoration: BoxDecoration(
-                            //color: AppColor.c5C6B72.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(28),
                             border: Border.all(
                               color: AppColor.c5C6B72.withOpacity(0.3),
@@ -217,23 +406,16 @@ class RewardScreen extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                            /*  Obx(
-                                () => Text(
-                                  rewardController.sortByText.value.tr,
-                                  style: w400_12p(color: AppColor.c2C2A2A),
-                                ),
-                              ),*/
-                              Obx(
-                                    () => Flexible(
+                              Obx(() {
+                                return Flexible(
                                   child: Text(
                                     rewardController.sortByText.value.tr,
-                                    //maxLines: 1,
+
                                     overflow: TextOverflow.ellipsis,
                                     style: w400_12p(color: AppColor.c2C2A2A),
                                   ),
-                                ),
-                              ),
-
+                                );
+                              }),
 
                               Spacer(),
                               ImageView(
@@ -293,158 +475,11 @@ class RewardScreen extends StatelessWidget {
                       ),
                     );
                   }
-
                   return buildOffersGrid(filteredOffers);
                 }),
               ],
             ),
-            Obx(
-              () =>
-                  rewardController.isVisible.value
-                      ? Positioned(
-                        top: 50,
-                        right: 0,
-                        child: Container(
-                          alignment: Alignment.center,
 
-                          width: 160,
-                          height: 130,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.deepPurple.withOpacity(0.3),
-                                blurRadius: 10,
-                                offset: Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 15,
-                          ),
-                          //   color: Colors.white,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  rewardController.toggleSortOrder();
-                                  rewardController.update();
-                                  rewardController.isVisible.value =
-                                      false; // Hide popup
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                  child: Text(
-                                    StringConstant.kAscendingOrder.tr,
-                                  ),
-                                ),
-                              ),
-
-                              GestureDetector(
-                                onTap: () {
-                                  rewardController.toggleSortOrder();
-                                  rewardController.update();
-                                  rewardController.isVisible.value =
-                                      false; // Hide popup
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                  child: Text(
-                                    StringConstant.kDescendingOrder.tr,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                      : Container(),
-            ),
-            Obx(
-              () =>
-                  rewardController.isVisibleAllOffer.value
-                      ? Positioned(
-                        top: 50,
-                        left: 0,
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          width: 160,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.deepPurple.withOpacity(0.3),
-                                blurRadius: 10,
-                                offset: Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 15,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  rewardController.selectedCategoryIndex.value =
-                                      0;
-                                  rewardController.isVisibleAllOffer.value =
-                                      false;
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 8),
-                                  child: Text(
-                                    StringConstant.kAllOffers.tr,
-                                    style: w400_14p(color: AppColor.c2C2A2A),
-                                  ),
-                                ),
-                              ),
-                              ...(rewardController
-                                          .getOfferCategoriesModel
-                                          .value
-                                          ?.offerCategory ??
-                                      [])
-                                  .asMap()
-                                  .entries
-                                  .map(
-                                    (entry) => GestureDetector(
-                                      onTap: () {
-                                        rewardController
-                                            .selectedCategoryIndex
-                                            .value = entry.key + 1;
-                                        rewardController
-                                            .isVisibleAllOffer
-                                            .value = false;
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 8,
-                                        ),
-                                        child: Text(
-                                          entry.value.name ?? '',
-                                          style: w400_14p(
-                                            color: AppColor.c2C2A2A,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ],
-                          ),
-                        ),
-                      )
-                      : Container(),
-            ),
           ],
         ),
       ],
@@ -480,11 +515,13 @@ class RewardScreen extends StatelessWidget {
                 ),
               ),
               builder: (BuildContext context) {
-                return CustomBottomSheet(child: viewOfferDetailBottomSheet(),onBackTap: (){
-                Get.back();
-                 // rewardController.getOffersByIdModel.value=null;
-
-                },);
+                return CustomBottomSheet(
+                  child: viewOfferDetailBottomSheet(),
+                  onBackTap: () {
+                    Get.back();
+                    // rewardController.getOffersByIdModel.value=null;
+                  },
+                );
               },
             ).then((_) {
               rewardController.isSelected.value = 1;
@@ -498,241 +535,16 @@ class RewardScreen extends StatelessWidget {
       },
     );
   }
+
   Widget viewOfferDetailBottomSheet() {
-    rewardController.clearCustomers(); // Clear previous customers
-    return Expanded(
-        child: SingleChildScrollView(
-        child: Obx(() {
-      var rewardDetail = rewardController.getOffersByIdModel.value?.offerDetailList?.first;
-      if (rewardDetail == null) {
-        return Center(child: CircularProgressIndicator());
-      }
-      return Padding(
-        padding: const EdgeInsets.all(1.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            20.heightSizeBox,
-            Container(
-              height: 187,
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  color: AppColor.c2C2A2A.withOpacity(0.2),
-                ),
-              ),
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: CachedNetworkImage(
-                      height: 187,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      imageUrl: rewardDetail.bannerImageUrl?.isNotEmpty == true
-                          ? rewardDetail.bannerImageUrl!
-                          : Assets.imagesImOffer,
-                      placeholder: (context, url) => Center(
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        Assets.imagesImOffer,
-                        height: 187,
-                        width: double.infinity,
-                        fit: BoxFit.fitWidth,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 35,
-                    left: 14,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        DateTimeWidget(title: rewardDetail.businessName),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(rewardDetail.title ?? '', style: w700_16a(color: AppColor.c2C2A2A)),
-                  Text(rewardDetail.offerDetails ?? '', style: w400_12p()),
-                  13.heightSizeBox,
-                  Center(
-                    child: CountdownOrDateTimer(expiryDateStr: rewardDetail.expiryDate ?? ''),
-                  ),
-                  18.heightSizeBox,
-                  // Selection buttons
-                  Obx(() => Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: Get.width,
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppColor.cF6F7FF,
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: AppColor.c5C6B72.withOpacity(0.15)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                rewardController.isSelected.value = 1;
-                                rewardController.update();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
-                                decoration: BoxDecoration(
-                                  color: rewardController.isSelected.value == 1
-                                      ? AppColor.c142293
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    StringConstant.kDetail.tr,
-                                    style: w600_12a(
-                                      color: rewardController.isSelected.value == 1
-                                          ? AppColor.white
-                                          : AppColor.c455A64,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 25),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () async {
-                                rewardController.isSelected.value = 2;
-                                showLoader();
-                                await rewardController.fetchCustomersById(rewardDetail.id.toString());
-                                hideLoader();
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
-                                decoration: BoxDecoration(
-                                  color: rewardController.isSelected.value == 2
-                                      ? AppColor.c142293
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    StringConstant.rewardedCustomers.tr,
-                                    style: w600_12a(
-                                      color: rewardController.isSelected.value == 2
-                                          ? AppColor.white
-                                          : AppColor.c455A64,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )),
-                  15.heightSizeBox,
-                  if (rewardController.isSelected.value == 1)
-                    Text(rewardDetail.description ?? ''),
-                  if (rewardController.isSelected.value == 2)
-                    Obx(() {
-                      final customers = rewardController.allCustomers;
-
-                      if (customers.isEmpty && rewardController.isLoading.value) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-
-                      if (customers.isEmpty) {
-                        return Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(StringConstant.kNoRewardedCustomerFound.tr),
-                        );
-                      }
-
-                      return ListView.separated(
-                        controller: rewardController.scrollController,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: customers.length + (rewardController.hasMore.value ? 1 : 0),
-                        separatorBuilder: (context, index) => Column(
-                          children: [
-                            10.heightSizeBox,
-                            DashedLineWidget(),
-                            10.heightSizeBox,
-                          ],
-                        ),
-                        itemBuilder: (context, index) {
-                          if (index < customers.length) {
-                            final customer = customers[index];
-                            return Row(
-                              children: [
-                                ProfileImageView(
-                                  radiusStack: 4,
-                                  radius: 17,
-                                  isVisibleStack: false,
-                                  imagePath: customer.profilePicUrl ?? '',
-                                ),
-                                9.widthSizeBox,
-                                Expanded(
-                                  child: Text(
-                                    customer.customerName ?? '',
-                                    style: w600_12a(color: AppColor.c2C2A2A),
-                                  ),
-                                ),
-                                20.widthSizeBox,
-                                Text(
-                                  formatServerDate(customer.redeemedAt ?? ''),
-                                  style: w400_10a(),
-                                ),
-                              ],
-                            );
-                          } else {
-                            // This is the loading indicator for pagination
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
-                          }
-                        },
-                      );
-                    }),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }),
-    ));
-  }
-
-/*  Widget viewOfferDetailBottomSheet() {
-    rewardController.  clearCustomers();
+    rewardController.clearCustomers();
     return Expanded(
       child: SingleChildScrollView(
         child: Obx(() {
           var rewardDetail =
               rewardController.getOffersByIdModel.value?.offerDetailList?.first;
           if (rewardDetail == null) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(      strokeWidth: 2,    color: Colors.blue,));
           }
           return Padding(
             padding: const EdgeInsets.all(1.0),
@@ -761,7 +573,6 @@ class RewardScreen extends StatelessWidget {
                               rewardDetail.bannerImageUrl?.isNotEmpty == true
                                   ? rewardDetail.bannerImageUrl!
                                   : Assets.imagesImOffer,
-
                           placeholder:
                               (context, url) => Center(
                                 child: SizedBox(
@@ -769,6 +580,7 @@ class RewardScreen extends StatelessWidget {
                                   width: 30,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
+                                    color: Colors.blue,
                                   ),
                                 ),
                               ),
@@ -788,14 +600,12 @@ class RewardScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             DateTimeWidget(title: rewardDetail.businessName),
-
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-                // DashedLineWidget(),
                 SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -841,35 +651,26 @@ class RewardScreen extends StatelessWidget {
                                       rewardController.update();
                                     },
                                     child: Container(
-
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 20,
                                         vertical: 9,
                                       ),
                                       decoration: BoxDecoration(
                                         color:
-                                            rewardController.isSelected.value == 1
+                                            rewardController.isSelected.value ==
+                                                    1
                                                 ? AppColor.c142293
                                                 : Colors.transparent,
                                         borderRadius: BorderRadius.circular(30),
-                                        boxShadow:
-                                            rewardController.isSelected.value == 1
-                                                ? [
-                                                  BoxShadow(
-                                                    color: AppColor.c142293
-                                                        .withOpacity(0.25),
-                                                    blurRadius: 10,
-                                                    offset: Offset(0, 5),
-                                                  ),
-                                                ]
-                                                : [],
                                       ),
                                       child: Center(
                                         child: Text(
                                           StringConstant.kDetail.tr,
                                           style: w600_12a(
                                             color:
-                                                rewardController.isSelected.value ==
+                                                rewardController
+                                                            .isSelected
+                                                            .value ==
                                                         1
                                                     ? AppColor.white
                                                     : AppColor.c455A64,
@@ -884,7 +685,6 @@ class RewardScreen extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () async {
                                       rewardController.isSelected.value = 2;
-
                                       showLoader();
                                       await rewardController.fetchCustomersById(
                                         rewardDetail.id.toString(),
@@ -898,32 +698,28 @@ class RewardScreen extends StatelessWidget {
                                       ),
                                       decoration: BoxDecoration(
                                         color:
-                                            rewardController.isSelected.value == 2
+                                            rewardController.isSelected.value ==
+                                                    2
                                                 ? AppColor.c142293
                                                 : Colors.transparent,
                                         borderRadius: BorderRadius.circular(30),
-                                        boxShadow:
-                                            rewardController.isSelected.value == 2
-                                                ? [
-                                                  BoxShadow(
-                                                    color: AppColor.c142293
-                                                        .withOpacity(0.25),
-                                                    blurRadius: 10,
-                                                    offset: Offset(0, 5),
-                                                  ),
-                                                ]
-                                                : [],
                                       ),
                                       child: Center(
-                                        child: Text(
-                                          StringConstant.rewardedCustomers.tr,
-                                          style: w600_12a(
-                                            color:
-                                                rewardController.isSelected.value ==
-                                                        2
-                                                    ? AppColor.white
-                                                    : AppColor.c455A64,
-                                          ),
+                                        child: Obx(
+                                           () {
+                                            return Text(
+                                              StringConstant.rewardedCustomers.tr,
+                                              style: w600_12a(
+                                                color:
+                                                    rewardController
+                                                                .isSelected
+                                                                .value ==
+                                                            2
+                                                        ? AppColor.white
+                                                        : AppColor.c455A64,
+                                              ),
+                                            );
+                                          }
                                         ),
                                       ),
                                     ),
@@ -944,7 +740,10 @@ class RewardScreen extends StatelessWidget {
                           if (customers.isEmpty &&
                               rewardController.isLoading.value) {
                             return const Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: Colors.blue,
+                                strokeWidth: 2,
+                              ),
                             );
                           }
 
@@ -1007,7 +806,10 @@ class RewardScreen extends StatelessWidget {
                                     vertical: 10,
                                   ),
                                   child: Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.blue,
+                                    ),
                                   ),
                                 );
                               }
@@ -1023,5 +825,5 @@ class RewardScreen extends StatelessWidget {
         }),
       ),
     );
-  }*/
+  }
 }
