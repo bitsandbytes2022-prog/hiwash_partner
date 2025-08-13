@@ -2,12 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
-import 'package:hiwash_partner/widgets/components/app_dialog.dart';
-
 import 'package:hiwash_partner/widgets/components/image_view.dart'
     show ImageView;
 import 'package:hiwash_partner/widgets/sized_box_extension.dart';
-
 import '../../../generated/assets.dart';
 import '../../../styling/app_color.dart';
 import '../../../styling/app_font_anybody.dart';
@@ -79,7 +76,7 @@ class RewardScreen extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: 10, bottom: 9),
                         child: Text(
-                          StringConstant.kTotalReward.tr,
+                          StringConstant.kAvailableOffers.tr,
                           style: w500_12p(
                             color: AppColor.white.withOpacity(0.7),
                           ),
@@ -410,7 +407,7 @@ class RewardScreen extends StatelessWidget {
                                 return Flexible(
                                   child: Text(
                                     rewardController.sortByText.value.tr,
-
+                                  
                                     overflow: TextOverflow.ellipsis,
                                     style: w400_12p(color: AppColor.c2C2A2A),
                                   ),

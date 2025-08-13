@@ -115,11 +115,9 @@ class AppHomeBg extends StatelessWidget {
 
             5.heightSizeBox,
             child1??   Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: padding ?? EdgeInsets.symmetric(horizontal: 16),
-                  child: child,
-                ),
+              child: Padding(
+                padding: padding ?? EdgeInsets.symmetric(horizontal: 16),
+                child: child,
               ),
             ),
           ],

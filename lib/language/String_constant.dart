@@ -230,9 +230,23 @@ class StringConstant {
 
   /// Reward screen
 static const kTotalReward="kTotalReward";
+static const kAvailableOffers="kAvailableOffers";
 static const kAllOffers="kAllOffers";
 static const kUnknown="kUnknown";
 static const kDetail="kDetail";
 static const kNoRewardedCustomerFound="kNoRewardedCustomerFound";
 static const kNoAewardsAvailable="kNoAewardsAvailable";
+
+  static const kJan = "kJan";
+  static const kFev = "kFev";
+  static const kMar = "kMar";
+  static const kApr = "kApr";
+  static const kMay = "kMay";
+  static const kJun = "kJun";
+  static const kJul = "kJul";
+  static const kAug = "kAug";
+  static const kSep = "kSep";
+  static const kAct = "kAct";
+  static const kNov = "kNov";
+  static const kDec = "kDec";
 }

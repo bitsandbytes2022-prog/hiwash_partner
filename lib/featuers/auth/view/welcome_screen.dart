@@ -101,7 +101,7 @@ class WelcomeScreen extends StatelessWidget {
                         15.heightSizeBox,
                         GestureDetector(
                           onTap: ()async{
-                            String url="https://loyaltyapistaging.pipelinedns.com/api/content/workerterms.html";
+                            String url="https://loyaltyapistaging.pipelinedns.com/api/content/partnerterms.html";
 
                             if(! await launchUrl(Uri.parse(url))){
 

@@ -342,7 +342,7 @@ class MyAccountScreen extends StatelessWidget {
                         ),
                       ),
 
-                      Positioned(
+                    /*  Positioned(
                         top: 9,
                         right: 8,
                         child: ImageView(
@@ -350,7 +350,7 @@ class MyAccountScreen extends StatelessWidget {
                           height: 18,
                           width: 18,
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ],

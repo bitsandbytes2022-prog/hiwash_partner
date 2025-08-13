@@ -24,7 +24,7 @@ class BgWidget extends StatelessWidget {
           Stack(
             children: [
               ImageView(path: imagePath),
-              Positioned(
+           /*   Positioned(
                 top: 50,
                 right: 16,
                 child: GestureDetector(
@@ -36,7 +36,7 @@ class BgWidget extends StatelessWidget {
                     style: w400_16a(color: AppColor.white),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
           Container(

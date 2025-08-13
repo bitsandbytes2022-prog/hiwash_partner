@@ -135,6 +135,8 @@ class Languages extends Translations {
       "kDetail": "Detail",
       "kNoRewardedCustomerFound": "No rewarded customers found.",
       "kNoAewardsAvailable": "No rewards available",
+      "kAvailableOffers": "Available Offers",
+
 
       /// subscription screen
       "kFullAccessSubscription": "Full access subscription",
@@ -286,6 +288,20 @@ class Languages extends Translations {
       "kScanToUnlockWeekly":
           "Scan to unlock weekly washes,\nexclusive offers, and amazing deals!",
       "kYourPaymentIsComplete": "Your payment is complete, and your\n",
+
+      "kJan": "Jan",
+      "kFev": "Feb",
+      "kMar": "Mar",
+      "kApr": "Apr",
+      "kMay": "May",
+      "kJun": "Jun",
+      "kJul": "Jul",
+      "kAug": "Aug",
+      "kSep": "Sep",
+      "kAct": "Oct",
+      "kNov": "Nov",
+      "kDec": "Dec",
+
     },
 
     'ar_SA': {
@@ -570,6 +586,8 @@ class Languages extends Translations {
       "kScanToUnlockWeekly":
       "امسح لفتح الغسلات الأسبوعية\nوالعروض الحصرية والصفقات المذهلة!",
       "kYourPaymentIsComplete": "تم إكمال الدفع، و\n",
+      "kAvailableOffers": "العروض المتاحة"
+
     },
   };
 }

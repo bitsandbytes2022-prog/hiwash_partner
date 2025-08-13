@@ -165,7 +165,7 @@ class DrawerScreen extends StatelessWidget {
 
         drawerRowWidget (
           onTap: ()async{
-            String url="https://loyaltyapistaging.pipelinedns.com/api/content/workerterms.html";
+            String url="https://loyaltyapistaging.pipelinedns.com/api/content/partnerterms.html";
 
             if(! await launchUrl(Uri.parse(url))){
 

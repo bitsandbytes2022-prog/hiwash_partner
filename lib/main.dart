@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+        //  locale:Locale('en', 'US'),
           locale: initialLocale,
           translations: Languages(),
           fallbackLocale: const Locale('en', 'US'),

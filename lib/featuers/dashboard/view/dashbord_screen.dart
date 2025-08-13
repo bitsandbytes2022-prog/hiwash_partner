@@ -9,6 +9,7 @@ import 'package:hiwash_partner/featuers/profile/view/drawer_screen.dart';
 import 'package:hiwash_partner/featuers/qr_scanner/view/qr_scanner.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:hiwash_partner/featuers/reward/view/reward_screen.dart';
+import 'package:hiwash_partner/featuers/rewarded_customers/controller/rewarded_customer_controller.dart';
 import 'package:hiwash_partner/featuers/rewarded_customers/view/rewarded_customers_screen.dart';
 import 'package:hiwash_partner/generated/assets.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
@@ -55,6 +56,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _openDrawer('first');
     } else {
       setState(() {
+        RewardedCustomerController rewardedCustomerController =Get.isRegistered<RewardedCustomerController>()?Get.find<RewardedCustomerController>():Get.put(RewardedCustomerController());
+     rewardedCustomerController.clearDateFilter();
+
         _currentIndex = index;
       });
     }

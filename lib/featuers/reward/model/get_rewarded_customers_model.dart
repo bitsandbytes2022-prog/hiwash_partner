@@ -35,7 +35,7 @@ class GetRewardedCustomersData {
   String? profilePicUrl;
   String? offerTitle;
   String? redeemedAt;
-  int? isPremium;
+  bool? isPremium;
 
   GetRewardedCustomersData(
       {this.customerId,
@@ -55,7 +55,8 @@ class GetRewardedCustomersData {
   /*  profilePicUrl = json['profilePicUrl'];*/
     offerTitle = json['offerTitle'];
     redeemedAt = json['redeemedAt'];
-    isPremium = json['isPremium'];
+    isPremium = json['isPremium'] == 1;
+
   }
 
   Map<String, dynamic> toJson() {
@@ -70,75 +71,3 @@ class GetRewardedCustomersData {
   }
 }
 
-
-/*
-class GetRewardedCustomersModel {
-  bool? success;
-  String? message;
-  List<Data>? data;
-
-  GetRewardedCustomersModel({this.success, this.message, this.data});
-
-  GetRewardedCustomersModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Data {
-  int? customerId;
-  String? customerName;
-  String? profilePicUrl;
-  String? offerTitle;
-  String? redeemedAt;
-  int? isPremium;
-
-  Data(
-      {this.customerId,
-        this.customerName,
-        this.profilePicUrl,
-        this.offerTitle,
-        this.redeemedAt,
-        this.isPremium});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    customerId = json['customerId'];
-
-    customerName = json['customerName'];
-    profilePicUrl =
-    json['profilePicUrl'] != null
-        ? "${ApiConstant.baseImageUrl}${json['profilePicUrl']}"
-        : null;
-    offerTitle = json['offerTitle'];
-    redeemedAt = json['redeemedAt'];
-    isPremium = json['isPremium'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['customerId'] = this.customerId;
-    data['customerName'] = this.customerName;
-    data['profilePicUrl'] = this.profilePicUrl;
-    data['offerTitle'] = this.offerTitle;
-    data['redeemedAt'] = this.redeemedAt;
-    data['isPremium'] = this.isPremium;
-    return data;
-  }
-}
-*/
