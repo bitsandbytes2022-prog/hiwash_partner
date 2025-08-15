@@ -19,7 +19,7 @@
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
 
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColor.cEAE8E8.withOpacity(1)),
+          borderSide: BorderSide(color: AppColor.blue),
           borderRadius: BorderRadius.circular(28),
         ),
         errorBorder: OutlineInputBorder(

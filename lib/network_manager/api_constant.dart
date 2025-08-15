@@ -19,6 +19,8 @@ static  getGuides(int entityType)=>"/content/guides?entityType=$entityType";
 static  getTermsAndConditions(int entityType)=>"/content/termsandconditions?entityType=$entityType";
 static const getOffers="$baseUrl/offer";
 static  getOffersById(int id)=>"$baseUrl/offer/$id";
+static getOffersByFilter(int id) => "$baseUrl/offer?filterType=$id";
+
 static  const offerCategories="$baseUrl/offer/categories";
 static const validateWashQr="$baseUrl/worker/validate-wash-qr";
 static const notificationUrl="$baseUrl/notification";

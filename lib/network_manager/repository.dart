@@ -247,6 +247,16 @@ class Repository {
     return GetOffersByIdModel.fromJson(response);
   }
 
+  Future<GetOfferResponseModel> getAllOfferFilterRepo(int id) async {
+    // print("url--->:${ApiConstant.getOffers}");
+    Map<String, dynamic> response = await dioHelper.get(
+      url: ApiConstant.getOffersByFilter(id),
+      isAuthRequired: true,
+    );
+    // print("Response--->: $response");
+    return GetOfferResponseModel.fromJson(response);
+  }
+
 
 
   Future<GetCustomerData> getCustomerData(int id) async {

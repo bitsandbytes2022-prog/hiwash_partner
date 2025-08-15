@@ -29,7 +29,21 @@ class RewardController extends GetxController {
   final ScrollController scrollController = ScrollController();
   RxBool isAscending = true.obs;
   RxString sortByText = StringConstant.kSortByExpiry.obs;
+  final List<String> offerFilterList = [
+    "Limited time",
+    "Limited quantity",
+    "Redeemed",
+    "Free",
+    "Discounted",
+  ];
 
+  RxInt selectedFilterIndex = 0
+      .obs;
+
+  Future<void> applyFilter(int index) async {
+    selectedFilterIndex.value = index;
+    await getAllOffersByFilter(index);
+  }
 
   @override
   void onInit() {
@@ -37,7 +51,17 @@ class RewardController extends GetxController {
     super.onInit();
     scrollController.addListener(onScroll);
   }
+  Future<GetOfferResponseModel?> getAllOffersByFilter(int id) async {
+    try {
 
+      offerResponseModel.value = await Repository().getAllOfferFilterRepo(id);
+
+      return offerResponseModel.value;
+    } catch (error) {
+      print("Error fetching Offers Get All: $error");
+    }
+    return null;
+  }
   void fetchInitialCustomers() {
     currentPage.value = 1;
     hasMore.value = true;
@@ -116,6 +140,8 @@ class RewardController extends GetxController {
     }
     return null;
   }
+
+
 
   Future<GetOffersByIdModel?> getOffersById(int id) async {
     try {

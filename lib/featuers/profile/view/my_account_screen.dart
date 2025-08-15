@@ -103,295 +103,297 @@ class MyAccountScreen extends StatelessWidget {
       headingText: StringConstant.kMyAccount.tr,
       iconRight: SizedBox(),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 1),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              15.heightSizeBox,
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  Obx(() {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(color: AppColor.blue.withOpacity(0.2)),
-                          ),
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.white,
-                            child: drawerProfileController.imageFile.value != null
-                                ? ClipOval(
-                              child: Image.file(
-                                drawerProfileController.imageFile.value!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                                : (userData?.profilePicUrl != null &&
-                                userData!.profilePicUrl!.trim().isNotEmpty &&
-                                Uri.tryParse(userData.profilePicUrl!)?.hasAbsolutePath == true)
-                                ? ClipOval(
-                              child: Image.network(
-                                userData.profilePicUrl!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(
-                                    Assets.imagesDemoProfile,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              ),
-                            )
-                                : ClipOval(
-                              child: Image.asset(
-                                Assets.imagesDemoProfile,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // Loader over image
-                        if (drawerProfileController.isUploadingProfileImage.value)
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                15.heightSizeBox,
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Obx(() {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
                           Container(
-                            width: 112,
-                            height: 112,
+                            padding: EdgeInsets.all(1),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.3),
-                              shape: BoxShape.circle,
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(color: AppColor.blue.withOpacity(0.2)),
                             ),
-                            child: const Center(
-                              child: SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: CircularProgressIndicator(
-                                  //color: Colors.white,
-                                  strokeWidth: 2,
-                                  color: Colors.blue,
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.white,
+                              child: drawerProfileController.imageFile.value != null
+                                  ? ClipOval(
+                                child: Image.file(
+                                  drawerProfileController.imageFile.value!,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                                  : (userData?.profilePicUrl != null &&
+                                  userData!.profilePicUrl!.trim().isNotEmpty &&
+                                  Uri.tryParse(userData.profilePicUrl!)?.hasAbsolutePath == true)
+                                  ? ClipOval(
+                                child: Image.network(
+                                  userData.profilePicUrl!,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      Assets.imagesDemoProfile,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
+                              )
+                                  : ClipOval(
+                                child: Image.asset(
+                                  Assets.imagesDemoProfile,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                           ),
-                      ],
-                    );
-                  }),
-
-                  // Edit Icon
-                  GestureDetector(
-                    onTap: () async {
-                      await _showImageSourceDialog(context);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: AppColor.cC41949,
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(color: AppColor.white, width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColor.cC41949.withOpacity(0.25),
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
+            
+                          // Loader over image
+                          if (drawerProfileController.isUploadingProfileImage.value)
+                            Container(
+                              width: 112,
+                              height: 112,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.3),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: CircularProgressIndicator(
+                                    //color: Colors.white,
+                                    strokeWidth: 2,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
-                      ),
-                      child: ImageView(
-                        path: Assets.iconsIcEdit,
-                        height: 17,
-                        width: 17,
+                      );
+                    }),
+            
+                    // Edit Icon
+                    GestureDetector(
+                      onTap: () async {
+                        await _showImageSourceDialog(context);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: AppColor.cC41949,
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(color: AppColor.white, width: 3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColor.cC41949.withOpacity(0.25),
+                              blurRadius: 10,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: ImageView(
+                          path: Assets.iconsIcEdit,
+                          height: 17,
+                          width: 17,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-
-              11.heightSizeBox,
-              Obx(() {
-                final updatedUserData = dashboardController.getPartnerModel.value?.data?.first;
-                return Text(
-                  updatedUserData?.businessName ?? '',
-                  style: w700_16a(color: AppColor.c2C2A2A),
-                );
-              }),
-
-
-              31.heightSizeBox,
-              HiWashTextField(
-                controller: drawerProfileController.businessNameController,
-                keyboardType: TextInputType.name,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                    RegExp(r"[a-zA-Z0-9 .,@#&/\-':()+=]"),
-                  ),
-                ],
-                hintText: StringConstant.kName.tr,
-                labelText: StringConstant.kName.tr,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return StringConstant.kPleaseEnterYourName.tr;
-                  }
-                  return null;
-                },
-
-              ),
-              20.heightSizeBox,
-              HiWashTextField(
-                readOnly: true,
-                controller: drawerProfileController.phoneController,
-                keyboardType: TextInputType.number,
-                hintText: StringConstant.kPhone.tr,
-                labelText: StringConstant.kPhone.tr,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return StringConstant.kPleaseEnterYourPhoneNumber.tr;
-                  }
-                  return null;
-                },
-              ),
-              20.heightSizeBox,
-              HiWashTextField(
-                readOnly: true,
-                controller: drawerProfileController.emailController,
-                keyboardType: TextInputType.emailAddress,
-                hintText: StringConstant.kEmail.tr,
-                labelText: StringConstant.kEmail.tr,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return StringConstant.kPleaseEnterYourEmail.tr;
-                  }
-                  return null;
-                },
-              ),
-
-              20.heightSizeBox,
-
-              Column(
-                children: [
-                  Stack(
-                    children: [
-                      TextFormField(
-                        maxLines: 3,
-                        controller: drawerProfileController.addressController,
-                        style: w400_14p(
-                          color: AppColor.c2C2A2A.withOpacity(0.9),
-                        ),
-                        decoration: InputDecoration(
-                          fillColor: AppColor.cF6F7FF,
-                          hintText: StringConstant.kAddress.tr,
-                          labelText: StringConstant.kAddress.tr,
-                          filled: true,
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          labelStyle: w400_13a(color: AppColor.c455A64),
-                          hintStyle: w400_14p(
-                            color: AppColor.c2C2A2A.withOpacity(0.40),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.cEAE8E8.withOpacity(0.5),
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.c5C6B72.withOpacity(0.5),
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.c5C6B72.withOpacity(0.5),
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.c5C6B72.withOpacity(0.5),
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.c5C6B72.withOpacity(0.5),
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.c5C6B72.withOpacity(0.5),
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                        ),
-                      ),
-
-                    /*  Positioned(
-                        top: 9,
-                        right: 8,
-                        child: ImageView(
-                          path: Assets.iconsMyLocation,
-                          height: 18,
-                          width: 18,
-                        ),
-                      ),*/
-                    ],
-                  ),
-                ],
-              ),
-              60.heightSizeBox,
-              Obx(() {
-                return HiWashButton(
-                  isLoading: drawerProfileController.isLoading.value,
-                  text: StringConstant.kSave.tr,
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      drawerProfileController.uploadProfile(
-                        drawerProfileController.businessNameController.text,
-                        drawerProfileController.phoneController.text,
-                        drawerProfileController.addressController.text,
-                      );
-
-                    await  dashboardController.getPartnerDataById(
-                        dashboardController
-                            .getPartnerModel
-                            .value
-                            ?.data
-                            ?.first
-                            .id ??
-                            0,
-
-                      );
-                    } else {
-                     /* Get.snackbar(
-                        'Invalid Input',
-                        'Please fix the errors in the form',
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );*/
+                  ],
+                ),
+            
+                11.heightSizeBox,
+                Obx(() {
+                  final updatedUserData = dashboardController.getPartnerModel.value?.data?.first;
+                  return Text(
+                    updatedUserData?.businessName ?? '',
+                    style: w700_16a(color: AppColor.c2C2A2A),
+                  );
+                }),
+            
+            
+                31.heightSizeBox,
+                HiWashTextField(
+                  controller: drawerProfileController.businessNameController,
+                  keyboardType: TextInputType.name,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r"[a-zA-Z0-9 .,@#&/\-':()+=]"),
+                    ),
+                  ],
+                  hintText: StringConstant.kName.tr,
+                  labelText: StringConstant.kName.tr,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return StringConstant.kPleaseEnterYourName.tr;
                     }
+                    return null;
                   },
-                );
-              }),
-
-              30.heightSizeBox,
-            ],
+            
+                ),
+                20.heightSizeBox,
+                HiWashTextField(
+                  readOnly: true,
+                  controller: drawerProfileController.phoneController,
+                  keyboardType: TextInputType.number,
+                  hintText: StringConstant.kPhone.tr,
+                  labelText: StringConstant.kPhone.tr,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return StringConstant.kPleaseEnterYourPhoneNumber.tr;
+                    }
+                    return null;
+                  },
+                ),
+                20.heightSizeBox,
+                HiWashTextField(
+                  readOnly: true,
+                  controller: drawerProfileController.emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  hintText: StringConstant.kEmail.tr,
+                  labelText: StringConstant.kEmail.tr,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return StringConstant.kPleaseEnterYourEmail.tr;
+                    }
+                    return null;
+                  },
+                ),
+            
+                20.heightSizeBox,
+            
+                Column(
+                  children: [
+                    Stack(
+                      children: [
+                        TextFormField(
+                          maxLines: 3,
+                          controller: drawerProfileController.addressController,
+                          style: w400_14p(
+                            color: AppColor.c2C2A2A.withOpacity(0.9),
+                          ),
+                          decoration: InputDecoration(
+                            fillColor: AppColor.cF6F7FF,
+                            hintText: StringConstant.kAddress.tr,
+                            labelText: StringConstant.kAddress.tr,
+                            filled: true,
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            labelStyle: w400_13a(color: AppColor.c455A64),
+                            hintStyle: w400_14p(
+                              color: AppColor.c2C2A2A.withOpacity(0.40),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color:AppColor.blue,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColor.c5C6B72.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColor.c5C6B72.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColor.c5C6B72.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColor.c5C6B72.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColor.c5C6B72.withOpacity(0.5),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                        ),
+            
+                      /*  Positioned(
+                          top: 9,
+                          right: 8,
+                          child: ImageView(
+                            path: Assets.iconsMyLocation,
+                            height: 18,
+                            width: 18,
+                          ),
+                        ),*/
+                      ],
+                    ),
+                  ],
+                ),
+                60.heightSizeBox,
+                Obx(() {
+                  return HiWashButton(
+                    isLoading: drawerProfileController.isLoading.value,
+                    text: StringConstant.kSave.tr,
+                    onTap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        drawerProfileController.uploadProfile(
+                          drawerProfileController.businessNameController.text,
+                          drawerProfileController.phoneController.text,
+                          drawerProfileController.addressController.text,
+                        );
+            
+                      await  dashboardController.getPartnerDataById(
+                          dashboardController
+                              .getPartnerModel
+                              .value
+                              ?.data
+                              ?.first
+                              .id ??
+                              0,
+            
+                        );
+                      } else {
+                       /* Get.snackbar(
+                          'Invalid Input',
+                          'Please fix the errors in the form',
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );*/
+                      }
+                    },
+                  );
+                }),
+            
+                30.heightSizeBox,
+              ],
+            ),
           ),
         ),
       ),
