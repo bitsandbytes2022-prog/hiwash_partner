@@ -131,14 +131,16 @@ class RewardController extends GetxController {
   }
   Future<GetOfferResponseModel?> getAllOffers() async {
     try {
-
+isLoading.value=true;
       offerResponseModel.value = await Repository().getAllOffer();
 
       return offerResponseModel.value;
     } catch (error) {
       print("Error fetching Offers Get All: $error");
+    }finally{
+        isLoading.value=false;
     }
-    return null;
+    //return null;
   }
 
 

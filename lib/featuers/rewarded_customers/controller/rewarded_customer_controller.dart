@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../network_manager/repository.dart';
+import '../../../network_manager/utils/api_response.dart';
+import '../../../widgets/components/loader.dart';
 import '../../reward/model/get_rewarded_customers_model.dart';
 
 class RewardedCustomerController extends GetxController {
@@ -13,6 +15,9 @@ class RewardedCustomerController extends GetxController {
   final int pageSize = 10;
   RxBool isLoading = false.obs;
   final RxBool hasMore = true.obs;
+  int userRating = 0;
+  final TextEditingController commentController = TextEditingController();
+
 
   final Rxn<DateTime> selectedDate = Rxn<DateTime>();
   final RxBool isDateFilterEnabled = false.obs;
@@ -157,204 +162,34 @@ class RewardedCustomerController extends GetxController {
     searchController.dispose();
     super.onClose();
   }
-}
+  Rxn<ApiResponse> apiResponse = Rxn<ApiResponse>();
 
-
-
-///------------------
-
-/*
-class RewardedCustomerController extends GetxController {
-  final TextEditingController searchController = TextEditingController();
-  final ScrollController scrollController = ScrollController();
-
-  final RxInt currentPage = 1.obs;
-  final int pageSize = 10;
-  final RxBool isLoading = false.obs;
-  final RxBool hasMore = true.obs;
-
-  final Rx<DateTime> selectedDate = DateTime.now().obs;
-  final RxList<GetRewardedCustomersData> allCustomers = <GetRewardedCustomersData>[].obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    scrollController.addListener(onScroll);
-    searchController.text = formatDateForTextField(selectedDate.value);
-    fetchInitialCustomers();
-  }
-
-  /// Called when user selects a new date
-  void setSelectedDate(DateTime date) {
-    selectedDate.value = date;
-    searchController.text = formatDateForTextField(date);
-    fetchInitialCustomers();
-  }
-
-  /// Called when user taps refresh icon
-  void refreshSelectedDateData() {
-    fetchInitialCustomers();
-  }
-
-  /// Reset and fetch data from page 1
-  void fetchInitialCustomers() {
-    currentPage.value = 1;
-    hasMore.value = true;
-    allCustomers.clear();
-    fetchCustomers();
-  }
-
-  /// Pagination trigger on scroll
-  void onScroll() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100 &&
-        !isLoading.value &&
-        hasMore.value) {
-      fetchCustomers();
-    }
-  }
-
-  /// Actual API calling logic
-  Future<void> fetchCustomers() async {
-    if (isLoading.value || !hasMore.value) return;
-
-    isLoading.value = true;
+  Future<dynamic> getRating(
+      String rating,
+      String offerRedemptionId,
+      String comment,
+      ) async {
     try {
-      final requestBody = {
-        "offerId": "0",
-        "pageNo": currentPage.value.toString(),
-        "pageSize": pageSize.toString(),
-        "redeemedDate": selectedDate.value.toIso8601String().split("T")[0], // yyyy-MM-dd
-      };
+      isLoading.value = true;
 
-      final result = await Repository().GetRewardedCustomersRepo(requestBody);
+      final response = await Repository().rating({
+        "rating": rating,
+        "offerRedemptionId": offerRedemptionId,
+        "comment": comment,
+      });
 
-      if (result != null && result.getRewardedCustomersData != null) {
-        final newList = result.getRewardedCustomersData!;
-        if (newList.isNotEmpty) {
-          allCustomers.addAll(newList);
-          currentPage.value++;
-          hasMore.value = newList.length == pageSize; // if less than 10, no more data
-        } else {
-          hasMore.value = false;
-        }
-      } else {
-        hasMore.value = false;
-      }
+      return response;
+
     } catch (e) {
-      print("Error fetching customers: $e");
-      hasMore.value = false;
+      print("Error in getRating: $e");
+      return null;
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// For displaying selected date in text field
-  String formatDateForTextField(DateTime date) {
-    return "${date.day}/${date.month}/${date.year}";
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    searchController.dispose();
-    super.onClose();
-  }
-}
-*/
-
-
-///---------------
-/*
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-
-import '../../../network_manager/repository.dart';
-import '../../reward/model/get_rewarded_customers_model.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../../../network_manager/repository.dart';
-
-class RewardedCustomerController extends GetxController {
-  TextEditingController searchController = TextEditingController();
-  var currentPage = 1.obs;
-  final int pageSize = 10;
-  final RxList<GetRewardedCustomersData> allCustomers = <GetRewardedCustomersData>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxBool hasMore = true.obs;
-  final ScrollController scrollController = ScrollController();
-
-  Rx<DateTime> selectedDate = DateTime.now().obs;
-
-  List<GetRewardedCustomersData> fullCustomerList = [];
-  void setSelectedDate(DateTime date) {
-    selectedDate.value = date;
-    fetchInitialCustomers();
-  }
-  void resetDateToToday() {
-    selectedDate.value = DateTime.now();
-    fetchInitialCustomers();
-  }
-  @override
-  void onInit() {
-    super.onInit();
-    scrollController.addListener(onScroll);
-  }
-
-  void fetchInitialCustomers() {
-    currentPage.value = 1;
-    hasMore.value = true;
-    allCustomers.clear();
-    fetchCustomers();
-  }
-
-  void onScroll() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 300) {
-      if (!isLoading.value && hasMore.value) {
-        fetchCustomers();
-      }
-    }
-  }
-
-  Future<void> fetchCustomers() async {
-    if (isLoading.value || !hasMore.value) return;
-    isLoading.value = true;
-
-    Map<String, dynamic> requestBody = {
-      "offerId": "0",
-      "pageNo": currentPage.value.toString(),
-      "pageSize": pageSize.toString(),
-    };
-
-    try {
-      final result = await Repository().GetRewardedCustomersRepo(requestBody);
-
-      if (result != null && result.getRewardedCustomersData != null) {
-        final newList = result.getRewardedCustomersData!;
-        if (newList.isNotEmpty) {
-          allCustomers.addAll(newList);
-          currentPage.value++;
-          if (newList.length < pageSize) {
-            hasMore.value = false;
-          }
-        } else {
-          hasMore.value = false;
-        }
-      } else {
-        hasMore.value = false;
-      }
-    } catch (e) {
-      print("Error fetching customers: $e");
-      hasMore.value = false;
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  @override
-  void onClose() {
-    scrollController.dispose();
-    super.onClose();
-  }
 }
 
-*/
+
+
+

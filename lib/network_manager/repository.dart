@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hiwash_partner/featuers/auth/model/login_model.dart';
+import 'package:hiwash_partner/network_manager/utils/api_response.dart';
 
 
 import '../featuers/auth/model/get_token_model.dart';
@@ -325,4 +326,15 @@ class Repository {
     // print("Response--->: $response");
     return GetOfferCategoriesModel.fromJson(response);
   }
+  Future<dynamic> rating(Object requestBody) async {
+    // print("Rating body--->: $requestBody");
+    Map<String, dynamic> response = await dioHelper.post(
+      url: ApiConstant.offerRating,
+      requestBody: requestBody,
+      isAuthRequired: true,
+    );
+    //  print("Rating Response--->: $response");
+    return response;
+  }
+
 }

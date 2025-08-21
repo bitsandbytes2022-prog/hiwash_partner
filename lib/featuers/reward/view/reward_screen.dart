@@ -20,6 +20,9 @@ import '../../../widgets/components/offers_grid_container.dart';
 import '../../../widgets/components/profile_image_view.dart';
 import '../controller/reward_controller.dart';
 import '../model/offer_response_model.dart';
+
+
+///----------------
 class RewardScreen extends StatelessWidget {
   RewardScreen({super.key});
 
@@ -183,7 +186,9 @@ class RewardScreen extends StatelessWidget {
                                                   (entry) => GestureDetector(
                                                 onTap: () async {
                                                   Get.back();
+                                                  showLoader();
                                                   await rewardController.applyFilter(entry.key);
+                                                  hideLoader();
                                                 },
                                                 child: Padding(
                                                   padding:
@@ -239,169 +244,6 @@ class RewardScreen extends StatelessWidget {
                       ),
                     ),
 
-                    /*    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          rewardController.isVisibleAllOffer.value =
-                          !rewardController.isVisibleAllOffer.value;
-                          rewardController.getOfferCategories();
-                          final RenderBox box =
-                          filterValue.currentContext!.findRenderObject() as RenderBox;
-                          final Offset position = box.localToGlobal(Offset.zero);
-
-                          Get.dialog(
-
-                              barrierColor: Colors.transparent,
-                              GestureDetector(
-                                onTap: () => Get.back(),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child:  Center(
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          top: position!.dy +20,
-                                          left: position!.dx,
-                                          child:Container(
-                                            alignment: Alignment.topLeft,
-                                            width: 160,
-                                            height: 180,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(15),
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.deepPurple.withOpacity(0.3),
-                                                  blurRadius: 10,
-                                                  offset: Offset(0, 10),
-                                                ),
-                                              ],
-                                            ),
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 20,
-                                              vertical: 15,
-                                            ),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    rewardController.selectedCategoryIndex.value =
-                                                    0;
-                                                    rewardController.isVisibleAllOffer.value =
-                                                    false;
-                                                    Get.back();
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      StringConstant.kAllOffers.tr,
-                                                      style: w400_14p(color: AppColor.c2C2A2A),
-                                                    ),
-                                                  ),
-                                                ),
-                                                ...(rewardController
-                                                    .getOfferCategoriesModel
-                                                    .value
-                                                    ?.offerCategory ??
-                                                    [])
-                                                    .asMap()
-                                                    .entries
-                                                    .map(
-                                                      (entry) => GestureDetector(
-                                                    onTap: () {
-                                                      rewardController
-                                                          .selectedCategoryIndex
-                                                          .value = entry.key + 1;
-                                                      rewardController
-                                                          .isVisibleAllOffer
-                                                          .value = false;
-                                                      Get.back();
-                                                    },
-                                                    child: Container(
-                                                      padding: EdgeInsets.symmetric(
-                                                        vertical: 8,
-                                                      ),
-                                                      child: Text(
-                                                        entry.value.name ?? '',
-                                                        style: w400_14p(
-                                                          color: AppColor.c2C2A2A,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )
-                                                    .toList(),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ));
-
-                        },
-                        child: Container(
-                          key: filterValue,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 15,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(28),
-                            border: Border.all(
-                              color: AppColor.c5C6B72.withOpacity(0.3),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Obx(() {
-                                final categories =
-                                    rewardController
-                                        .getOfferCategoriesModel
-                                        .value
-                                        ?.offerCategory;
-                                final selectedIndex =
-                                    rewardController
-                                        .selectedCategoryIndex
-                                        .value;
-
-                                final extendedCategories = [
-                                  null,
-                                  ...?categories,
-                                ];
-
-                                final categoryName =
-                                selectedIndex == 0
-                                    ? StringConstant.kAllOffers.tr
-                                    : (selectedIndex > 0 &&
-                                    selectedIndex <
-                                        extendedCategories.length)
-                                    ? extendedCategories[selectedIndex]
-                                    ?.name ??
-                                    StringConstant.kUnknown.tr
-                                    : StringConstant.kAllOffers.tr;
-
-                                return Text(
-                                  categoryName,
-                                  style: w400_12p(color: AppColor.c2C2A2A),
-                                );
-                              }),
-                              Spacer(),
-                              ImageView(
-                                path: Assets.iconsIcDropDown,
-                                height: 5,
-                                width: 9,
-                                color: AppColor.c2C2A2A,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),*/
                     8.widthSizeBox,
                     Expanded(
                       child: GestureDetector(
@@ -533,6 +375,7 @@ class RewardScreen extends StatelessWidget {
                 ),
                 19.heightSizeBox,
                 Obx(() {
+                  final isLoading = rewardController.isLoading.value;
                   final List<Offers> allOffers =
                       rewardController.offerResponseModel.value?.data?.offers ??
                           [];
@@ -569,7 +412,7 @@ class RewardScreen extends StatelessWidget {
                       child: Container(
                         height: 200,
                         child: Text(
-                          '',
+                          "No data found",
                           style: w400_18p(color: AppColor.c2C2A2A),
                         ),
                       ),
@@ -927,7 +770,7 @@ class RewardScreen extends StatelessWidget {
     );
   }
 }
-
+///----------------
 /*
 class RewardScreen extends StatelessWidget {
   RewardScreen({super.key});

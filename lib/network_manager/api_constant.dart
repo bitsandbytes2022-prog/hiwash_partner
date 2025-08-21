@@ -35,6 +35,7 @@ static  getCustomerId(int id)=>"$baseUrl/customer/$id";
 static const validateOfferQr="$baseUrl/offer/validate-offer-qr";
 static const approvalStatus="$baseUrl/offer/approval-status";
 static const String notification = "$baseUrl/notification/0";
+  static  const offerRating="$baseUrl/offer/rating";
 
 
 
