@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:hiwash_partner/styling/app_color.dart';
 
 showLoader() {
   Get.dialog(
@@ -10,7 +11,7 @@ showLoader() {
       const AbsorbPointer(
           child: Center(
         child: CircularProgressIndicator(
-          color: Colors.blue,
+          color: AppColor.blue,
           strokeWidth: 2,
         ),
       )));

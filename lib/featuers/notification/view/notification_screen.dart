@@ -70,12 +70,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget _buildLoadingIndicator() {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
-      child: Center(child: CircularProgressIndicator(  strokeWidth: 2,        color: Colors.blue,)),
+      child: Center(child: CircularProgressIndicator(  strokeWidth: 2,        color: AppColor.blue,)),
     );
   }
 
   Widget _buildPaginationLoader() {
-    return Center(child: CircularProgressIndicator(    strokeWidth: 2,      color: Colors.blue,));
+    return Center(child: CircularProgressIndicator(    strokeWidth: 2,      color: AppColor.blue,));
   }
 
   Widget _notificationContainer(NotificationData item, int index) {

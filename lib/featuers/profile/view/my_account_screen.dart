@@ -182,7 +182,7 @@ class MyAccountScreen extends StatelessWidget {
                                   child: CircularProgressIndicator(
                                     //color: Colors.white,
                                     strokeWidth: 2,
-                                    color: Colors.blue,
+                                    color: AppColor.blue,
                                   ),
                                 ),
                               ),

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
-import 'package:hiwash_partner/widgets/components/loader.dart';
 
 import '../../../network_manager/repository.dart';
 import '../model/get_offer_categories.dart';
@@ -30,7 +29,7 @@ class RewardController extends GetxController {
   RxBool isAscending = true.obs;
   RxString sortByText = StringConstant.kSortByExpiry.obs;
   final List<String> offerFilterList = [
-    "Limited time",
+    "Expiring soon",
     "Limited quantity",
     "Redeemed",
     "Free",
@@ -140,7 +139,6 @@ isLoading.value=true;
     }finally{
         isLoading.value=false;
     }
-    //return null;
   }
 
 

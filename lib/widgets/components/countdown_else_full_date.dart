@@ -88,7 +88,7 @@ class _CountdownElseFullDateState extends State<CountdownElseFullDate> {
     final m = remaining.inMinutes % 60;
     final s = remaining.inSeconds % 60;
 
-    final formattedCountdown = "$h:$m ${StringConstant.kHRS.tr} - ${_twoDigits(s)} ${StringConstant.kMINS.tr}{}";
+    final formattedCountdown = "$h:$m ${StringConstant.kHRS.tr} - ${_twoDigits(s)} ${StringConstant.kMINS.tr}";
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),

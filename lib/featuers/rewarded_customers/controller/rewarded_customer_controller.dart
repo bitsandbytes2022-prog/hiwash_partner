@@ -9,7 +9,7 @@ import '../../reward/model/get_rewarded_customers_model.dart';
 class RewardedCustomerController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-
+  var selectedOfferTitle = ''.obs;
   RxBool isCalenderSelected = false.obs;
   final RxInt currentPage = 1.obs;
   final int pageSize = 10;
@@ -44,6 +44,36 @@ class RewardedCustomerController extends GetxController {
     fetchInitialCustomers();
   }
 
+  List<GetRewardedCustomersData> get filteredCustomers {
+    var data = allCustomers;
+
+    if (selectedOfferTitle.value.isNotEmpty) {
+      data = data.where((c) => c.offerTitle == selectedOfferTitle.value).toList().obs;
+    }
+
+    if (rangeStartDate.value != null && rangeEndDate.value != null) {
+      data = data.where((c) {
+        if (c.redeemedAt == null) return false;
+        final redeemed = DateTime.parse(c.redeemedAt!);
+        return redeemed.isAfter(
+            rangeStartDate.value!.subtract(const Duration(days: 1))) &&
+            redeemed.isBefore(
+                rangeEndDate.value!.add(const Duration(days: 1)));
+      }).toList().obs;
+    }
+
+    return data;
+  }
+
+  /* List<GetRewardedCustomersData> get filteredCustomers {
+    if (selectedOfferTitle.value.isEmpty) {
+      return allCustomers;
+    } else {
+      return allCustomers
+          .where((c) => c.offerTitle == selectedOfferTitle.value)
+          .toList();
+    }
+  }*/
   void fetchInitialCustomers() {
     currentPage.value = 1;
     hasMore.value = true;
@@ -76,6 +106,8 @@ class RewardedCustomerController extends GetxController {
     rangeEndDate.value = end;
     focusedDay1 = focusedDay;
     selectedDay1 = null;
+    selectedOfferTitle.value = "";
+
 
     if (start != null && end != null) {
       currentPage.value = 1;
@@ -142,6 +174,8 @@ class RewardedCustomerController extends GetxController {
     isDateFilterEnabled.value = false;
     searchController.text = '';
     fetchInitialCustomers();
+    selectedOfferTitle.value = "";
+
   }
 
   void refreshSelectedDateData() {

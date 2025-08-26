@@ -40,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   final List<Widget> _pages = [
     RewardScreen(),
-    RewardedCustomersScreen(),
+      RewardedCustomersScreen(),
     NotificationScreen(),
   ];
 
@@ -112,7 +112,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         height: 16,
                         width: 16,
                         child: CircularProgressIndicator(strokeWidth: 2,
-                        color: Colors.blue,
+                        color: AppColor.blue,
 
                         ),
                       ),
@@ -164,7 +164,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         height: 16,
                         width: 16,
                         child: CircularProgressIndicator(strokeWidth: 2
-                        ,          color: Colors.blue,),
+                        ,          color: AppColor.blue,),
                       ),
                     ),
                 errorWidget:
@@ -192,16 +192,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           drawerEnableOpenDragGesture: false,
 
           body: AppHomeBg(
+
             iconLeft: SizedBox(),
             buttonPadding:
                 _currentIndex == 0
                     ? EdgeInsets.only(left: 16, right: 16, top: 40, bottom: 30)
                     : EdgeInsets.only(left: 16, right: 16, top: 40),
             headingText: _headings[_currentIndex].tr,
-            padding:
+            padding: (_currentIndex == 1 || _currentIndex == 2)
+                ? EdgeInsets.zero
+                : EdgeInsets.symmetric(horizontal: 16),
+          /*  padding:
                 _currentIndex == 2
                     ? EdgeInsets.zero
-                    : EdgeInsets.symmetric(horizontal: 16),
+                    : EdgeInsets.symmetric(horizontal: 16),*/
             iconRight: GestureDetector(
               onTap: () {
                 setState(() {

@@ -136,6 +136,8 @@ class Languages extends Translations {
       "kNoRewardedCustomerFound": "No rewarded customers found.",
       "kNoAewardsAvailable": "No rewards available",
       "kAvailableOffers": "Available Offers",
+      ///New
+      "kAvailableOffer": "Available Offer",
 
 
       /// subscription screen

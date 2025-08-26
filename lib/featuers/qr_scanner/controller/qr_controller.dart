@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
@@ -308,6 +310,295 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
   }
 
   Widget approveRewardDialog(
+      GetCustomerData customerData,
+      OfferDetailList offerDetailList,
+      ) {
+    return Obx(() {
+      if (!isOfferValid.value) {
+
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              20.heightSizeBox,
+              Text(
+                "Invalid Reward",
+                style: w700_18a(color:AppColor.white),
+                textAlign: TextAlign.center,
+              ),
+              40.heightSizeBox,
+
+              // Decline button only
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 35, vertical: 13),
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(color: AppColor.cC31848),
+                  ),
+                  child: Text(
+                    StringConstant.kDecline.tr,
+                    style: w500_14a(color: AppColor.cC31848),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  27.heightSizeBox,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          StringConstant.kApproveRewardSharing.tr,
+                          style: w700_18a(color: AppColor.c2C2A2A),
+                        ),
+                        Html(
+                          data: offerDetailList.offerDetails ?? "",
+                          style: {
+                            "body": Style(
+                              fontSize: FontSize(12),
+                              fontWeight: FontWeight.w400,
+                              color: AppColor.c2C2A2A,
+                            ),
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  6.heightSizeBox,
+                  Container(
+                    height: 160,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border:
+                      Border.all(color: AppColor.c2C2A2A.withOpacity(0.2)),
+                    ),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: CachedNetworkImage(
+                            height: 172,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            imageUrl: offerDetailList.image?.isNotEmpty == true
+                                ? offerDetailList.image!
+                                : Assets.imagesImOffer,
+                            placeholder: (context, url) => const Center(
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColor.blue,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Image.asset(
+                                  Assets.imagesImOffer,
+                                  height: 160,
+                                  width: double.infinity,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 35,
+                          left: 14,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CountdownElseFullDate(
+                                expiryDateStr:
+                                offerDetailList.expiryDate ?? '',
+                              ),
+                              13.heightSizeBox,
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  21.heightSizeBox,
+                  ProfileImageView(
+                    radius: 24,
+                    radiusStack: 6,
+                    imagePath: customerData
+                        .data?.customerDetails?.profilePicUrl ??
+                        '',
+                    isVisibleStack: customerData
+                        .data?.subscriptionDetails?.isPremium,
+                  ),
+                  11.heightSizeBox,
+                  Text(StringConstant.kCUSTOMER.tr, style: w400_10a()),
+                  Text(
+                    customerData.data?.customerDetails?.fullName ?? "",
+                    style: w400_16a(color: AppColor.c2C2A2A),
+                  ),
+                  11.heightSizeBox,
+                  CountdownOrDateTimer(
+                    expiryDateStr: offerDetailList.expiryDate ?? '',
+                  ),
+                  22.heightSizeBox,
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColor.cF6F7FF,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                children: [
+                  DashedLineWidget(),
+
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Decline button
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          margin:
+                          const EdgeInsets.only(top: 21, bottom: 21),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 35, vertical: 13),
+                          decoration: BoxDecoration(
+                            color: AppColor.white,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(color: AppColor.cC31848),
+                          ),
+                          child: Text(
+                            StringConstant.kDecline.tr,
+                            style: w500_14a(color: AppColor.cC31848),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+
+                      // Approve button
+                      isLoading.value
+                          ? const Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                          : GestureDetector(
+                        onTap: () async {
+                          isLoading.value = true;
+                          Get.back();
+
+                          try {
+                            final response = await validateOfferQr(
+                              customerData
+                                  .data!.customerDetails!.id
+                                  .toString(),
+                              offerDetailList.id.toString(),
+                            );
+
+                            if (response != null) {
+                              await rewardController.fetchCustomersById(
+                                getOffersByIdModel
+                                    .value?.offerDetailList
+                                    ?.first.id
+                                    .toString() ??
+                                    '',
+                              );
+
+                              showDialog(
+                                barrierDismissible: false,
+                                context: Get.context!,
+                                builder: (context) {
+                                  return AppDialog(
+                                    onTap: () => Get.back(),
+                                    padding: EdgeInsets.zero,
+                                    child: successDialog(
+                                      customerDataSuccess: customerData,
+                                      offerDetailListSuccess:
+                                      offerDetailList,
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          } catch (e) {
+                            appSnackBar(
+                              message: StringConstant
+                                  .kSomethingWentWrongTryAgain.tr,
+                            );
+                          } finally {
+                            isLoading.value = false;
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 21, bottom: 21),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 35, vertical: 13),
+                          decoration: BoxDecoration(
+                            color: AppColor.c1F9D70,
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColor.c1F9D70
+                                    .withOpacity(0.30),
+                                spreadRadius: 0,
+                                blurRadius: 15,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            StringConstant.kApprove.tr,
+                            style: w500_14a(color: AppColor.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+    });
+  }
+
+
+/*
+  Widget approveRewardDialog(
     GetCustomerData customerData,
     OfferDetailList offerDetailList,
   ) {
@@ -361,7 +652,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
                                 width: 30,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Colors.blue,
+                                  color: AppColor.blue,
                                 ),
                               ),
                             ),
@@ -533,6 +824,7 @@ class QrController extends GetxController with GetTickerProviderStateMixin {
       ],
     );
   }
+*/
 
   Widget successDialog({
     required GetCustomerData customerDataSuccess,

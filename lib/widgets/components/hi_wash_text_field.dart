@@ -163,7 +163,7 @@ class _HiWashTextFieldState extends State<HiWashTextField> {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: isReadOnly ? AppColor.c2C2A2A.withOpacity(0.2) : Colors.blue,
+            color: isReadOnly ? AppColor.c2C2A2A.withOpacity(0.2) : AppColor.blue,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(28),

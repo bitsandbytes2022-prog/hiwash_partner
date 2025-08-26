@@ -107,7 +107,7 @@ class DrawerScreen extends StatelessWidget {
                     child: SizedBox(
                       height: 24,
                       width: 24,
-                      child: CircularProgressIndicator(strokeWidth: 2,          color: Colors.blue,),
+                      child: CircularProgressIndicator(strokeWidth: 2,          color: AppColor.blue,),
                     ),
                   ),
                   errorWidget: (context, url, error) => Image.asset(

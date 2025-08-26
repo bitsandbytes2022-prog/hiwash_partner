@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hiwash_partner/language/String_constant.dart';
 import 'package:hiwash_partner/styling/app_color.dart';
@@ -29,11 +28,18 @@ class RewardedCustomersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Obx(() {
-      final groupedLogs = groupLogsByDate(controller.allCustomers);
+      final groupedLogs = groupLogsByDate(controller.filteredCustomers);
       final groupedKeys = groupedLogs.keys.toList();
 
+      final uniqueOfferTitles = controller.allCustomers
+          .map((c) => c.offerTitle ?? "")
+          .toSet()
+          .toList();
+
       return SingleChildScrollView(
+        padding: EdgeInsets.zero,
         controller: controller.scrollController,
         child: Stack(
           children: [
@@ -43,11 +49,12 @@ class RewardedCustomersScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     controller.isCalenderSelected.value =
-                        !controller.isCalenderSelected.value;
+                    !controller.isCalenderSelected.value;
                   },
                   child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
+                      horizontal: 16,
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
@@ -65,29 +72,75 @@ class RewardedCustomersScreen extends StatelessWidget {
                           ),
                           style: w500_14p(color: AppColor.c2C2A2A),
                         ),
+                        Spacer(),
+                        Text(
+                          "(${controller.filteredCustomers.length})",
+                          style: w500_14p(color: AppColor.c2C2A2A),
+                        ),
+                        5.widthSizeBox,
                         ImageView(
                           path: Assets.iconsIcDropDown,
                           height: 6,
                           width: 8,
                           color: AppColor.c2C2A2A,
                         ),
+                       // 8.widthSizeBox,
                       ],
                     ),
                   ),
                 ),
                 15.heightSizeBox,
 
+                SizedBox(
+                  height: 40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: uniqueOfferTitles.length,
+                    padding: const EdgeInsets.only(left: 20),
+                    itemBuilder: (context, index) {
+                      final title = uniqueOfferTitles[index];
+                      final isSelected =
+                          controller.selectedOfferTitle.value == title;
+
+                      return GestureDetector(
+                        onTap: () {
+                          if (isSelected) {
+                            controller.selectedOfferTitle.value =
+                            "";
+                          } else {
+                            controller.selectedOfferTitle.value = title;
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected ?AppColor.blue : Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color:isSelected ?AppColor.blue :AppColor.c455A64.withOpacity(0.2) )
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            title,
+                            style:  TextStyle(color: isSelected ?AppColor.white : Colors.black),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
                 if (groupedKeys.isEmpty && !controller.isLoading.value)
                   Padding(
                     padding: const EdgeInsets.only(top: 40),
-                    child: Text(
-                      "No rewarded customers found.",
+                    child: Text(StringConstant.kNoRewardedCustomerFound.tr,
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                   )
                 else
                   ListView.separated(
-                    padding: const EdgeInsets.only(top: 20, bottom: 30),
+                    padding: const EdgeInsets.only(top: 20, bottom: 30,left: 16,right: 16),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: groupedKeys.length,
@@ -113,39 +166,19 @@ class RewardedCustomersScreen extends StatelessWidget {
                               ],
                             ),
                             child: Column(
-                              children:
-                                  logs
-                                      .map(
-                                        (log) => Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 8,
-                                          ),
-                                          child: washLogRow(
-                                           // ratingText: log.rating.toString(),
-                                            log: log,
-                                           /* onTap: () {
-                                              controller.commentController
-                                                  .clear();
-                                              controller.userRating = 0;
-                                              controller
-                                                  .refreshSelectedDateData();
-                                              controller
-                                                  .selectedDate
-                                                  .value = DateTime.parse(
-                                                log.redeemedAt!,
-                                              );
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return successDialog(log);
-
-                                                },
-                                              );
-                                            },*/
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
+                              children: logs
+                                  .map(
+                                    (log) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                  child: washLogRow(
+                                    ratingText: log.voucherNumber,
+                                    log: log,
+                                  ),
+                                ),
+                              )
+                                  .toList(),
                             ),
                           ),
                           Container(
@@ -160,9 +193,19 @@ class RewardedCustomersScreen extends StatelessWidget {
                                 color: AppColor.c142293.withOpacity(0.10),
                               ),
                             ),
-                            child: Text(
-                              formatDate(logs[0].redeemedAt ?? ""),
-                              style: w500_10p(),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  formatDate(logs[0].redeemedAt ?? ""),
+                                  style: w500_10p(),
+                                ),
+                                5.widthSizeBox,
+                                Text(
+                                  "(${logs.length.toString()})",
+                                  style: w500_10p(),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -174,7 +217,7 @@ class RewardedCustomersScreen extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: CircularProgressIndicator(
-                      color: Colors.blue,
+                      color: AppColor.blue,
                       strokeWidth: 2,
                     ),
                   ),
@@ -190,10 +233,9 @@ class RewardedCustomersScreen extends StatelessWidget {
                 ),
                 child: TableCalendar(
                   focusedDay: controller.focusedDay1,
-                  firstDay: DateTime.utc(2025, 3, 4),
-                  lastDay: DateTime.utc(2090, 3, 4),
-                  selectedDayPredicate:
-                      (day) => isSameDay(day, controller.selectedDay1),
+                  firstDay: DateTime.utc(2020, 1, 1),
+                  lastDay: DateTime.now(),
+                  selectedDayPredicate: (day) => isSameDay(day, controller.selectedDay1),
                   calendarFormat: controller.calendarFormat,
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   weekNumbersVisible: false,
@@ -220,6 +262,8 @@ class RewardedCustomersScreen extends StatelessWidget {
         ),
       );
     });
+
+
   }
 
   Map<String, List<GetRewardedCustomersData>> groupLogsByDate(
@@ -274,7 +318,7 @@ class RewardedCustomersScreen extends StatelessWidget {
   Widget washLogRow({
     required GetRewardedCustomersData log,
     VoidCallback? onTap,
-    String? ratingText
+    String? ratingText,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -301,17 +345,27 @@ class RewardedCustomersScreen extends StatelessWidget {
                   ),
 
                   3.widthSizeBox,
-                  if (ratingText != null && ratingText != "0" && ratingText.isNotEmpty)
+                  if (ratingText != null &&
+                      ratingText != "0" &&
+                      ratingText.isNotEmpty)
                     Text(
-                      "(⭐$ratingText)",
+                      "($ratingText)",
                       style: w500_10a(color: AppColor.c455A64),
                     ),
-
                 ],
               ),
-              Text(
-                log.offerTitle ?? "",
-                style: w500_10a(color: AppColor.c455A64),
+              Row(
+                children: [
+                  Text(
+                    log.offerTitle ?? "",
+                    style: w500_10a(color: AppColor.c455A64),
+                  ),
+                  3.widthSizeBox,
+                  Text(
+                    "(${log.mobile.toString() ?? ""})",
+                    style: w500_10a(color: AppColor.c2C2A2A),
+                  ),
+                ],
               ),
             ],
           ),
@@ -328,7 +382,7 @@ class RewardedCustomersScreen extends StatelessWidget {
 
   Widget successDialog(GetRewardedCustomersData completedWashData) {
     return AppDialog(
-      onTap: (){
+      onTap: () {
         controller.commentController.clear();
         controller.userRating = 0;
         controller.fetchInitialCustomers();
@@ -340,7 +394,7 @@ class RewardedCustomersScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: Get.height/1.80,
+            height: Get.height / 1.80,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -356,7 +410,7 @@ class RewardedCustomersScreen extends StatelessWidget {
                       height: 100,
                     ),
                   ),
-              
+
                   21.heightSizeBox,
                   Text(
                     StringConstant.kWashComplete.tr,
@@ -369,9 +423,7 @@ class RewardedCustomersScreen extends StatelessWidget {
                   ),
                   9.heightSizeBox,
                   GetBuilder<RewardedCustomerController>(
-
                     builder: (controller) {
-
                       return RatingStars(
                         value: controller.userRating.toDouble(),
                         onValueChanged: (v) {
@@ -379,7 +431,8 @@ class RewardedCustomersScreen extends StatelessWidget {
                           controller.update();
                         },
                         starBuilder:
-                            (index, color) => Icon(Icons.star, color: color, size: 28),
+                            (index, color) =>
+                                Icon(Icons.star, color: color, size: 28),
                         starCount: 5,
                         starSize: 28,
                         valueLabelVisibility: false,
@@ -389,10 +442,9 @@ class RewardedCustomersScreen extends StatelessWidget {
                         starSpacing: 2,
                       );
                     },
-
                   ),
                   15.heightSizeBox,
-              
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextFormField(
@@ -400,58 +452,59 @@ class RewardedCustomersScreen extends StatelessWidget {
                       maxLines: 3,
                       style: w400_14p(color: AppColor.c2C2A2A.withOpacity(0.9)),
                       decoration: InputDecoration(
-                          fillColor: AppColor.white,
-                          hintText: StringConstant.kEnterYourCommentHere.tr,
-                          filled: true,
-                          hintStyle: w400_14p(
-                            color: AppColor.c2C2A2A.withOpacity(0.40),
+                        fillColor: AppColor.white,
+                        hintText: StringConstant.kEnterYourCommentHere.tr,
+                        filled: true,
+                        hintStyle: w400_14p(
+                          color: AppColor.c2C2A2A.withOpacity(0.40),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColor.c5C6B72.withOpacity(0.10),
                           ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.c5C6B72.withOpacity(0.10),
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColor.blue,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          )
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.blue),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ),
                   15.heightSizeBox,
-              
+
                   GestureDetector(
                     onTap: () {
                       final comment = controller.commentController.text.trim();
                       final ratingString = controller.userRating.toString();
-              
+
                       controller
                           .getRating(
-                        ratingString,
-                        completedWashData.customerId.toString(),
-                        comment,
-                      )
+                            ratingString,
+                            completedWashData.customerId.toString(),
+                            comment,
+                          )
                           .then((value) {
-                        if (value != null) {
-                          controller.commentController.clear();
-                          controller.userRating = 0;
-                          controller.fetchInitialCustomers();
-                          Get.back();
-                        }
-                      });
+                            if (value != null) {
+                              controller.commentController.clear();
+                              controller.userRating = 0;
+                              controller.fetchInitialCustomers();
+                              Get.back();
+                            }
+                          });
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 28,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColor.c142293,
                         borderRadius: BorderRadius.circular(100),
@@ -501,7 +554,7 @@ class RewardedCustomersScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            completedWashData.customerName?? "",
+                            completedWashData.customerName ?? "",
                             style: w600_14a(color: AppColor.c2C2A2A),
                           ),
                           5.widthSizeBox,
@@ -513,7 +566,7 @@ class RewardedCustomersScreen extends StatelessWidget {
                                 width: 18,
                               ),*/
                               Text(
-                                completedWashData.offerTitle??"",
+                                completedWashData.offerTitle ?? "",
                                 style: w400_12a(color: AppColor.c455A64),
                               ),
                             ],

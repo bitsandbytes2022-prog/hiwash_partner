@@ -86,7 +86,7 @@ class FaqScreen extends StatelessWidget {
 
           Obx(() {
             if (secondDrawerController.isLoading.value) {
-              return const Center(child: CircularProgressIndicator(          color: Colors.blue,
+              return const Center(child: CircularProgressIndicator(          color: AppColor.blue,
                 strokeWidth: 2,
               ));
             }

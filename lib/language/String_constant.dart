@@ -231,6 +231,7 @@ class StringConstant {
   /// Reward screen
 static const kTotalReward="kTotalReward";
 static const kAvailableOffers="kAvailableOffers";
+static const kAvailableOffer="kAvailableOffer";
 static const kAllOffers="kAllOffers";
 static const kUnknown="kUnknown";
 static const kDetail="kDetail";
